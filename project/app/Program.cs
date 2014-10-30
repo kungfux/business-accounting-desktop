@@ -17,15 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 using System;
+using System.Threading;
+using System.Windows.Forms;
+using BusinessAccounting.Common;
 
 namespace BusinessAccounting
 {
     internal class Program
     {
+        // app mutex name
+        private const string appMutexName = "business-accounting";
+
+        [STAThread]
         public static void Main()
         {
+            // allow running single instance only
+            using (Mutex mutex = new Mutex(false, appMutexName))
+            {
+                bool appAlreadyRunning = !mutex.WaitOne(0, false);
+                if (appAlreadyRunning)
+                {
+                    // if app already running
+                    // show message and exit
+                    Messaging.Instance.ShowMessage(
+                        "One instance of the application can be run at the same time!", // TODO: Replace with locale lang string
+                        MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                }
+                else
+                {
+                    // launch app instance
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    //Application.Run(new BusinessAccountingForm()); // TODO: Call new form creation
+                }
+            }
         }
     }
 }

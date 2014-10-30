@@ -5,4 +5,4 @@ Download from: http://www.codeproject.com/Articles/61485/Winforms-SkinFramework
 Needed files: 
  SkinFramework.dll
 
-Note: do not trace PInvokeException while debugging if appears
+Note: do not trace PInvokeStackImbalance while debugging if exception appears

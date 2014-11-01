@@ -38,10 +38,12 @@ namespace BusinessAccounting
                 bool appAlreadyRunning = !mutex.WaitOne(0, false);
                 if (appAlreadyRunning)
                 {
+                    // init language support
+                    LanguageSupport language = new LanguageSupport();
                     // if app already running
                     // show message and exit
                     Messaging.Instance.ShowMessage(
-                        "One instance of the application can be run at the same time!", // TODO: Replace with locale lang string
+                        language.GetStringByID("WarningOneInstance"),
                         MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
                 else

@@ -47,6 +47,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\LanguageSupport.cs" />
     <Compile Include="Common\Messaging.cs" />
     <Compile Include="Common\RegistrySettings.cs" />
     <Compile Include="Program.cs" />

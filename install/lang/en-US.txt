@@ -1,0 +1,4 @@
+﻿# Business Accounting Language Resource File
+# English (United States) en-US
+
+WarningOneInstance = Application is already running!

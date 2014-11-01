@@ -1,0 +1,4 @@
+﻿# Business Accounting Language Resource File
+# Russian (Russian Federation) ru-RU
+
+WarningOneInstance = Программа уже запущена!

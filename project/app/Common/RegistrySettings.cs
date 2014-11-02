@@ -57,13 +57,22 @@ namespace BusinessAccounting.Common
             try
             {
                 key = Registry.CurrentUser.OpenSubKey(defaultBranchPath);
-
+                // boolean
                 if (typeof(T) == typeof(bool))
                 {
                     return key != null ? 
                         (T)(bool.Parse((key.GetValue(pSettingName, getDefaultValue(pSettingName)).ToString())) as object) : 
                         (T)(bool.Parse(getDefaultValue(pSettingName)).ToString() as object);
                 }
+                // Drawing.Size
+                else if (typeof(T) == typeof(Size))
+                {
+                    TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(Size));
+                    return key != null ? 
+                        (T)Convert.ChangeType(typeConverter.ConvertFromString(key.GetValue(pSettingName, getDefaultValue(pSettingName)).ToString()), typeof(T)) :
+                        (T)Convert.ChangeType(typeConverter.ConvertFromString(getDefaultValue(pSettingName)), typeof(T));
+                }
+                // System.Type: int, string
                 else
                 {
                     return key != null ? 
@@ -77,33 +86,6 @@ namespace BusinessAccounting.Common
                     ex.Message, // TODO: Replace with lang string reader
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return (T)Convert.ChangeType(getDefaultValue(pSettingName), typeof(T));
-            }
-            finally
-            {
-                if (key != null)
-                    key.Close();
-            }
-        }
-
-        /// <summary>
-        /// Return Size type setting value from registry
-        /// </summary>
-        public Size ReadSizeSetting(string pSettingName, Size pDefaultSize)
-        {
-            RegistryKey key = null;
-            try
-            {
-                key = Registry.CurrentUser.OpenSubKey(defaultBranchPath);
-
-                    TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(Size));
-                    return key != null ? (Size)typeConverter.ConvertFromString(key.GetValue(pSettingName, pDefaultSize).ToString()) : pDefaultSize;
-            }
-            catch (Exception ex)
-            {
-                Messaging.Instance.ShowMessage(
-                    ex.Message, // TODO: Replace with lang string reader
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return pDefaultSize;
             }
             finally
             {

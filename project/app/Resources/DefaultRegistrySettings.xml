@@ -9,4 +9,8 @@
 
 <DefaultRegistrySettings>
   <DefaultSetting id="Language">en-US</DefaultSetting>
+  <DefaultSetting id="Skin">0</DefaultSetting>
+  <DefaultSetting id="FormSize">800; 500</DefaultSetting>
+  <DefaultSetting id="FormWindowState">0</DefaultSetting>
+  <DefaultSetting id="GlobalFontName">Calibri</DefaultSetting>
 </DefaultRegistrySettings>

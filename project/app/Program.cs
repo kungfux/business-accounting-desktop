@@ -21,6 +21,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using BusinessAccounting.Common;
+using BusinessAccounting.UI;
 
 namespace BusinessAccounting
 {
@@ -51,7 +52,7 @@ namespace BusinessAccounting
                     // launch app instance
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    //Application.Run(new BusinessAccountingForm()); // TODO: Call new form creation
+                    Application.Run(new BusinessAccountingForm());
                 }
             }
         }

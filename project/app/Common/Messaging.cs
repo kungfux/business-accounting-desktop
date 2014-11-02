@@ -42,7 +42,7 @@ namespace BusinessAccounting.Common
         }
 
         // assembly product attribute
-        private readonly string appProductName =
+        public readonly string appProductName =
             ((AssemblyProductAttribute)Attribute.GetCustomAttribute(
             Assembly.GetExecutingAssembly(), typeof(AssemblyProductAttribute), false))
             .Product;

@@ -24,7 +24,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<title>Business Accounting</title>
 		<link rel="shortcut icon" href="favicon.ico">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script src="jquery.js" type="text/javascript"></script>
+		<script>
+		// return value of url parameter
+		function getUrlParameter(pParameterName) {
+    		var url = window.location.search.substring(1);
+    		var urlParams = url.split('&');
+    		for (var i = 0; i < urlParams.length; i++) {
+        		var pParamName = urlParams[i].split('=');
+        		if (pParamName[0] == pParameterName) {
+            		return pParamName[1];
+        		}
+    		}
+		} // end getUrlParameter()
+
+		// translate the page
+		function translate() {
+			$.getJSON(lang + ".json", function(json) {
+				// translate objects
+				// change these lines on each page
+				$("#lang").text(lang);
+				$("#test").text(json.test);
+			});
+		} // end translate()
+
+		// ?lang= parameter value
+		var lang = getUrlParameter('lang');
+
+		$(document).ready(function(){
+			translate();
+		});
+
+		</script>
 	</head>
 	<body>
+		<p>Passed language from app: <span id="lang"></span></p>
+		<p>Loaded text string from JSON: <span id="test"></span></p>
 	</body>
 </html>

@@ -32,6 +32,8 @@ namespace BusinessAccounting.UI
     {
         // Attach skin manager
         private readonly SkinningManager skinManager = new SkinningManager();
+        private readonly LanguageSupport language = new LanguageSupport();
+        private StatusStrip statusStrip;
 
         public BusinessAccountingForm()
         {
@@ -42,12 +44,52 @@ namespace BusinessAccounting.UI
             this.Size = RegistrySettings.Instance.ReadSetting<Size>("FormSize");
             this.WindowState = (FormWindowState)RegistrySettings.Instance.ReadSetting<int>("FormWindowState");
             this.Font = SystemFonts.GetFontByName(RegistrySettings.Instance.ReadSetting<string>("GlobalFontName"));
+            
+            // status strip
+            statusStrip = new StatusStrip();
+            statusStrip.Visible = false;
+
+            ToolStripStatusLabel labelLoading = new ToolStripStatusLabel(language.GetStringByID("LoadingStatus"));
+            ToolStripStatusLabel labelSpring = new ToolStripStatusLabel("");
+            labelSpring.Spring = true;
+
+            ToolStripProgressBar progressBar = new ToolStripProgressBar();
+            progressBar.Width = 100;
+            progressBar.Style = ProgressBarStyle.Marquee;
+            progressBar.MarqueeAnimationSpeed = 50;
+            progressBar.Value = progressBar.Maximum;
+            
+            statusStrip.Items.Add(labelLoading);
+            statusStrip.Items.Add(labelSpring);
+            statusStrip.Items.Add(progressBar);
+            this.Controls.Add(statusStrip);
+            
             // events
             this.FormClosing += new FormClosingEventHandler(BusinessAccountingForm_FormClosing);
+
+            // add front-end browser
+            FrontEndBrowser.Instance.Navigating += new WebBrowserNavigatingEventHandler(frontEndBrowser_Navigating);
+            FrontEndBrowser.Instance.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(frontEndBrowser_DocumentCompleted);
+            this.Controls.Add(FrontEndBrowser.Instance);
 
             // apply skin
             skinManager.ParentForm = this;
             skinManager.DefaultSkin = (DefaultSkin)RegistrySettings.Instance.ReadSetting<int>("Skin");
+        }
+
+        private void DisplayProgress(bool pInProgress)
+        {
+            statusStrip.Visible = pInProgress;
+        }
+
+        void frontEndBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            DisplayProgress(false);
+        }
+
+        void frontEndBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            DisplayProgress(true);
         }
 
         void BusinessAccountingForm_FormClosing(object sender, FormClosingEventArgs e)

@@ -60,6 +60,9 @@
     <Compile Include="UI\BusinessAccountingForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UI\FrontEndBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SkinFramework">

@@ -13,4 +13,5 @@
   <DefaultSetting id="FormSize">800; 500</DefaultSetting>
   <DefaultSetting id="FormWindowState">0</DefaultSetting>
   <DefaultSetting id="GlobalFontName">Calibri</DefaultSetting>
+  <DefaultSetting id="FrontEndTheme">Redmont</DefaultSetting>
 </DefaultRegistrySettings>

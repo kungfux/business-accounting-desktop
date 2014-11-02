@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE DefaultRegistrySettings [
+  <!ELEMENT DefaultRegistrySettings ANY>
+  <!ELEMENT DefaultSetting ANY>
+  <!ATTLIST DefaultSetting id ID #REQUIRED>
+]>
+
+<!--This file contains default registry settings -->
+
+<DefaultRegistrySettings>
+  <DefaultSetting id="Language">en-US</DefaultSetting>
+</DefaultRegistrySettings>

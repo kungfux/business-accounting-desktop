@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
 using Microsoft.Win32;
+using System.Xml;
 
 namespace BusinessAccounting.Common
 {
@@ -50,7 +51,7 @@ namespace BusinessAccounting.Common
         /// Return setting value from registry
         /// </summary>
         /// <typeparam name="T">string, int</typeparam>
-        public T ReadSetting<T>(string pSettingName, T pDefaultValue)
+        public T ReadSetting<T>(string pSettingName)
         {
             RegistryKey key = null;
             try
@@ -59,11 +60,15 @@ namespace BusinessAccounting.Common
 
                 if (typeof(T) == typeof(bool))
                 {
-                    return key != null ? (T)(bool.Parse((key.GetValue(pSettingName, pDefaultValue).ToString())) as object) : pDefaultValue;
+                    return key != null ? 
+                        (T)(bool.Parse((key.GetValue(pSettingName, getDefaultValue(pSettingName)).ToString())) as object) : 
+                        (T)(bool.Parse(getDefaultValue(pSettingName)).ToString() as object);
                 }
                 else
                 {
-                    return key != null ? (T)key.GetValue(pSettingName, pDefaultValue) : pDefaultValue;
+                    return key != null ? 
+                        (T)Convert.ChangeType(key.GetValue(pSettingName, getDefaultValue(pSettingName)), typeof(T)) : 
+                        (T)Convert.ChangeType(getDefaultValue(pSettingName), typeof(T));
                 }
             }
             catch (Exception ex)
@@ -71,7 +76,7 @@ namespace BusinessAccounting.Common
                 Messaging.Instance.ShowMessage(
                     ex.Message, // TODO: Replace with lang string reader
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return pDefaultValue;
+                return (T)Convert.ChangeType(getDefaultValue(pSettingName), typeof(T));
             }
             finally
             {
@@ -131,6 +136,17 @@ namespace BusinessAccounting.Common
                 if (key != null)
                     key.Close();
             }
+        }
+
+        /// <summary>
+        /// Retrieve default setting value from DefaultRegistrySettings.xml
+        /// </summary>
+        private string getDefaultValue(string pSettingName)
+        {
+            XmlDocument xmlDefaultSettings = new XmlDocument();
+            xmlDefaultSettings.LoadXml(Resources.DefaultRegistrySettings);
+            XmlElement xmlElement = xmlDefaultSettings.GetElementById(pSettingName);
+            return xmlElement != null ? xmlElement.InnerText : null;
         }
     }
 }

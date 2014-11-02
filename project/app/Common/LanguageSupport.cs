@@ -33,7 +33,7 @@ namespace BusinessAccounting.Common
 
         private static ResourceManager resManager;
         public string Language { get { return resManager.BaseName; } }
-        private readonly string defaultLanguage = RegistrySettings.Instance.ReadSetting<string>("Language", "en-US");
+        private readonly string defaultLanguage = RegistrySettings.Instance.ReadSetting<string>("Language");
 
         public LanguageSupport()
         {

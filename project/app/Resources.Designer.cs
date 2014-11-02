@@ -61,6 +61,28 @@ namespace BusinessAccounting {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; ?&gt;
+        ///&lt;!-- 
+        ///Business Accounting 
+        ///Small Business Accounting Solution
+        ///Copyright (C) 2014 Fuks Alexander
+        ///mailto:kungfux2010@gmail.com
+        /// 
+        ///This program is free software: you can redistribute it and/or modify
+        ///it under the terms of the GNU General Public License as published by
+        ///the Free Software Foundation, either version 3 of the License, or
+        ///(at your option) any later version.
+        ///
+        ///This program is distributed in the hope that it will be useful,
+        ///but WITHOUT ANY WARRANTY; without even the i [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DefaultRegistrySettings {
+            get {
+                return ResourceManager.GetString("DefaultRegistrySettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon favicon {

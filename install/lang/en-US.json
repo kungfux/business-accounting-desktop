@@ -1,4 +1,16 @@
 {
 	"Business Accounting Language Resource File" : "English (United States) en-US",
+	"dtClose" : "Close",
+	"dtPrev" : "Prev",
+	"dtNext" : "Next",
+	"dtToday" : "Today",
+	"dtMonth" : [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
+	"dtMonthShort" : [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
+	"dtDay" : [ "Monday", "Tuesday", "Wednesday", "Thurday", "Friday", "Saturday", "Sunday" ],
+	"dtDayShort" : [ "mon", "tue", "wed", "thu", "fri", "sat", "sun" ],
+	"dtDayMin" : [ "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su" ],
+	"dtWeekMin" : "Wk",
+	"dtFormat" : "mm/dd/yy",
+	"dtFirstDay" : 6,
 	"test" : "en-US test string"
 }

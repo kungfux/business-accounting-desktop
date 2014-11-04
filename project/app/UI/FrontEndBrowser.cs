@@ -42,9 +42,10 @@ namespace BusinessAccounting.UI
         private LanguageSupport language = new LanguageSupport();
         private readonly string DefaultRoot = string.Format(@"{0}\frontend\", Application.StartupPath);
         private readonly string DefaultParameters = 
-            string.Format("?lang={0}&theme={1}", 
+            string.Format("?lang={0}&theme={1}&reverse={2}", 
             RegistrySettings.Instance.ReadSetting<string>("Language"),
-            RegistrySettings.Instance.ReadSetting<string>("FrontEndTheme"));
+            RegistrySettings.Instance.ReadSetting<string>("FrontEndTheme"),
+            RegistrySettings.Instance.ReadSetting<bool>("FrontEndReverseBackground"));
 
         private FrontEndBrowser()
         {

@@ -1,0 +1,90 @@
+/* Business Accounting 
+ * Small Business Accounting Solution
+ * Copyright (C) 2014 Fuks Alexander
+ * <mailto:kungfux2010@gmail.com>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+body {
+	font-size: 12px;
+}
+
+#page {
+	position: absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+}
+#content {
+	float: left;
+	margin: 8px;
+}
+#menu {
+	width: 100%;
+	background: rgb(255,255,255);
+	padding: 8px 0;
+	float: left;
+}
+#menu:before {
+	content: "";
+	display: block;
+}
+#menu:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+#menu ul {
+	list-style-type: none;
+	position: relative;
+	display: block;
+	font-size: 12px;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px solid rgb(0,154,225);
+}
+#menu ul:before {
+	content: "";
+	display: block;
+}
+#menu ul:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+#menu li {
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+#menu li a {
+	float: left;
+	color: rgb(0,0,0);
+	text-decoration: none;
+	height: 24px;
+	padding: 9px 15px 0;
+	font-weight: normal;
+}
+#menu li:hover,
+#menu .active {
+	text-decoration: none;
+	border-bottom: 2px solid rgb(0,154,225);
+}
+#menu .active a {
+	font-weight: 700;
+}

@@ -12,5 +12,10 @@
 	"dtWeekMin" : "Не",
 	"dtFormat" : "dd.mm.yy",
 	"dtFirstDay" : 0,
+	"menuCash" : "Касса",
+	"menuEmployees" : "Сотрудники",
+	"menuCharts" : "Графики",
+	"menuReports" : "Отчеты",
+	"menuHelp" : "Помощь",
 	"test" : "ru-RU тестовая строка"
 }

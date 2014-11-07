@@ -63,6 +63,13 @@
     <Compile Include="UI\FrontEndBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\FrontEndPageSkeleton.cs" />
+    <Compile Include="UI\FrontEndPages\CashPage.cs" />
+    <Compile Include="UI\FrontEndPages\ChartsPage.cs" />
+    <Compile Include="UI\FrontEndPages\EmployeesPage.cs" />
+    <Compile Include="UI\FrontEndPages\HelpPage.cs" />
+    <Compile Include="UI\FrontEndPages\ReportsPage.cs" />
+    <Compile Include="UI\FrontEndPages\SetupPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SkinFramework">

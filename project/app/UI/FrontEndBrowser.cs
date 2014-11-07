@@ -20,6 +20,7 @@
 using System;
 using System.Windows.Forms;
 using BusinessAccounting.Common;
+using BusinessAccounting.UI.FrontEndPages;
 
 namespace BusinessAccounting.UI
 {
@@ -40,12 +41,21 @@ namespace BusinessAccounting.UI
         }
 
         private LanguageSupport language = new LanguageSupport();
-        private readonly string DefaultRoot = string.Format(@"{0}\frontend\", Application.StartupPath);
-        private readonly string DefaultParameters = 
+        private readonly string defaultRoot = string.Format(@"{0}\frontend\", Application.StartupPath);
+        private readonly string defaultParameters = 
             string.Format("?lang={0}&theme={1}&reverse={2}", 
             RegistrySettings.Instance.ReadSetting<string>("Language"),
             RegistrySettings.Instance.ReadSetting<string>("FrontEndTheme"),
             RegistrySettings.Instance.ReadSetting<bool>("FrontEndReverseBackground"));
+        private readonly FrontEndPageSkeleton[] pages = 
+            new FrontEndPageSkeleton[] {
+            new CashPage(),
+            new EmployeesPage(),
+            new ChartsPage(),
+            new ReportsPage(),
+            new SetupPage(),
+            new HelpPage()
+            };
 
         private FrontEndBrowser()
         {
@@ -54,12 +64,12 @@ namespace BusinessAccounting.UI
             // Navigate options
             //this.AllowNavigation = false;
             this.IsWebBrowserContextMenuEnabled = false;
-            this.WebBrowserShortcutsEnabled = false;
+            this.WebBrowserShortcutsEnabled = RegistrySettings.Instance.ReadSetting<bool>("FrontEndBrowserShortcutsEnabled");
             // events
             this.Navigated += new WebBrowserNavigatedEventHandler(FrontEndBrowser_Navigated);
             this.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(FrontEndBrowser_DocumentCompleted);
             // load index page
-            this.Navigate(DefaultRoot + "index.html" + DefaultParameters);
+            this.Navigate(defaultRoot + "index.html" + defaultParameters);
         }
 
         void FrontEndBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
@@ -77,7 +87,40 @@ namespace BusinessAccounting.UI
 
         void FrontEndBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            //TODO: Link front-end browser with HTML menu
+            // link front-end browser with HTML menu
+            if (this.Document != null)
+            {
+                for (int a = 0; a < pages.Length; a++)
+                {
+                    // add click event to menu item
+                    this.Document.GetElementById(pages[a].PageID).Click += new HtmlElementEventHandler(HtmlMenu_Click);
+                }
+            }
+            // call Init() page for active page
+            for (int a = 0; a < pages.Length; a++)
+            {
+                if (this.Document.Url.ToString().EndsWith(pages[a].PageHtmlSource))
+                {
+                    pages[a].Init();
+                }
+            }
+        }
+
+        void HtmlMenu_Click(object sender, HtmlElementEventArgs e)
+        {
+            // open another source if menu item is clicked
+            if (sender is HtmlElement)
+            {
+                HtmlElement element = sender as HtmlElement;
+                for (int a = 0; a < pages.Length; a++)
+                {
+                    if (element.Id == pages[a].PageID)
+                    {
+                        this.Navigate(defaultRoot + pages[a].PageHtmlSource + defaultParameters);
+                        break;
+                    }
+                }
+            }           
         }
     }
 }

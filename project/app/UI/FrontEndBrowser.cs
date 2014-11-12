@@ -87,21 +87,28 @@ namespace BusinessAccounting.UI
 
         void FrontEndBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            // link front-end browser with HTML menu
-            if (this.Document != null)
+            if (e.Url.Equals(this.Url) && this.ReadyState == WebBrowserReadyState.Complete)
             {
+                // link front-end browser with HTML menu
+                if (this.Document != null)
+                {
+                    for (int a = 0; a < pages.Length; a++)
+                    {
+                        // add click event to menu item
+                        if (this.Document.GetElementById(pages[a].PageID) != null)
+                        {
+                            this.Document.GetElementById(pages[a].PageID).Click += new HtmlElementEventHandler(HtmlMenu_Click);
+                        }
+                    }
+                }
+                // call Init() page for active page
                 for (int a = 0; a < pages.Length; a++)
                 {
-                    // add click event to menu item
-                    this.Document.GetElementById(pages[a].PageID).Click += new HtmlElementEventHandler(HtmlMenu_Click);
-                }
-            }
-            // call Init() page for active page
-            for (int a = 0; a < pages.Length; a++)
-            {
-                if (this.Document.Url.ToString().EndsWith(pages[a].PageHtmlSource))
-                {
-                    pages[a].Init();
+                    if (e.Url.ToString().Contains(pages[a].PageHtmlSource))
+                    {
+                        pages[a].Init();
+                        break;
+                    }
                 }
             }
         }

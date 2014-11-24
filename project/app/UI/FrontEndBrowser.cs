@@ -62,9 +62,9 @@ namespace BusinessAccounting.UI
             // Dock
             this.Dock = DockStyle.Fill;
             // Navigate options
-            //this.AllowNavigation = false;
-            this.IsWebBrowserContextMenuEnabled = false;
-            this.WebBrowserShortcutsEnabled = RegistrySettings.Instance.ReadSetting<bool>("FrontEndBrowserShortcutsEnabled");
+            this.AllowNavigation = true;
+            this.IsWebBrowserContextMenuEnabled = RegistrySettings.Instance.ReadSetting<bool>("FrontEndBrowserDebugMode");
+            this.WebBrowserShortcutsEnabled = RegistrySettings.Instance.ReadSetting<bool>("FrontEndBrowserDebugMode");
             // events
             this.Navigated += new WebBrowserNavigatedEventHandler(FrontEndBrowser_Navigated);
             this.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(FrontEndBrowser_DocumentCompleted);

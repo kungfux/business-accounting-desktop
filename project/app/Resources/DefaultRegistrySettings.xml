@@ -20,5 +20,5 @@
   <DefaultSetting id="FormSize">800; 500</DefaultSetting>
   <DefaultSetting id="FormWindowState">0</DefaultSetting>
   <!-- Dev settings -->
-  <DefaultSetting id="FrontEndBrowserShortcutsEnabled">false</DefaultSetting>
+  <DefaultSetting id="FrontEndBrowserDebugMode">false</DefaultSetting>
 </DefaultRegistrySettings>

@@ -18,6 +18,10 @@
  */
 
 using System;
+using System.IO;
+using System.Windows.Forms;
+using SkinFramework;
+using BusinessAccounting.Common;
 
 namespace BusinessAccounting.UI.FrontEndPages
 {
@@ -35,7 +39,62 @@ namespace BusinessAccounting.UI.FrontEndPages
 
         public override void Init()
         {
-            throw new NotImplementedException();
+            FrontEndBrowser.Instance.Document.InvokeScript("externalAddLanguageOptions", new object[] { getLanguages() } );
+            FrontEndBrowser.Instance.Document.InvokeScript("externalAddThemeOptions", new object[] { getThemes() });
+            FrontEndBrowser.Instance.Document.InvokeScript("externalAddSkinOptions", new object[] { getSkins() });
+        }
+
+        private readonly string frontendPath = Application.StartupPath + @"\frontend";
+        private readonly string frontendThemesPath = Application.StartupPath + @"\frontend\themes";
+
+        private string getLanguages()
+        {
+            DirectoryInfo dFrontEnd = new DirectoryInfo(frontendPath);
+            FileInfo[] fLangs = dFrontEnd.GetFiles("*.json", SearchOption.TopDirectoryOnly);
+            string result = "{";
+            for (int a=0;a<fLangs.Length;a++)
+            {
+                result += string.Format("\"{0}\":\"{1}\"", a, fLangs[a].Name.Replace(fLangs[a].Extension, ""));
+                if (a < fLangs.Length - 1)
+                {
+                    result += ",";
+                }
+            }
+            result += "}";
+            return result;
+        }
+
+        private string getSkins()
+        {
+            string result = "{";
+            int skinsCount = Enum.GetNames(typeof(DefaultSkin)).Length;
+            for (int a = 0; a < skinsCount; a++)
+            {
+                result += string.Format("\"{0}\":\"{1}\"", RegistrySettings.Instance.ReadSetting<int>("Skin") == a ? "active" : a.ToString(), (DefaultSkin)a);
+                if (a < skinsCount - 1)
+                {
+                    result += ",";
+                }
+            }
+            result += "}";
+            return result;
+        }
+
+        private string getThemes()
+        {
+            DirectoryInfo dFrontEndThemes = new DirectoryInfo(frontendThemesPath);
+            DirectoryInfo[] dThemes = dFrontEndThemes.GetDirectories();
+            string result = "{";
+            for (int a = 0; a < dThemes.Length; a++)
+            {
+                result += string.Format("\"{0}\":\"{1}\"", a, dThemes[a].Name);
+                if (a < dThemes.Length - 1)
+                {
+                    result += ",";
+                }
+            }
+            result += "}";
+            return result;
         }
     }
 }

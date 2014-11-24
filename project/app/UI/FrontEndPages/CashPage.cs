@@ -35,7 +35,7 @@ namespace BusinessAccounting.UI.FrontEndPages
 
         public override void Init()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

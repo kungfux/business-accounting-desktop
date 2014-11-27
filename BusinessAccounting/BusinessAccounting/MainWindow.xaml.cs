@@ -24,6 +24,38 @@ namespace BusinessAccounting
         public MainWindow()
         {
             InitializeComponent();
+            MenuContext mc = new MenuContext();
+            mc.MenuHeadText = "Главная";
+            this.MenuInfo.DataContext = mc;
+        }
+
+        private string activePageName = "Главная";
+
+        public class MenuContext
+        {
+            public string MenuHeadText { get; set; }
+        }
+
+        private void MenuItem_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is Button)
+            {
+                var b = sender as Button;
+                MenuContext mc = new MenuContext();
+                mc.MenuHeadText = b.Tag.ToString();
+                this.MenuInfo.DataContext = mc;
+            }
+        }
+
+        private void MenuItem_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is Button)
+            {
+                var b = sender as Button;
+                MenuContext mc = new MenuContext();
+                mc.MenuHeadText = activePageName;
+                this.MenuInfo.DataContext = mc;
+            }
         }
     }
 }

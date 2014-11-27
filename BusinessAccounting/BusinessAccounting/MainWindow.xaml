@@ -4,16 +4,66 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     Title="Business Accounting"
+    TitleCaps="False"
     Height="400"
     Width="700"
     BorderBrush="{DynamicResource AccentColorBrush}"
     BorderThickness="1"
     WindowStartupLocation="CenterScreen"
     ResizeMode="CanResizeWithGrip"
-    Icon="favicon.ico"
-    >
+    Icon="favicon.ico">
 
-    <Grid>
-        
+    <Controls:MetroWindow.Resources>
+        <Image Source="pack://application:,,,/Resources/test.png" x:Key="test"/>
+    </Controls:MetroWindow.Resources>
+    
+    <Grid ShowGridLines="True" x:Name="MenuInfo">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel VerticalAlignment="Top" Height="50" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="0" Margin="0,0,15,0">
+            <Button Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{DynamicResource MetroCircleButtonStyle}" Tag="Отчеты"  MouseEnter="MenuItem_MouseEnter" MouseLeave="MenuItem_MouseLeave">
+                <Rectangle Width="20" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_city}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{DynamicResource MetroCircleButtonStyle}" Tag="Графики"  MouseEnter="MenuItem_MouseEnter" MouseLeave="MenuItem_MouseLeave">
+                <Rectangle Width="20" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_city}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{DynamicResource MetroCircleButtonStyle}" Tag="Сотрудники"  MouseEnter="MenuItem_MouseEnter" MouseLeave="MenuItem_MouseLeave">
+                <Rectangle Width="20" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_city}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{DynamicResource MetroCircleButtonStyle}" Tag="Касса"  MouseEnter="MenuItem_MouseEnter" MouseLeave="MenuItem_MouseLeave">
+                <Rectangle Width="20" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_city}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{DynamicResource MetroCircleButtonStyle}" Tag="Главная" MouseEnter="MenuItem_MouseEnter" MouseLeave="MenuItem_MouseLeave">
+                <Rectangle Width="20" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource test}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Label VerticalAlignment="Center" FontSize="16" Content="{Binding Path=MenuHeadText}">
+                   
+            </Label>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Image Source="pack://application:,,,/Resources/test.png"></Image>
+        </Grid>
     </Grid>
 </Controls:MetroWindow>

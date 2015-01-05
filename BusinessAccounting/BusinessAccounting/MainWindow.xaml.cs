@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
+using System.Windows.Media.Animation;
 
 namespace BusinessAccounting
 {
@@ -24,38 +25,37 @@ namespace BusinessAccounting
         public MainWindow()
         {
             InitializeComponent();
-            MenuContext mc = new MenuContext();
-            mc.MenuHeadText = "Главная";
-            this.MenuInfo.DataContext = mc;
         }
 
-        private string activePageName = "Главная";
-
-        public class MenuContext
+        private void ButtonMenu_Click(object sender, RoutedEventArgs e)
         {
-            public string MenuHeadText { get; set; }
+            OpenCloseMenu();   
         }
 
-        private void MenuItem_MouseEnter(object sender, MouseEventArgs e)
+        private void MenuButtonCash_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button)
-            {
-                var b = sender as Button;
-                MenuContext mc = new MenuContext();
-                mc.MenuHeadText = b.Tag.ToString();
-                this.MenuInfo.DataContext = mc;
-            }
+            OpenCloseMenu();
         }
 
-        private void MenuItem_MouseLeave(object sender, MouseEventArgs e)
+        private void MenuButtonGraphics_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button)
-            {
-                var b = sender as Button;
-                MenuContext mc = new MenuContext();
-                mc.MenuHeadText = activePageName;
-                this.MenuInfo.DataContext = mc;
-            }
+            OpenCloseMenu();
         }
+
+        private void MenuButtonEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            OpenCloseMenu();
+        }
+
+        private void OpenCloseMenu()
+        {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = GridMenu.Opacity > 0 ? 1 : 0;
+            animation.To = GridMenu.Opacity > 0 ? 0 : 1;
+            animation.Duration = new Duration(TimeSpan.FromSeconds(0.5));
+            GridMenu.BeginAnimation(OpacityProperty, animation);
+        }
+
+        
     }
 }

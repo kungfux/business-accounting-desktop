@@ -33,6 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>BusinessAccounting.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro">
       <HintPath>..\packages\MahApps.Metro.0.14.0.0\lib\net45\MahApps.Metro.dll</HintPath>
@@ -85,13 +91,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="favicon.ico" />
+    <Resource Include="Resources\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\test.png" />
+    <Resource Include="Resources\image_menu.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\ba3.ico" />
+    <Resource Include="Resources\image_cash.png" />
+    <Resource Include="Resources\image_clock.png" />
+    <Resource Include="Resources\image_graph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\image_man.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

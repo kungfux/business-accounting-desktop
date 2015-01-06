@@ -20,26 +20,43 @@
         <Image x:Key="ImageGraph" Source="pack://application:,,,/Resources/image_graph.png" />
     </Controls:MetroWindow.Resources>
 
-    <Grid ShowGridLines="True">
+    <!-- this grid contain menu button -->
+    <Grid>
+        <Grid.Triggers>
+            <!-- Animates the rectangle's opacity. -->
+            <EventTrigger RoutedEvent="Grid.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="0.0" To="1.0" Duration="0:0:0.5" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <!-- this grid contain all user controls (pages of app) -->
+        <Grid Name="UserControlGrid">
+            <!-- TODO: add startup elements -->
+        </Grid>
+        <!-- main menu button -->
         <Button 
-            Height="64" 
-            Width="64" 
-            Focusable="False"
-            Content="{StaticResource ImageMenu}"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="0,10,10,0" 
-            ToolTip="Главное меню"
-            Name="ButtonMenu" 
-            Click="ButtonMenu_Click">
-        </Button>
+    		Height="64" 
+    		Width="64" 
+    		Focusable="False"
+    		Content="{StaticResource ImageMenu}"
+    		HorizontalAlignment="Right"
+    		VerticalAlignment="Top"
+    		Margin="0,10,10,0" 
+    		ToolTip="Главное меню"
+    		x:Name="ButtonMenu" 
+    		Click="ButtonMenu_Click"/>
         <Grid 
-            Width="150"
-            VerticalAlignment="Top" 
-            HorizontalAlignment="Right" 
-            Margin="0,74,10,0" 
-            Opacity="0.0"
-            Name="GridMenu">
+    		Width="150"
+    		VerticalAlignment="Top" 
+    		HorizontalAlignment="Right" 
+    		Margin="0,74,10,0" 
+    		Opacity="1.0"
+    		x:Name="GridMenu">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="64"/>
@@ -50,53 +67,53 @@
                 <RowDefinition Height="64" />
             </Grid.RowDefinitions>
             <Button
-                Height="64" 
-                Width="64" 
-                Focusable="False"
-                Content="{StaticResource ImageCash}"
-                HorizontalAlignment="Left"
-                Grid.Row="0"
-                Grid.Column="1" 
-                Name="MenuButtonCash"
-                Click="MenuButtonCash_Click"/>
+    			Height="64" 
+    			Width="64" 
+    			Focusable="False"
+    			Content="{StaticResource ImageCash}"
+    			HorizontalAlignment="Left"
+    			Grid.Row="0"
+    			Grid.Column="1" 
+    			x:Name="MenuButtonCash"
+    			Click="MenuButtonCash_Click"/>
             <Button
-                Height="64" 
-                Width="64" 
-                Focusable="False"
-                Content="{StaticResource ImageMan}"
-                HorizontalAlignment="Left"
-                Grid.Row="1"
-                Grid.Column="1"
-                Name="MenuButtonEmployee"
-                Click="MenuButtonEmployee_Click"/>
+    			Height="64" 
+    			Width="64" 
+    			Focusable="False"
+    			Content="{StaticResource ImageMan}"
+    			HorizontalAlignment="Left"
+    			Grid.Row="1"
+    			Grid.Column="1"
+    			x:Name="MenuButtonEmployee"
+    			Click="MenuButtonEmployee_Click"/>
             <Button
-                Height="64" 
-                Width="64" 
-                Focusable="False"
-                Content="{StaticResource ImageGraph}"
-                HorizontalAlignment="Left"
-                Grid.Row="2"
-                Grid.Column="1"
-                Name="MenuButtonGraphics"
-                Click="MenuButtonGraphics_Click"/>
+    			Height="64" 
+    			Width="64" 
+    			Focusable="False"
+    			Content="{StaticResource ImageGraph}"
+    			HorizontalAlignment="Left"
+    			Grid.Row="2"
+    			Grid.Column="1"
+    			x:Name="MenuButtonGraphics"
+    			Click="MenuButtonGraphics_Click"/>
             <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Content="Касса"
-                HorizontalAlignment="Right"
-                VerticalContentAlignment="Center"/>
+    			Grid.Row="0"
+    			Grid.Column="0"
+    			Content="Касса"
+    			HorizontalAlignment="Right"
+    			VerticalContentAlignment="Center"/>
             <Label
-                Grid.Row="1"
-                Grid.Column="0"
-                Content="Сотрудники"
-                HorizontalAlignment="Right" 
-                VerticalContentAlignment="Center"/>
+    			Grid.Row="1"
+    			Grid.Column="0"
+    			Content="Сотрудники"
+    			HorizontalAlignment="Right" 
+    			VerticalContentAlignment="Center"/>
             <Label
-                Grid.Row="2"
-                Grid.Column="0"
-                Content="Графики"
-                HorizontalAlignment="Right"
-                VerticalContentAlignment="Center"/>
+    			Grid.Row="2"
+    			Grid.Column="0"
+    			Content="Графики"
+    			HorizontalAlignment="Right"
+    			VerticalContentAlignment="Center"/>
         </Grid>
     </Grid>
 </Controls:MetroWindow>

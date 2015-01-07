@@ -66,23 +66,27 @@ namespace BusinessAccounting.UserControls
                     break;
             }
 
+            bool chartReady = false;
             switch (((ComboBoxItem)comboChartType.SelectedItem).Name)
             {
                 case "Incomes":
-                    MakeIncomesChart(startDate);
+                    chartReady = MakeIncomesChart(startDate);
                     break;
                 case "Charges":
-                    MakeChargesChart(startDate);
+                    chartReady = MakeChargesChart(startDate);
                     break;
                 case "Compare":
-                    MakeCompareChart(startDate);
+                    chartReady = MakeCompareChart(startDate);
                     break;
             }
 
-            wfHost.Child = chart;
+            if (chartReady)
+            {
+                wfHost.Child = chart;
+            }
         }
 
-        void MakeIncomesChart(DateTime startDate)
+        bool MakeIncomesChart(DateTime startDate)
         {
             chart.Series.Add("");
             chart.Titles.Add("График прибыли за период с " + startDate.ToShortDateString() + " по " + DateTime.Now.ToShortDateString());
@@ -101,13 +105,22 @@ namespace BusinessAccounting.UserControls
             DataTable table = global.sqlite.SelectTable("select datetime, sum from ba_cash_operations where sum > 0 and datetime >= @d order by datetime asc;",
                 new SQLiteParameter("@d", startDate));
 
-            for (int a = 0; a < table.Rows.Count; a++)
+            if (table != null)
             {
-                chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), Convert.ToDouble(table.Rows[a].ItemArray[1])));
+                for (int a = 0; a < table.Rows.Count; a++)
+                {
+                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), Convert.ToDouble(table.Rows[a].ItemArray[1])));
+                }
             }
+            else
+            {
+                ShowMessage("Нет данных для построения графика!");
+                return false;
+            }
+            return true;
         }
 
-        void MakeChargesChart(DateTime startDate)
+        bool MakeChargesChart(DateTime startDate)
         {
             chart.Series.Add("");
             chart.Titles.Add("График расходов за период с " + startDate.ToShortDateString() + " по " + DateTime.Now.ToShortDateString());
@@ -127,13 +140,22 @@ namespace BusinessAccounting.UserControls
             DataTable table = global.sqlite.SelectTable("select datetime, sum from ba_cash_operations where sum < 0 and datetime >= @d order by datetime asc;",
                 new SQLiteParameter("@d", startDate));
 
-            for (int a = 0; a < table.Rows.Count; a++)
+            if (table != null)
             {
-                chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), Convert.ToDouble(table.Rows[a].ItemArray[1].ToString())));
+                for (int a = 0; a < table.Rows.Count; a++)
+                {
+                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), 0 - Convert.ToDouble(table.Rows[a].ItemArray[1].ToString())));
+                }
             }
+            else
+            {
+                ShowMessage("Нет данных для построения графика!");
+                return false;
+            }
+            return true;
         }
 
-        void MakeCompareChart(DateTime startDate)
+        bool MakeCompareChart(DateTime startDate)
         {
             chart.Series.Add("");
             chart.Titles.Add("График сравнения за период с " + startDate.ToShortDateString() + " по " + DateTime.Now.ToShortDateString());
@@ -160,6 +182,12 @@ namespace BusinessAccounting.UserControls
                 chart.Series[0].Points[1].LegendText = "Расходы";
                 chart.Series[0].Points[1].Label = chargesSum > 0 ? string.Format("{0:C}", chargesSum) : "";
             }
+            else
+            {
+                ShowMessage("Нет данных для построения графика!");
+                return false;
+            }
+            return true;
         }
 
         void ShowMessage(string text)

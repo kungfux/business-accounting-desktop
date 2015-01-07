@@ -50,9 +50,9 @@ namespace BusinessAccounting.UserControls
                 {
                     history.Add(new HistoryRecord()
                     {
-                        id = int.Parse(row.ItemArray[0].ToString()),
-                        date = DateTime.Parse(row.ItemArray[1].ToString()),
-                        sum = decimal.Parse(row.ItemArray[2].ToString()),
+                        id = Convert.ToInt32(row.ItemArray[0].ToString()),
+                        date = Convert.ToDateTime(row.ItemArray[1]).ToShortDateString(),
+                        sum = string.Format("{0:C}", decimal.Parse(row.ItemArray[2].ToString())),
                         comment = row.ItemArray[3].ToString()
                     });
                 }
@@ -134,7 +134,7 @@ namespace BusinessAccounting.UserControls
                     break;
                 }
 
-            await AskAndDelete(string.Concat("Удалить запись с суммой: \"", record.sum.ToString(), "\" за ", record.date.ToShortDateString(), " число?"), record);
+            await AskAndDelete(string.Concat("Удалить запись с суммой ", record.sum.ToString(), " за ", record.date, " число?"), record);
         }
 
         private async Task AskAndDelete(string question, HistoryRecord record)

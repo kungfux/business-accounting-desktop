@@ -9,8 +9,8 @@ namespace BusinessAccounting.UserControls
     public class HistoryRecord
     {
         public int id {get; set;}
-        public DateTime date { get; set; }
-        public decimal sum { get; set; }
+        public string date { get; set; }
+        public string sum { get; set; }
         public string comment { get; set; }
     }
 }

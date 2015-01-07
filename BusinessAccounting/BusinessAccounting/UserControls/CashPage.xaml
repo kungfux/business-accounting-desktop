@@ -59,12 +59,12 @@
                 <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                 <Label Grid.Row="1" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                 <Label Grid.Row="2" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите дату" FirstDayOfWeek="Monday" />
-                <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите сумму" Controls:TextboxHelper.ClearTextButton="True"/>
+                <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите дату" FirstDayOfWeek="Monday" Name="inputDate" />
+                <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите сумму" Controls:TextboxHelper.ClearTextButton="True" Name="inputSum"/>
                 <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Укажите комментарий"
                          Controls:TextboxHelper.ClearTextButton="True" SpellCheck.IsEnabled="True" VerticalScrollBarVisibility="Auto" 
-                         AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" />
-                <Button Grid.Row="4" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0"/>
+                         AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="inputComment"/>
+                <Button Grid.Row="4" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
             </Grid>
         </GroupBox>
         <Grid
@@ -79,8 +79,10 @@
             Grid.Row="0"
             Background="Silver"
 			BorderBrush="Silver"
-			Header="Последние записи">
-                <ListView Name="HistoryTable">
+			Header="Последние записи"
+            Name="groupHistory">
+                <ListView 
+                    Name="HistoryTable">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="№" Width="40" DisplayMemberBinding="{Binding id}" />
@@ -91,7 +93,7 @@
                     </ListView.View>
                 </ListView>
             </GroupBox>
-            <Button Grid.Row="1" Content="Показать все" Margin="5,0,5,5"/>
+            <Button Grid.Row="1" Content="Показать все" Margin="5,0,5,5" Click="bShowAll_Click"/>
         </Grid>
     </Grid>
 </UserControl>

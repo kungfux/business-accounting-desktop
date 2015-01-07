@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using System.Windows.Media.Animation;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace BusinessAccounting
 {
@@ -38,18 +28,19 @@ namespace BusinessAccounting
         private void MenuButtonCash_Click(object sender, RoutedEventArgs e)
         {
             OpenCloseMenu();
-            ClearWindow();
-            UserControlGrid.Children.Add(new UserControls.CashPage());
+            LoadPage(new UserControls.CashPage());
         }
 
         private void MenuButtonGraphics_Click(object sender, RoutedEventArgs e)
         {
             OpenCloseMenu();
+            LoadPage(new UserControls.GraphicsPage());
         }
 
         private void MenuButtonEmployee_Click(object sender, RoutedEventArgs e)
         {
             OpenCloseMenu();
+            LoadPage(new UserControls.EmployeePage());
         }
 
         private void OpenCloseMenu()
@@ -76,9 +67,27 @@ namespace BusinessAccounting
             }
         }
 
-        private void ClearWindow()
+        private void LoadPage(UserControl pPage)
         {
             UserControlGrid.Children.Clear();
+            UserControlGrid.Children.Add(pPage);
+        }
+
+        private bool WindowDisplayed = false;
+
+        protected override void OnContentRendered(EventArgs e)
+        {
+            base.OnContentRendered(e);
+
+            if (WindowDisplayed)
+                return;
+
+            WindowDisplayed = true;
+
+            if (!global.sqlite.TestConnection("Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true", true, false))
+            {
+                this.ShowMessageAsync("Проблемка", "Не удалось установить соединение с базой данных.", MessageDialogStyle.Affirmative);
+            }
         }
     }
 }

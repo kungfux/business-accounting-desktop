@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace BusinessAccounting.UserControls
 {
@@ -28,7 +30,7 @@ namespace BusinessAccounting.UserControls
         private void LoadHistory(bool all = false)
         {
             DataTable historyRecords;
-            
+
             if (all)
             {
                 historyRecords = global.sqlite.SelectTable("select id, datetime, sum, comment from ba_cash_operations order by id desc;");
@@ -60,7 +62,7 @@ namespace BusinessAccounting.UserControls
             {
                 groupHistory.Header = "Нет последних записей";
                 groupHistory.IsEnabled = false;
-            }   
+            }
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -114,6 +116,39 @@ namespace BusinessAccounting.UserControls
         {
             ((MetroWindow)this.Parent.GetParentObject().GetParentObject()).ShowMessageAsync("Проблемка", text +
                 Environment.NewLine + global.sqlite.LastOperationErrorMessage, MessageDialogStyle.Affirmative);
+        }
+
+        private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)
+        {
+            HistoryRecord record = null;
+
+            for (var visual = sender as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+                if (visual is GridViewRowPresenter)
+                {
+                    var row = (GridViewRowPresenter)visual;
+                    record = (HistoryRecord)row.DataContext;
+                    break;
+                }
+
+            await AskAndDelete(string.Concat("Удалить запись с суммой: \"", record.sum.ToString(), "\" за ", record.date.ToShortDateString(), " число?"), record);
+        }
+
+        private async Task AskAndDelete(string question, HistoryRecord record)
+        {
+            MetroWindow w = (MetroWindow)this.Parent.GetParentObject().GetParentObject();
+            MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
+            if (result == MessageDialogResult.Affirmative)
+            {
+                if (global.sqlite.ChangeData("delete from ba_cash_operations where id = @id;",
+                        new SQLiteParameter("@id", record.id)) <= 0)
+                {
+                    ShowMessage("Не удалось удалить запись из базы данных!");
+                }
+                else
+                {
+                    LoadHistory();
+                }
+            }
         }
     }
 }

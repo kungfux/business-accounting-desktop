@@ -7,7 +7,7 @@
     xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls"
     x:Class="BusinessAccounting.UserControls.CashPage" 
     mc:Ignorable="d" 
-    d:DesignHeight="400" d:DesignWidth="700">
+    d:DesignHeight="400" d:DesignWidth="800">
     
     <Grid>
         <Grid.Triggers>
@@ -87,8 +87,15 @@
                         <GridView>
                             <GridViewColumn Header="№" Width="40" DisplayMemberBinding="{Binding id}" />
                             <GridViewColumn Header="Дата" Width="70" DisplayMemberBinding="{Binding date}" />
-                            <GridViewColumn Header="Сумма" Width="100" DisplayMemberBinding="{Binding sum}" />
+                            <GridViewColumn Header="Сумма" Width="60" DisplayMemberBinding="{Binding sum}" />
                             <GridViewColumn Header="Комментарий" Width="100" DisplayMemberBinding="{Binding comment}" />
+                            <GridViewColumn Width="70">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Удалить" Click="bRemoveHistoryRecord_Click" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>

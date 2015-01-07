@@ -7,7 +7,7 @@
     xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls"
     x:Class="BusinessAccounting.UserControls.CashPage" 
     mc:Ignorable="d" 
-    d:DesignHeight="400" d:DesignWidth="800">
+    d:DesignHeight="450" d:DesignWidth="850">
     
     <Grid>
         <Grid.Triggers>
@@ -27,7 +27,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="350"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label 
@@ -49,6 +49,7 @@
                     <RowDefinition Height="27"/>
                     <RowDefinition Height="27"/>
                     <RowDefinition Height="27"/>
+                    <RowDefinition Height="27"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -59,12 +60,12 @@
                 <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                 <Label Grid.Row="1" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                 <Label Grid.Row="2" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите дату" FirstDayOfWeek="Monday" Name="inputDate" />
+                <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите дату" FirstDayOfWeek="Monday" Name="inputDate" SelectedDateFormat="Long" />
                 <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите сумму" Controls:TextboxHelper.ClearTextButton="True" Name="inputSum"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Укажите комментарий"
+                <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Controls:TextboxHelper.Watermark="Укажите комментарий"
                          Controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto" 
                          AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="inputComment"/>
-                <Button Grid.Row="4" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
+                <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
             </Grid>
         </GroupBox>
         <Grid
@@ -85,11 +86,11 @@
                     Name="HistoryTable">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="№" Width="40" DisplayMemberBinding="{Binding id}" />
-                            <GridViewColumn Header="Дата" Width="70" DisplayMemberBinding="{Binding date}" />
-                            <GridViewColumn Header="Сумма" Width="60" DisplayMemberBinding="{Binding sum}" />
-                            <GridViewColumn Header="Комментарий" Width="100" DisplayMemberBinding="{Binding comment}" />
-                            <GridViewColumn Width="70">
+                            <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
+                            <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding date}" />
+                            <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding sum}" />
+                            <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding comment}" />
+                            <GridViewColumn Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Удалить" Click="bRemoveHistoryRecord_Click" />

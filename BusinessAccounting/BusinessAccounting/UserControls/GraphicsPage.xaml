@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="BusinessAccounting.UserControls.GraphicsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
@@ -47,6 +48,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
@@ -57,20 +59,13 @@
                 <ComboBox Grid.Row="0" Grid.Column="1" Name="comboChartType">
                     <ComboBoxItem Content="Доходы" Name="Incomes"/>
                     <ComboBoxItem Content="Расходы" Name="Charges"/>
+                    <ComboBoxItem Content="Доходы/Расходы" Name="IncomesCharges"/>
                     <ComboBoxItem Content="Сравнение" Name="Compare"/>
                 </ComboBox>
-                <ComboBox Grid.Row="1" Grid.Column="1" Name="comboChartPeriod">
-                    <ComboBoxItem Content="Неделя" Name="Week"/>
-                    <ComboBoxItem Content="Месяц" Name="Month"/>
-                    <ComboBoxItem Content="Квартал" Name="ThreeMonth"/>
-                    <ComboBoxItem Content="Полугодие" Name="SixMonth"/>
-                    <ComboBoxItem Content="Год" Name="Year"/>
-                    <ComboBoxItem Content="3 года" Name="ThreeYears"/>
-                    <ComboBoxItem Content="5 лет" Name="FiveYears"/>
-                    <ComboBoxItem Content="Всё время" Name="AllTime"/>
-                </ComboBox>
-                <Button Grid.Row="2" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Click="bBuildGraph_Click"/>
-                <Button Grid.Row="3" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="bSaveGraph_Click"/>
+                <DatePicker Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Начальная дата" FirstDayOfWeek="Monday" Name="pickerPeriodStart" SelectedDateFormat="Long"/>
+                <DatePicker Grid.Row="2" Grid.Column="1" Controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" Name="pickerPeriodEnd" SelectedDateFormat="Long"/>
+                <Button Grid.Row="3" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Click="bBuildGraph_Click"/>
+                <Button Grid.Row="4" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="bSaveGraph_Click"/>
             </Grid>
         </GroupBox>
         <GroupBox

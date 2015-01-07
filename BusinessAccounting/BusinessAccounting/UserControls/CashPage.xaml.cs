@@ -33,12 +33,12 @@ namespace BusinessAccounting.UserControls
 
             if (all)
             {
-                historyRecords = global.sqlite.SelectTable("select id, datetime, sum, comment from ba_cash_operations order by id desc;");
+                historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc;");
                 groupHistory.Header = "Все записи";
             }
             else
             {
-                historyRecords = global.sqlite.SelectTable("select id, datetime, sum, comment from ba_cash_operations order by id desc limit 20;");
+                historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc limit 20;");
                 groupHistory.Header = "Последние 20 записей";
             }
 
@@ -51,7 +51,7 @@ namespace BusinessAccounting.UserControls
                     history.Add(new HistoryRecord()
                     {
                         id = Convert.ToInt32(row.ItemArray[0].ToString()),
-                        date = Convert.ToDateTime(row.ItemArray[1]).ToShortDateString(),
+                        date = Convert.ToDateTime(row.ItemArray[1]).ToString("dd MMMM yyyy"),
                         sum = string.Format("{0:C}", decimal.Parse(row.ItemArray[2].ToString())),
                         comment = row.ItemArray[3].ToString()
                     });
@@ -91,7 +91,7 @@ namespace BusinessAccounting.UserControls
                 comment = inputComment.Text != "" ? inputComment.Text : null;
             }
 
-            if (global.sqlite.ChangeData("insert into ba_cash_operations (datetime, sum, comment) values (@d, @s, @c);",
+            if (global.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
                 new SQLiteParameter("@d", inputDate.SelectedDate),
                 new SQLiteParameter("@s", sum),
                 new SQLiteParameter("@c", comment)) > 0)
@@ -134,7 +134,8 @@ namespace BusinessAccounting.UserControls
                     break;
                 }
 
-            await AskAndDelete(string.Concat("Удалить запись с суммой ", record.sum.ToString(), " за ", record.date, " число?"), record);
+            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1}{0} Сумма: {2}{0} Комментарий: {3}", 
+                Environment.NewLine, record.date, record.sum.ToString(), record.comment), record);
         }
 
         private async Task AskAndDelete(string question, HistoryRecord record)

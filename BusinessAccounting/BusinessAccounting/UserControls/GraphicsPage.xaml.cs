@@ -74,7 +74,7 @@ namespace BusinessAccounting.UserControls
         bool MakeIncomesChart(DateTime startDate, DateTime endDate)
         {
             chart.Series.Add("");
-            chart.Titles.Add("График прибыли за период с " + startDate.ToShortDateString() + " по " + endDate.ToShortDateString());
+            chart.Titles.Add("График прибыли за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
             chart.Legends.Add("");
             chart.Legends[0].Title = "Легенда";
             chart.Series[0].LegendText = "Прибыль";
@@ -111,7 +111,7 @@ namespace BusinessAccounting.UserControls
         bool MakeChargesChart(DateTime startDate, DateTime endDate)
         {
             chart.Series.Add("");
-            chart.Titles.Add("График расходов за период с " + startDate.ToShortDateString() + " по " + endDate.ToShortDateString());
+            chart.Titles.Add("График расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
             chart.Legends.Add("");
             chart.Legends[0].Title = "Легенда";
             chart.Series[0].LegendText = "Расходы";
@@ -149,7 +149,7 @@ namespace BusinessAccounting.UserControls
         bool MakeCompareChart(DateTime startDate, DateTime endDate)
         {
             chart.Series.Add("");
-            chart.Titles.Add("График сравнения за период с " + startDate.ToShortDateString() + " по " + endDate.ToShortDateString());
+            chart.Titles.Add("График сравнения за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
             chart.Legends.Add("");
             chart.Legends[0].Title = "Легенда";
 
@@ -188,7 +188,7 @@ namespace BusinessAccounting.UserControls
         {
             chart.Series.Add("");
             chart.Series.Add("");
-            chart.Titles.Add("График прибыли и расходов за период с " + startDate.ToShortDateString() + " по " + endDate.ToShortDateString());
+            chart.Titles.Add("График прибыли и расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
             chart.Legends.Add("");
             chart.Legends[0].Title = "Легенда";
             chart.Series[0].LegendText = "Прибыль";

@@ -83,7 +83,7 @@
 			Header="Последние записи"
             Name="groupHistory">
                 <ListView 
-                    Name="HistoryTable">
+                    Name="HistoryTable" SelectionMode="Single">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />

@@ -92,7 +92,7 @@ namespace BusinessAccounting.UserControls
             }
 
             if (global.sqlite.ChangeData("insert into ba_cash_operations (datetime, sum, comment) values (@d, @s, @c);",
-                new SQLiteParameter("@d", inputDate.DisplayDate),
+                new SQLiteParameter("@d", inputDate.SelectedDate),
                 new SQLiteParameter("@s", sum),
                 new SQLiteParameter("@c", comment)) > 0)
             {
@@ -114,8 +114,12 @@ namespace BusinessAccounting.UserControls
 
         void ShowMessage(string text)
         {
-            ((MetroWindow)this.Parent.GetParentObject().GetParentObject()).ShowMessageAsync("Проблемка", text +
-                Environment.NewLine + global.sqlite.LastOperationErrorMessage, MessageDialogStyle.Affirmative);
+            for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+                if (visual is MetroWindow)
+                {
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + global.sqlite.LastOperationErrorMessage, 
+                        MessageDialogStyle.Affirmative);
+                }
         }
 
         private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)

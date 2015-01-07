@@ -46,6 +46,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
@@ -54,21 +55,22 @@
                 <Label Grid.Row="0" Grid.Column="0" Content="Тип графика" HorizontalAlignment="Right"/>
                 <Label Grid.Row="1" Grid.Column="0" Content="Период" HorizontalAlignment="Right"/>
                 <ComboBox Grid.Row="0" Grid.Column="1" Name="comboChartType">
-                    <ComboBoxItem Content="Доходы"/>
-                    <ComboBoxItem Content="Расходы"/>
-                    <ComboBoxItem Content="Доходы/расходы"/>
+                    <ComboBoxItem Content="Доходы" Name="Incomes"/>
+                    <ComboBoxItem Content="Расходы" Name="Charges"/>
+                    <ComboBoxItem Content="Сравнение" Name="Compare"/>
                 </ComboBox>
                 <ComboBox Grid.Row="1" Grid.Column="1" Name="comboChartPeriod">
-                    <ComboBoxItem Content="Неделя"/>
-                    <ComboBoxItem Content="Месяц"/>
-                    <ComboBoxItem Content="Квартал"/>
-                    <ComboBoxItem Content="Полугодие"/>
-                    <ComboBoxItem Content="Год"/>
-                    <ComboBoxItem Content="3 года"/>
-                    <ComboBoxItem Content="5 лет"/>
-                    <ComboBoxItem Content="Всё время"/>
+                    <ComboBoxItem Content="Неделя" Name="Week"/>
+                    <ComboBoxItem Content="Месяц" Name="Month"/>
+                    <ComboBoxItem Content="Квартал" Name="ThreeMonth"/>
+                    <ComboBoxItem Content="Полугодие" Name="SixMonth"/>
+                    <ComboBoxItem Content="Год" Name="Year"/>
+                    <ComboBoxItem Content="3 года" Name="ThreeYears"/>
+                    <ComboBoxItem Content="5 лет" Name="FiveYears"/>
+                    <ComboBoxItem Content="Всё время" Name="AllTime"/>
                 </ComboBox>
                 <Button Grid.Row="2" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Click="bBuildGraph_Click"/>
+                <Button Grid.Row="3" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="bSaveGraph_Click"/>
             </Grid>
         </GroupBox>
         <GroupBox

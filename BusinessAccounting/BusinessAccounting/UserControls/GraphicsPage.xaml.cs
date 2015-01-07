@@ -256,7 +256,16 @@ namespace BusinessAccounting.UserControls
 
         private void bSaveGraph_Click(object sender, RoutedEventArgs e)
         {
-            chart.SaveImage("image.png", ChartImageFormat.Png);
+            System.Windows.Forms.SaveFileDialog sfDialog = new System.Windows.Forms.SaveFileDialog();
+            sfDialog.AddExtension = true;
+            sfDialog.Filter = "Png (PNG)|*.png";
+            if (sfDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (sfDialog.FileName != "")
+                {
+                    chart.SaveImage(sfDialog.FileName, ChartImageFormat.Png);
+                }
+            }
         }
     }
 }

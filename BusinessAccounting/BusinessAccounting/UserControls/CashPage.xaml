@@ -40,8 +40,6 @@
 			Background="{DynamicResource AccentColorBrush}"/>
         <GroupBox
 			Grid.Row="1"
-			Background="Silver"
-			BorderBrush="Silver"
 			Header="Добавить запись">
             <Grid>
                 <Grid.RowDefinitions>
@@ -78,8 +76,6 @@
             </Grid.RowDefinitions>
             <GroupBox
             Grid.Row="0"
-            Background="Silver"
-			BorderBrush="Silver"
 			Header="Последние записи"
             Name="groupHistory">
                 <ListView 

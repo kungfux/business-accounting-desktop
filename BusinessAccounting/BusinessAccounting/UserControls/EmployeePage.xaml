@@ -1,15 +1,12 @@
 ﻿<UserControl x:Class="BusinessAccounting.UserControls.EmployeePage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="700">
-    
-    <UserControl.Resources>
-        <Image x:Key="ImageNoImage" Source="pack://application:,,,/Resources/image_noimage.png" />
-    </UserControl.Resources>
-    
+             d:DesignHeight="450" d:DesignWidth="950">
+       
     <Grid>
         <Grid.Triggers>
             <!-- Animates the rectangle's opacity. -->
@@ -44,11 +41,70 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="128"/>
                 <ColumnDefinition />
+                <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
-            <Label Content="{StaticResource ImageNoImage}" Width="128" Height="128"/>
-            <Label Grid.Column="1" Content="Эта страница ещё не работает, извините." />
+            <GroupBox Visibility="Hidden"
+                Grid.Column="0" Grid.RowSpan="2" Header="Данные о сотруднике">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="128"/>
+                        <ColumnDefinition Width="170"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.RowSpan="5" Source="pack://application:,,,/Resources/image_noimage.png" />
+                    <Label Grid.Row="0" Grid.Column="1" Content="Фамилия, имя, отчество" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="Номер телефона" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <Label Grid.Row="2" Grid.Column="1" Content="Паспортные данные" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <Label Grid.Row="4" Grid.Column="1" Content="Адрес проживания" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <Label Grid.Row="6" Grid.Column="1" Content="Заметки" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Controls:TextboxHelper.Watermark="Укажите фамилию, имя и отчество сотрудника" 
+                         Controls:TextboxHelper.ClearTextButton="True" Name="inputEmplName"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" Controls:TextboxHelper.Watermark="Укажите контактный номер телефона" 
+                         Controls:TextboxHelper.ClearTextButton="True" Name="inputEmplPhone"/>
+                    <TextBox Grid.Row="2" Grid.Column="2" Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Укажите паспортные данные" 
+                         Controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
+                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplPassport"/>
+                    <TextBox Grid.Row="4" Grid.Column="2" Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Укажите адрес проживания" 
+                         Controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
+                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplAddress"/>
+                    <TextBox Grid.Row="6" Grid.Column="2" Grid.RowSpan="3" Controls:TextboxHelper.Watermark="Укажите прочие данные" 
+                         Controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
+                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplNotes"/>
+                    <Button Grid.Row="5" Content="Выбрать фото"/>
+                    <Button Grid.Row="6" Content="Удалить фото"/>
+                    <Button Grid.Row="9" Grid.Column="2" Content="Редактировать"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Visibility="Hidden"
+                Grid.Column="1" Grid.RowSpan="2" Header="Поиск сотрудников">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </GroupBox>
         </Grid>
     </Grid>
 </UserControl>

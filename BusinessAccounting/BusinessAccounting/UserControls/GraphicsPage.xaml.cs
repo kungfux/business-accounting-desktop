@@ -98,6 +98,10 @@ namespace BusinessAccounting.UserControls
                 {
                     chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), 
                         Convert.ToDouble(table.Rows[a].ItemArray[1])));
+                    if (comboDisplayValues.IsChecked == true)
+                    {
+                        chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
+                    }
                 }
             }
             else
@@ -135,7 +139,11 @@ namespace BusinessAccounting.UserControls
                 for (int a = 0; a < table.Rows.Count; a++)
                 {
                     chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), 
-                        0 - Convert.ToDouble(table.Rows[a].ItemArray[1].ToString())));
+                        0 - Convert.ToDouble(table.Rows[a].ItemArray[1])));
+                    if (comboDisplayValues.IsChecked == true)
+                    {
+                        chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
+                    }
                 }
             }
             else
@@ -170,11 +178,17 @@ namespace BusinessAccounting.UserControls
 
                 chart.Series[0].Points.Add(incomeSum);
                 chart.Series[0].Points[0].LegendText = "Доходы";
-                chart.Series[0].Points[0].Label = incomeSum > 0 ? string.Format("{0:C}", incomeSum) : "";
+                if (comboDisplayValues.IsChecked == true)
+                {
+                    chart.Series[0].Points[0].Label = incomeSum > 0 ? string.Format("{0:C}", incomeSum) : "";
+                }
 
                 chart.Series[0].Points.Add(chargesSum);
                 chart.Series[0].Points[1].LegendText = "Расходы";
-                chart.Series[0].Points[1].Label = chargesSum > 0 ? string.Format("{0:C}", chargesSum) : "";
+                if (comboDisplayValues.IsChecked == true)
+                {
+                    chart.Series[0].Points[1].Label = chargesSum > 0 ? string.Format("{0:C}", chargesSum) : "";
+                }
             }
             else
             {
@@ -229,6 +243,10 @@ namespace BusinessAccounting.UserControls
                     {
                         chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(tableIncomes.Rows[a].ItemArray[0]).ToOADate(), 
                             Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1])));
+                        if (comboDisplayValues.IsChecked == true)
+                        {
+                            chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1]));
+                        }
                     }
                 }
 
@@ -237,7 +255,11 @@ namespace BusinessAccounting.UserControls
                     for (int a = 0; a < tableCharges.Rows.Count; a++)
                     {
                         chart.Series[1].Points.Add(new DataPoint(Convert.ToDateTime(tableCharges.Rows[a].ItemArray[0]).ToOADate(), 
-                            0 - Convert.ToDouble(tableCharges.Rows[a].ItemArray[1].ToString())));
+                            0 - Convert.ToDouble(tableCharges.Rows[a].ItemArray[1])));
+                        if (comboDisplayValues.IsChecked == true)
+                        {
+                            chart.Series[1].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableCharges.Rows[a].ItemArray[1]));
+                        }
                     }
                 }
             }

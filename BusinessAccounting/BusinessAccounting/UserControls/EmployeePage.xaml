@@ -6,7 +6,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="950">
-       
+
+    <UserControl.Resources>
+        <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_man.png" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.Triggers>
             <!-- Animates the rectangle's opacity. -->
@@ -29,11 +33,14 @@
         </Grid.ColumnDefinitions>
         <Label 
 			Grid.Row="0"
-			Content="   Сотрудники"
+			Content="           Сотрудники"
 			VerticalContentAlignment="Center"
 			FontSize="14"
 			Foreground="White"
 			Background="{DynamicResource AccentColorBrush}"/>
+        <Label 
+            Grid.Row="0"
+            Content="{StaticResource ImageHeader}" />
         <Grid
             Grid.Row="1">
             <Grid.RowDefinitions>

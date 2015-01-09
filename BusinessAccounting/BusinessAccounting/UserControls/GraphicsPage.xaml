@@ -6,6 +6,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="700">
+
+    <UserControl.Resources>
+        <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_graph.png" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.Triggers>
             <!-- Animates the rectangle's opacity. -->
@@ -26,16 +31,18 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="300"/>
-        </Grid.ColumnDefinitions>
-                      
+        </Grid.ColumnDefinitions>     
         <Label 
     		Grid.Row="0"
-    		Content="   Графики"
+    		Content="           Графики"
             Grid.ColumnSpan="2"
     		VerticalContentAlignment="Center"
     		FontSize="14"
     		Foreground="White"
     		Background="{DynamicResource AccentColorBrush}"/>
+        <Label 
+            Grid.Row="0"
+            Content="{StaticResource ImageHeader}" />
         <GroupBox
             Grid.Row="1"
             Grid.Column="1"

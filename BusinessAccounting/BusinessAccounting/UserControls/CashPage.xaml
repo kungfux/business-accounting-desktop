@@ -9,6 +9,10 @@
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="850">
     
+    <UserControl.Resources>
+        <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_cash.png" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.Triggers>
             <!-- Animates the rectangle's opacity. -->
@@ -33,11 +37,14 @@
         <Label 
 			Grid.Row="0"
 			Grid.ColumnSpan="2"
-			Content="   Касса"
+			Content="           Касса"
 			VerticalContentAlignment="Center"
 			FontSize="14"
 			Foreground="White"
 			Background="{DynamicResource AccentColorBrush}"/>
+        <Label 
+            Grid.Row="0"
+            Content="{StaticResource ImageHeader}" />
         <GroupBox
 			Grid.Row="1"
 			Header="Добавить запись">

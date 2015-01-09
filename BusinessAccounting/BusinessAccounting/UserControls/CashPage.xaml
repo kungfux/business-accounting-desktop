@@ -1,5 +1,6 @@
 ﻿<UserControl
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -62,8 +63,8 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
-                            <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding date}"/>
-                            <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding sum}"/>
+                            <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                            <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
                             <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding comment}"/>
                             <GridViewColumn Width="Auto">
                                 <GridViewColumn.CellTemplate>
@@ -76,36 +77,40 @@
                     </ListView.View>
                 </ListView>
             </GroupBox>
-            <Button Grid.Row="1" Content="Загрузить все записи" Margin="5,0,5,5" Click="bShowAll_Click"/>
+            <Button Grid.Row="1" Content="Загрузить всю историю" Margin="5,0,5,5" Click="bShowAll_Click"/>
         </Grid>
         <GroupBox
 			Grid.Row="1"
             Grid.Column="1"
 			Header="Добавить запись">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="0"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <Label Grid.Row="1" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <Label Grid.Row="2" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="inputDate" SelectedDateFormat="Long" />
-                <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите сумму" Controls:TextboxHelper.ClearTextButton="True" Name="inputSum"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="4" Controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)"
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="0"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                        <Label Grid.Row="1" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                        <Label Grid.Row="2" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                        <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="inputDate" SelectedDateFormat="Long" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите сумму" Controls:TextboxHelper.ClearTextButton="True" Name="inputSum"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="4" Controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)"
                          Controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto" 
                          AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="inputComment"/>
-                <Button Grid.Row="6" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
+                        <Button Grid.Row="6" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
+                    </Grid>
+                </ScrollViewer>
             </Grid>
         </GroupBox>
     </Grid>

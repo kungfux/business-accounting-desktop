@@ -27,6 +27,8 @@ namespace BusinessAccounting.UserControls
             LoadHistory();
         }
 
+        List<CashTransaction> history = new List<CashTransaction>();
+
         private void LoadHistory(bool all = false)
         {
             DataTable historyRecords;
@@ -40,17 +42,17 @@ namespace BusinessAccounting.UserControls
                 historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc limit 50;");
             }
 
-            List<HistoryRecord> history = new List<HistoryRecord>();
+            history = new List<CashTransaction>();
 
             if (historyRecords != null)
             {
                 foreach (DataRow row in historyRecords.Rows)
                 {
-                    history.Add(new HistoryRecord()
+                    history.Add(new CashTransaction()
                     {
                         id = Convert.ToInt32(row.ItemArray[0].ToString()),
-                        date = Convert.ToDateTime(row.ItemArray[1]).ToString("dd MMMM yyyy"),
-                        sum = string.Format("{0:C}", decimal.Parse(row.ItemArray[2].ToString())),
+                        date = Convert.ToDateTime(row.ItemArray[1]),
+                        sum = decimal.Parse(row.ItemArray[2].ToString()),
                         comment = row.ItemArray[3].ToString()
                     });
                 }
@@ -122,21 +124,21 @@ namespace BusinessAccounting.UserControls
 
         private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)
         {
-            HistoryRecord record = null;
+            CashTransaction record = null;
 
             for (var visual = sender as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is GridViewRowPresenter)
                 {
                     var row = (GridViewRowPresenter)visual;
-                    record = (HistoryRecord)row.DataContext;
+                    record = (CashTransaction)row.DataContext;
                     break;
                 }
 
-            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1}{0} Сумма: {2}{0} Комментарий: {3}",
-                Environment.NewLine, record.date, record.sum.ToString(), record.comment), record);
+            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1:dd MMMM yyyy}{0} Сумма: {2:C}{0} Комментарий: {3}",
+                Environment.NewLine, record.date, record.sum, record.comment), record);
         }
 
-        private async Task AskAndDelete(string question, HistoryRecord record)
+        private async Task AskAndDelete(string question, CashTransaction record)
         {
             MetroWindow w = (MetroWindow)this.Parent.GetParentObject().GetParentObject();
             MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);

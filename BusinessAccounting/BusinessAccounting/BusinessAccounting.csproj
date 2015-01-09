@@ -82,13 +82,14 @@
     <Compile Include="UserControls\CashPage.xaml.cs">
       <DependentUpon>CashPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Employee.cs" />
     <Compile Include="UserControls\EmployeePage.xaml.cs">
       <DependentUpon>EmployeePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\GraphicsPage.xaml.cs">
       <DependentUpon>GraphicsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\HistoryRecord.cs" />
+    <Compile Include="UserControls\CashTransaction.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

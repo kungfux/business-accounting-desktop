@@ -34,12 +34,10 @@ namespace BusinessAccounting.UserControls
             if (all)
             {
                 historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc;");
-                groupHistory.Header = "Все записи";
             }
             else
             {
-                historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc limit 20;");
-                groupHistory.Header = "Последние 20 записей";
+                historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc limit 50;");
             }
 
             List<HistoryRecord> history = new List<HistoryRecord>();
@@ -117,7 +115,7 @@ namespace BusinessAccounting.UserControls
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + global.sqlite.LastOperationErrorMessage, 
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + global.sqlite.LastOperationErrorMessage,
                         MessageDialogStyle.Affirmative);
                 }
         }
@@ -134,7 +132,7 @@ namespace BusinessAccounting.UserControls
                     break;
                 }
 
-            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1}{0} Сумма: {2}{0} Комментарий: {3}", 
+            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1}{0} Сумма: {2}{0} Комментарий: {3}",
                 Environment.NewLine, record.date, record.sum.ToString(), record.comment), record);
         }
 

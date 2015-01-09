@@ -11,7 +11,8 @@
     BorderThickness="1"
     WindowStartupLocation="CenterScreen"
     ResizeMode="CanResizeWithGrip"
-    Icon="pack://application:,,,/Resources/favicon.ico">
+    Icon="pack://application:,,,/Resources/favicon.ico"
+    SaveWindowPosition="True">
 
     <Controls:MetroWindow.Resources>
         <Image x:Key="ImageMenu" Source="pack://application:,,,/Resources/image_menu.png" />
@@ -39,24 +40,25 @@
             <!-- TODO: add startup elements -->
         </Grid>
         <!-- main menu button -->
-        <Grid 
-    		Width="150"
-    		VerticalAlignment="Top" 
+        <Grid
+            Width="150"
+            VerticalAlignment="Top" 
     		HorizontalAlignment="Right" 
-    		Margin="0,74,10,0" 
-    		Opacity="1.0"
-    		x:Name="GridMenu"
-            Background="White">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="64"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="64" />
-                <RowDefinition Height="64" />
-                <RowDefinition Height="64" />
-            </Grid.RowDefinitions>
-            <Button
+    		Margin="0,74,10,0"
+            Opacity="1.0"
+    		x:Name="GridMenu">
+            <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2" CornerRadius="4">
+                <Grid Background="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="64"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="64" />
+                        <RowDefinition Height="64" />
+                        <RowDefinition Height="64" />
+                    </Grid.RowDefinitions>
+                    <Button
     			Height="64" 
     			Width="64" 
     			Focusable="False"
@@ -66,7 +68,7 @@
     			Grid.Column="1" 
     			x:Name="MenuButtonCash"
     			Click="MenuButtonCash_Click"/>
-            <Button
+                    <Button
     			Height="64" 
     			Width="64" 
     			Focusable="False"
@@ -76,7 +78,7 @@
     			Grid.Column="1"
     			x:Name="MenuButtonEmployee"
     			Click="MenuButtonEmployee_Click"/>
-            <Button
+                    <Button
     			Height="64" 
     			Width="64" 
     			Focusable="False"
@@ -86,24 +88,26 @@
     			Grid.Column="1"
     			x:Name="MenuButtonGraphics"
     			Click="MenuButtonGraphics_Click"/>
-            <Label
+                    <Label
     			Grid.Row="0"
     			Grid.Column="0"
     			Content="Касса"
     			HorizontalAlignment="Right"
     			VerticalContentAlignment="Center"/>
-            <Label
+                    <Label
     			Grid.Row="1"
     			Grid.Column="0"
     			Content="Сотрудники"
     			HorizontalAlignment="Right" 
     			VerticalContentAlignment="Center"/>
-            <Label
+                    <Label
     			Grid.Row="2"
     			Grid.Column="0"
     			Content="Графики"
     			HorizontalAlignment="Right"
     			VerticalContentAlignment="Center"/>
+                </Grid>
+            </Border>
         </Grid>
         <Button 
     		Height="64" 

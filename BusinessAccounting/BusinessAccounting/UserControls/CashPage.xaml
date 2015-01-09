@@ -31,8 +31,8 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
             <ColumnDefinition />
+            <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
         <Label 
 			Grid.Row="0"
@@ -45,11 +45,46 @@
         <Label 
             Grid.Row="0"
             Content="{StaticResource ImageHeader}" />
+        <Grid
+            Grid.Column="0"
+            Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="0"/>
+            </Grid.RowDefinitions>
+            <GroupBox
+            Grid.Row="0"
+			Header="Журнал операций"
+            Name="groupHistory">
+                <ListView 
+                    Name="HistoryTable" SelectionMode="Single">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
+                            <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding date}"/>
+                            <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding sum}"/>
+                            <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding comment}"/>
+                            <GridViewColumn Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Удалить" Click="bRemoveHistoryRecord_Click" ToolTip="Удалить запись"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+            <Button Grid.Row="1" Content="Загрузить все записи" Margin="5,0,5,5" Click="bShowAll_Click"/>
+        </Grid>
         <GroupBox
 			Grid.Row="1"
+            Grid.Column="1"
 			Header="Добавить запись">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="27"/>
                     <RowDefinition Height="27"/>
                     <RowDefinition Height="27"/>
                     <RowDefinition Height="27"/>
@@ -65,46 +100,13 @@
                 <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                 <Label Grid.Row="1" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                 <Label Grid.Row="2" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите дату" FirstDayOfWeek="Monday" Name="inputDate" SelectedDateFormat="Long" />
-                <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Укажите сумму" Controls:TextboxHelper.ClearTextButton="True" Name="inputSum"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Controls:TextboxHelper.Watermark="Укажите комментарий"
+                <DatePicker Grid.Row="0" Grid.Column="1" Controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="inputDate" SelectedDateFormat="Long" />
+                <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите сумму" Controls:TextboxHelper.ClearTextButton="True" Name="inputSum"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="4" Controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)"
                          Controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto" 
                          AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="inputComment"/>
-                <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
+                <Button Grid.Row="6" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
             </Grid>
         </GroupBox>
-        <Grid
-            Grid.Column="1"
-            Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="0"/>
-            </Grid.RowDefinitions>
-            <GroupBox
-            Grid.Row="0"
-			Header="Последние записи"
-            Name="groupHistory">
-                <ListView 
-                    Name="HistoryTable" SelectionMode="Single">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
-                            <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding date}" />
-                            <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding sum}" />
-                            <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding comment}" />
-                            <GridViewColumn Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Удалить" Click="bRemoveHistoryRecord_Click" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </GroupBox>
-            <Button Grid.Row="1" Content="Показать все" Margin="5,0,5,5" Click="bShowAll_Click"/>
-        </Grid>
     </Grid>
 </UserControl>

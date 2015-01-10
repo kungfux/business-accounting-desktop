@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace BusinessAccounting.UserControls
@@ -20,27 +21,12 @@ namespace BusinessAccounting.UserControls
             InitializeComponent();
         }
 
-        Chart chart = new Chart();
+        Chart chart;
 
-        private void bBuildGraph_Click(object sender, RoutedEventArgs e)
+        #region Functionality methods
+        private void PrintChart()
         {
             wfHost.Visibility = Visibility.Hidden;
-
-            if (comboChartType.SelectedItem == null)
-            {
-                ShowMessage("Нужно выбрать тип графика для построения!");
-                return;
-            }
-            if (pickerPeriodStart.SelectedDate == null || pickerPeriodEnd.SelectedDate == null)
-            {
-                ShowMessage("Нужно выбрать период для построения графика (укажите обе даты - начальную и конечную)!");
-                return;
-            }
-            if (pickerPeriodEnd.SelectedDate < pickerPeriodStart.SelectedDate)
-            {
-                ShowMessage("Выбранная конечная дата меньше начальной. Это не логично!");
-                return;
-            }
 
             chart = new Chart();
 
@@ -51,16 +37,16 @@ namespace BusinessAccounting.UserControls
             switch (((ComboBoxItem)comboChartType.SelectedItem).Name)
             {
                 case "Incomes":
-                    chartReady = MakeIncomesChart(startDate, endDate);
+                    chartReady = BuildIncomesChart(startDate, endDate);
                     break;
                 case "Charges":
-                    chartReady = MakeChargesChart(startDate, endDate);
+                    chartReady = BuildChargesChart(startDate, endDate);
                     break;
                 case "IncomesCharges":
-                    chartReady = MakeIncomesChargesChart(startDate, endDate);
+                    chartReady = BuildIncomesChargesChart(startDate, endDate);
                     break;
                 case "Compare":
-                    chartReady = MakeCompareChart(startDate, endDate);
+                    chartReady = BuildCompareChart(startDate, endDate);
                     break;
             }
 
@@ -71,7 +57,7 @@ namespace BusinessAccounting.UserControls
             }
         }
 
-        bool MakeIncomesChart(DateTime startDate, DateTime endDate)
+        private bool BuildIncomesChart(DateTime startDate, DateTime endDate)
         {
             chart.Series.Add("");
             chart.Titles.Add("График прибыли за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
@@ -96,7 +82,7 @@ namespace BusinessAccounting.UserControls
             {
                 for (int a = 0; a < table.Rows.Count; a++)
                 {
-                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), 
+                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
                         Convert.ToDouble(table.Rows[a].ItemArray[1])));
                     if (comboDisplayValues.IsChecked == true)
                     {
@@ -112,7 +98,7 @@ namespace BusinessAccounting.UserControls
             return true;
         }
 
-        bool MakeChargesChart(DateTime startDate, DateTime endDate)
+        private bool BuildChargesChart(DateTime startDate, DateTime endDate)
         {
             chart.Series.Add("");
             chart.Titles.Add("График расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
@@ -138,7 +124,7 @@ namespace BusinessAccounting.UserControls
             {
                 for (int a = 0; a < table.Rows.Count; a++)
                 {
-                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(), 
+                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
                         0 - Convert.ToDouble(table.Rows[a].ItemArray[1])));
                     if (comboDisplayValues.IsChecked == true)
                     {
@@ -154,7 +140,7 @@ namespace BusinessAccounting.UserControls
             return true;
         }
 
-        bool MakeCompareChart(DateTime startDate, DateTime endDate)
+        private bool BuildCompareChart(DateTime startDate, DateTime endDate)
         {
             chart.Series.Add("");
             chart.Titles.Add("График сравнения за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
@@ -198,7 +184,7 @@ namespace BusinessAccounting.UserControls
             return true;
         }
 
-        bool MakeIncomesChargesChart(DateTime startDate, DateTime endDate)
+        private bool BuildIncomesChargesChart(DateTime startDate, DateTime endDate)
         {
             chart.Series.Add("");
             chart.Series.Add("");
@@ -241,7 +227,7 @@ namespace BusinessAccounting.UserControls
                 {
                     for (int a = 0; a < tableIncomes.Rows.Count; a++)
                     {
-                        chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(tableIncomes.Rows[a].ItemArray[0]).ToOADate(), 
+                        chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(tableIncomes.Rows[a].ItemArray[0]).ToOADate(),
                             Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1])));
                         if (comboDisplayValues.IsChecked == true)
                         {
@@ -254,7 +240,7 @@ namespace BusinessAccounting.UserControls
                 {
                     for (int a = 0; a < tableCharges.Rows.Count; a++)
                     {
-                        chart.Series[1].Points.Add(new DataPoint(Convert.ToDateTime(tableCharges.Rows[a].ItemArray[0]).ToOADate(), 
+                        chart.Series[1].Points.Add(new DataPoint(Convert.ToDateTime(tableCharges.Rows[a].ItemArray[0]).ToOADate(),
                             0 - Convert.ToDouble(tableCharges.Rows[a].ItemArray[1])));
                         if (comboDisplayValues.IsChecked == true)
                         {
@@ -276,7 +262,7 @@ namespace BusinessAccounting.UserControls
                 }
         }
 
-        private void bSaveGraph_Click(object sender, RoutedEventArgs e)
+        private void SaveChart()
         {
             System.Windows.Forms.SaveFileDialog sfDialog = new System.Windows.Forms.SaveFileDialog();
             sfDialog.AddExtension = true;
@@ -289,5 +275,35 @@ namespace BusinessAccounting.UserControls
                 }
             }
         }
+        #endregion
+
+        #region Commands
+        private void PrintChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute =
+                comboChartType.SelectedIndex != -1 & // type of chart is selected
+                pickerPeriodStart.SelectedDate != null & // start date is selected
+                pickerPeriodEnd.SelectedDate != null & // end date is selected
+                pickerPeriodStart.SelectedDate <= pickerPeriodEnd.SelectedDate; // start date is earlier then end date
+        }
+
+        private void PrintChart_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PrintChart();
+        }
+
+        private void SaveChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute =
+                wfHost != null &&
+                wfHost.Visibility == Visibility.Visible && // if WindowsFormsHost visible than chart is built
+                chart != null;
+        }
+
+        private void SaveChart_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveChart();
+        }
+        #endregion
     }
 }

@@ -13,6 +13,11 @@
     <UserControl.Resources>
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_cash.png" />
     </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveRecord_Executed" CanExecute="SaveRecord_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Open" Executed="LoadHistory_Executed" CanExecute="LoadHistory_CanExecute" />
+    </UserControl.CommandBindings>
     
     <Grid>
         <Grid.Triggers>
@@ -59,7 +64,7 @@
 			Header="Журнал операций"
             Name="groupHistory">
                 <ListView 
-                    Name="HistoryTable" SelectionMode="Single">
+                    Name="lvHistory" SelectionMode="Single">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
@@ -69,7 +74,7 @@
                             <GridViewColumn Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Удалить" Click="bRemoveHistoryRecord_Click" ToolTip="Удалить запись"/>
+                                        <Button Content="Удалить" Click="bRemoveHistoryRecord_Click" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -77,12 +82,12 @@
                     </ListView.View>
                 </ListView>
             </GroupBox>
-            <Button Grid.Row="1" Content="Загрузить всю историю" Margin="5,0,5,5" Click="bShowAll_Click"/>
+            <Button Grid.Row="1" Content="Загрузить весь журнал" Margin="5,0,5,5" Command="ApplicationCommands.Open"/>
         </Grid>
         <GroupBox
 			Grid.Row="1"
             Grid.Column="1"
-			Header="Добавить запись">
+			Header="Добавить запись в журнал">
             <Grid>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <Grid>
@@ -108,7 +113,7 @@
                         <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="4" Controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)"
                          Controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto" 
                          AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="inputComment"/>
-                        <Button Grid.Row="6" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="Button_Click"/>
+                        <Button Grid.Row="6" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="ApplicationCommands.Save"/>
                     </Grid>
                 </ScrollViewer>
             </Grid>

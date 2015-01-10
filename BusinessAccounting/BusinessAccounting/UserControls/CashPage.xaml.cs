@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace BusinessAccounting.UserControls
@@ -22,28 +23,23 @@ namespace BusinessAccounting.UserControls
             InitializeComponent();
 
             inputDate.DisplayDate = DateTime.Now;
-            inputDate.SelectedDate = DateTime.Now;
 
             LoadHistory();
         }
 
+        private readonly int preloadRecordsCount = 30;
         List<CashTransaction> history = new List<CashTransaction>();
 
+        #region Functionality methods
+        // load history of cash operations from db and fill listview
         private void LoadHistory(bool all = false)
         {
-            DataTable historyRecords;
-
-            if (all)
-            {
-                historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc;");
-            }
-            else
-            {
-                historyRecords = global.sqlite.SelectTable("select id, datestamp, summa, comment from ba_cash_operations order by id desc limit 50;");
-            }
+            string query = string.Format("select id, datestamp, summa, comment from ba_cash_operations order by id desc {0};",
+                all ? "" : "limit " + preloadRecordsCount);
 
             history = new List<CashTransaction>();
 
+            DataTable historyRecords = global.sqlite.SelectTable(query);
             if (historyRecords != null)
             {
                 foreach (DataRow row in historyRecords.Rows)
@@ -56,7 +52,7 @@ namespace BusinessAccounting.UserControls
                         comment = row.ItemArray[3].ToString()
                     });
                 }
-                HistoryTable.ItemsSource = history;
+                lvHistory.ItemsSource = history;
             }
             else
             {
@@ -65,61 +61,24 @@ namespace BusinessAccounting.UserControls
             }
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        // save new cash operation to db
+        private void SaveRecord()
         {
-            DateTime date;
-            decimal sum;
-            string comment;
-
-            if (inputDate.SelectedDate == null)
-            {
-                ShowMessage("Перед сохранением необходимо выбрать дату!");
-                return;
-            }
-            else
-            {
-                date = (DateTime)inputDate.SelectedDate;
-            }
-
-            if (!decimal.TryParse(inputSum.Text, out sum))
-            {
-                ShowMessage("Перед сохранением необходимо указать сумму или сумма была введена неверно!");
-                return;
-            }
-            else
-            {
-                comment = inputComment.Text != "" ? inputComment.Text : null;
-            }
-
             if (global.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
                 new SQLiteParameter("@d", inputDate.SelectedDate),
-                new SQLiteParameter("@s", sum),
-                new SQLiteParameter("@c", comment)) > 0)
+                new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
+                new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null)) > 0)
             {
-                LoadHistory();
+                inputDate.SelectedDate = null;
                 inputSum.Text = "";
                 inputComment.Text = "";
+                LoadHistory();
             }
             else
             {
                 ShowMessage("Не удалось сохранить запись в базе данных!");
                 return;
             }
-        }
-
-        private void bShowAll_Click(object sender, RoutedEventArgs e)
-        {
-            LoadHistory(true);
-        }
-
-        void ShowMessage(string text)
-        {
-            for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is MetroWindow)
-                {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + global.sqlite.LastOperationErrorMessage,
-                        MessageDialogStyle.Affirmative);
-                }
         }
 
         private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)
@@ -155,5 +114,43 @@ namespace BusinessAccounting.UserControls
                 }
             }
         }
+
+        private void ShowMessage(string text)
+        {
+            for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+                if (visual is MetroWindow)
+                {
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + global.sqlite.LastOperationErrorMessage,
+                        MessageDialogStyle.Affirmative);
+                }
+        }
+        #endregion
+
+        #region Commands
+        private void SaveRecord_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            decimal sum;
+
+            e.CanExecute = 
+                inputDate.SelectedDate != null && // date is selected
+                inputSum.Text.Length > 0 && // sum is entered
+                decimal.TryParse(inputSum.Text, out sum) == true; // sum is correct
+        }
+
+        private void SaveRecord_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveRecord();
+        }
+
+        private void LoadHistory_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = lvHistory.Items.Count <= preloadRecordsCount;
+        }
+
+        private void LoadHistory_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            LoadHistory(true);
+        }
+        #endregion
     }
 }

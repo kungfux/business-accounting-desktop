@@ -10,6 +10,11 @@
     <UserControl.Resources>
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_graph.png" />
     </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Print" Executed="PrintChart_Executed" CanExecute="PrintChart_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveChart_Executed" CanExecute="SaveChart_CanExecute" />
+    </UserControl.CommandBindings>
     
     <Grid>
         <Grid.Triggers>
@@ -75,8 +80,8 @@
                         <DatePicker Grid.Row="2" Grid.Column="1" Controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" 
                             Name="pickerPeriodEnd" SelectedDateFormat="Long"/>
                         <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="comboDisplayValues" ToolTip="Отображать значение каждой точки графика"/>
-                        <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Click="bBuildGraph_Click"/>
-                        <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Click="bSaveGraph_Click"/>
+                        <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="ApplicationCommands.Print"/>
+                        <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="ApplicationCommands.Save"/>
                     </Grid>
                 </ScrollViewer>
             </Grid>
@@ -84,7 +89,7 @@
         <GroupBox
             Grid.Row="1"
             Header="График">
-            <WindowsFormsHost Margin="5,5,5,5" Name="wfHost"/>
+            <WindowsFormsHost Margin="5,5,5,5" Name="wfHost" Visibility="Hidden"/>
         </GroupBox>
         
     </Grid>

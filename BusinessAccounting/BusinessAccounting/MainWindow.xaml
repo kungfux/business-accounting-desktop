@@ -37,7 +37,7 @@
         </Grid.Triggers>
         <!-- this grid contain all user controls (pages of app) -->
         <Grid Name="UserControlGrid">
-            <!-- TODO: add startup elements -->
+            <!-- active pages content -->
         </Grid>
         <!-- main menu button -->
         <Grid

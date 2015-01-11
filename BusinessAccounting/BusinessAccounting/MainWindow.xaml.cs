@@ -88,6 +88,9 @@ namespace BusinessAccounting
             {
                 this.ShowMessageAsync("Проблемка", "Не удалось установить соединение с базой данных.", MessageDialogStyle.Affirmative);
             }
+
+            // open default page
+            LoadPage(new UserControls.CashPage());
         }
     }
 }

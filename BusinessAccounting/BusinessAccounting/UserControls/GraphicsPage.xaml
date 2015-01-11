@@ -79,7 +79,8 @@
                             Name="pickerPeriodStart" SelectedDateFormat="Long"/>
                         <DatePicker Grid.Row="2" Grid.Column="1" Controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" 
                             Name="pickerPeriodEnd" SelectedDateFormat="Long"/>
-                        <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="comboDisplayValues" ToolTip="Отображать значение каждой точки графика"/>
+                        <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="comboDisplayValues" 
+                                  ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>
                         <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="ApplicationCommands.Print"/>
                         <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="ApplicationCommands.Save"/>
                     </Grid>

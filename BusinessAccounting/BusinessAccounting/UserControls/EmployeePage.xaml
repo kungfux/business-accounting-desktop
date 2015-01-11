@@ -212,7 +212,7 @@
                             <Label Grid.Row="1" Content="Данные для поиска" HorizontalAlignment="Right"/>
                             <Label Grid.Row="4" Grid.ColumnSpan="2" Content="Результаты поиска" HorizontalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Name="comboSearchCriteria">
-                                <ComboBoxItem Content="ФИО" Name="Name" IsSelected="True"/>
+                                <ComboBoxItem Content="ФИО" Name="FullName" IsSelected="True"/>
                                 <ComboBoxItem Content="Телефон" Name="Phone"/>
                             </ComboBox>
                             <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите данные" Controls:TextboxHelper.ClearTextButton="True"

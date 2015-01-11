@@ -43,7 +43,7 @@ namespace BusinessAccounting.UserControls
             {
                 switch (((ComboBoxItem)comboSearchCriteria.SelectedItem).Name)
                 {
-                    case "Name":
+                    case "FullName":
                         query += " where fullname like @data;";
                         break;
                     case "Phone":

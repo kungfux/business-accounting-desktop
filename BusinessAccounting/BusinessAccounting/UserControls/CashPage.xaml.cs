@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Xclass.Database;
 
 namespace BusinessAccounting.UserControls
 {
@@ -27,8 +28,9 @@ namespace BusinessAccounting.UserControls
             LoadHistory();
         }
 
-        private readonly int preloadRecordsCount = 30;
+        private const int preloadRecordsCount = 30;
         List<CashTransaction> history = new List<CashTransaction>();
+        List<Employee> employees = new List<Employee>();
 
         #region Functionality methods
         // load history of cash operations from db and fill listview
@@ -61,17 +63,63 @@ namespace BusinessAccounting.UserControls
             }
         }
 
+        private void LoadEmployees()
+        {
+            employees = new List<Employee>();
+
+            DataTable employeesData = global.sqlite.SelectTable("select id, fullname from ba_employees_cardindex where fired is null;");
+            if (employeesData != null && employeesData.Rows.Count > 0)
+            {
+                foreach (DataRow r in employeesData.Rows)
+                {
+                    employees.Add(new Employee()
+                    {
+                        Id = Convert.ToInt32(r.ItemArray[0]),
+                        FullName = r.ItemArray[1].ToString()
+                    });
+                }
+            }
+            comboEmployee.ItemsSource = employees;
+        }
+
         // save new cash operation to db
         private void SaveRecord()
         {
-            if (global.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
-                new SQLiteParameter("@d", inputDate.SelectedDate),
-                new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
-                new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null)) > 0)
+            bool result = false;
+
+            if ((bool)SalaryMode.IsChecked)
+            {
+                result = 2 == global.sqlite.PerformTransaction(new SQLiteQueryStatement[] {
+                    new SQLiteQueryStatement() {
+                         QuerySql = "insert into ba_cash_operations (datestamp, summa, comment) values (@D, @s, @c);",
+                         QueryParameters = new SQLiteParameter[] {
+                            new SQLiteParameter("@d", inputDate.SelectedDate),
+                            new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
+                            new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null)
+                          }
+                    },
+                    new SQLiteQueryStatement() {
+                        QuerySql = "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.id) from ba_cash_operations));",
+                        QueryParameters = new SQLiteParameter[] {
+                            new SQLiteParameter("@e", employees[comboEmployee.SelectedIndex].Id)
+                        }
+                    }
+                });
+            }
+            else
+            {
+                result = 1 == global.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
+                    new SQLiteParameter("@d", inputDate.SelectedDate),
+                    new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
+                    new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null));
+            }
+
+            if (result)
             {
                 inputDate.SelectedDate = null;
                 inputSum.Text = "";
                 inputComment.Text = "";
+                comboEmployee.SelectedIndex = -1;
                 LoadHistory();
             }
             else
@@ -131,10 +179,21 @@ namespace BusinessAccounting.UserControls
         {
             decimal sum;
 
-            e.CanExecute = 
-                inputDate.SelectedDate != null && // date is selected
-                inputSum.Text.Length > 0 && // sum is entered
-                decimal.TryParse(inputSum.Text, out sum) == true; // sum is correct
+            e.CanExecute =
+                (bool)SalaryMode.IsChecked & 
+                (
+                    comboEmployee != null &&
+                    comboEmployee.SelectedIndex != -1 && // employee is selected
+                    decimal.TryParse(inputSum.Text, out sum) && // sum is entered
+                    sum < 0 // sum is less then zero because you spent money
+                )
+                ||
+                !(bool)SalaryMode.IsChecked &
+                (
+                    inputDate.SelectedDate != null && // date is selected
+                    inputSum.Text.Length > 0 && // sum is entered
+                    decimal.TryParse(inputSum.Text, out sum) == true // sum is correct
+                );
         }
 
         private void SaveRecord_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -152,5 +211,14 @@ namespace BusinessAccounting.UserControls
             LoadHistory(true);
         }
         #endregion
+
+        private void SalaryMode_IsCheckedChanged(object sender, EventArgs e)
+        {
+            GridSalary.Visibility = (bool)SalaryMode.IsChecked ? Visibility.Visible : Visibility.Collapsed;
+            if ((bool)SalaryMode.IsChecked)
+            {
+                LoadEmployees();
+            }
+        }
     }
 }

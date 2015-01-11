@@ -68,7 +68,8 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xclass.Database">
+    <Reference Include="Xclass.Database, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Xclass\Xclass.Database\Xclass.Database.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -90,6 +91,7 @@
       <DependentUpon>GraphicsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CashTransaction.cs" />
+    <Compile Include="UserControls\InverseBooleanConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

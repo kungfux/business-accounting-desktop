@@ -1,0 +1,241 @@
+﻿<UserControl x:Class="BusinessAccounting.UserControls.EmployeePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:BusinessAccounting.UserControls"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="1050">
+
+    <UserControl.Resources>
+        <c:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_man.png" />
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" Executed="New_Executed" CanExecute="New_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Open" Executed="Open_Executed" CanExecute="Open_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Replace" Executed="Edit_Executed" CanExecute="Edit_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Save" Executed="Save_Executed" CanExecute="Save_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Delete" Executed="Delete_Executed" CanExecute="Delete_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Find" Executed="Find_Executed" CanExecute="Find_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.SelectAll" Executed="FindAll_Executed" CanExecute="FindAll_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Replace" Executed="LoadAll_Executed" CanExecute="LoadAll_CanExecute" />
+    </UserControl.CommandBindings>
+    
+    <Grid>
+        <Grid.Triggers>
+            <!-- Animates the rectangle's opacity. -->
+            <EventTrigger RoutedEvent="Grid.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="0.0" To="1.0" Duration="0:0:0.5" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label 
+			Grid.Row="0"
+			Content="           Сотрудники"
+			VerticalContentAlignment="Center"
+			FontSize="14"
+			Foreground="White"
+			Background="{DynamicResource AccentColorBrush}"/>
+        <Label 
+            Grid.Row="0"
+            Content="{StaticResource ImageHeader}" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Header="Досье сотрудника">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="192"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="192"/>
+                                        <RowDefinition Height="27"/>
+                                        <RowDefinition Height="27"/>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Image Grid.Row="0" Source="pack://application:,,,/Resources/image_noimage.png" />
+                                    <Button Grid.Row="1" Content="Выбрать фото" IsEnabled="False"/>
+                                    <Button Grid.Row="2" Content="Удалить фото" IsEnabled="False"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Column="1" Name="gridInputFields">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                    <RowDefinition Height="27"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Content="Принят" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="0" Grid.Column="2" Content="Уволен" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="1" Grid.Column="0" Content="Фамилия, имя, отчество" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="2" Grid.Column="0" Content="Номер телефона" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="3" Grid.Column="0" Content="Паспортные данные" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="5" Grid.Column="0" Content="Адрес проживания" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="7" Grid.Column="0" Content="Заметки" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+                                <DatePicker Grid.Column="1" Controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long"
+                                            SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="pickerHiredDate"/>
+                                <DatePicker Grid.Column="3" Controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long"
+                                            SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="pickerFiredDate"/>
+
+                                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
+                                         Controls:TextboxHelper.Watermark="Введите фамилию, имя и отчество сотрудника" 
+                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         Name="inputEmplName" Text="{Binding Path=FullName}"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
+                                         Controls:TextboxHelper.Watermark="Введите контактный номер телефона" 
+                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         Name="inputEmplPhone" Text="{Binding Path=Telephone}"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
+                                         Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Введите паспортные данные" 
+                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
+                                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplPassport" Text="{Binding Path=Document}"/>
+                                <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
+                                         Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Введите адрес проживания" 
+                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
+                                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplAddress" Text="{Binding Path=Address}"/>
+                                <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="3" IsReadOnly="True"
+                                         Controls:TextboxHelper.Watermark="Введите прочие данные" 
+                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
+                                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplNotes" Text="{Binding Path=Notes}"/>
+
+                                <Grid Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Content="Создать" Command="ApplicationCommands.New"/>
+                                    <Button Grid.Column="1" Content="Редактировать" Command="ApplicationCommands.Replace"/>
+                                    <Button Grid.Column="2" Content="Сохранить"  Command="ApplicationCommands.Save"/>
+                                    <Button Grid.Column="3" Content="Удалить" Command="ApplicationCommands.Delete"/>
+                                </Grid>
+                                
+                            </Grid>
+                        </Grid>
+                        <GroupBox Grid.Row="1" Header="История зарплат" Name="headerSalaryHistory">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <Grid>
+                                    <!--<Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="27" />
+                                    </Grid.RowDefinitions>-->
+                                    <ListView Name="lvSalaryHistory" SelectionMode="Single">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
+                                                <GridViewColumn Header="Дата" Width="Auto"
+                                                                DisplayMemberBinding="{Binding date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                                                <GridViewColumn Header="Сумма" Width="Auto"
+                                                                DisplayMemberBinding="{Binding sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                                                <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding comment}"/>
+                                                <GridViewColumn Width="Auto">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button Content="Удалить" Click="bRemoveHistoryRecord_Click"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                    <!--<Button Grid.Row="1" Content="Загрузить всю историю" Command="ApplicationCommands.Replace"/>-->
+                                </Grid>
+                            </ScrollViewer>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="Поиск сотрудников">
+                <Grid>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="27"/>
+                                <RowDefinition Height="27"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="27"/>
+                                <RowDefinition Height="27"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="27"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Критерий поиска" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="1" Content="Данные для поиска" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="4" Grid.ColumnSpan="2" Content="Результаты поиска" HorizontalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Name="comboSearchCriteria">
+                                <ComboBoxItem Content="ФИО" Name="FullName" IsSelected="True"/>
+                                <ComboBoxItem Content="Телефон" Name="Phone"/>
+                            </ComboBox>
+                            <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите данные" Controls:TextboxHelper.ClearTextButton="True"
+                                     Name="inputSearchData"/>
+                            <Button Grid.Row="2" Grid.Column="1" Content="Поиск" Margin="0,5,0,0" Command="ApplicationCommands.Find"/>
+                            <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="250">
+                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="1">
+                                    <Grid>
+                                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                            <Grid>
+                                                <ListBox Name="lbEmployees" ListViewItem.MouseDoubleClick="listFoundEmpl_MouseDoubleClick"
+                                                 DisplayMemberPath="FullName"/>
+                                            </Grid>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Открыть досье" Margin="0,5,0,0" Command="ApplicationCommands.Open" />
+                            <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Content="Найти всех" Margin="0,0,0,0" Command="ApplicationCommands.SelectAll"/>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

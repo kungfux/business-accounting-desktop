@@ -22,6 +22,15 @@ namespace BusinessAccounting.UserControls
             InitializeComponent();
         }
 
+        public static RoutedCommand NewEmployeeCommand = new RoutedCommand();
+        public static RoutedCommand OpenEmployeeCommand = new RoutedCommand();
+        public static RoutedCommand EditEmployeeCommand = new RoutedCommand();
+        public static RoutedCommand SaveEmployeeCommand = new RoutedCommand();
+        public static RoutedCommand DeleteEmployeeCommand = new RoutedCommand();
+        public static RoutedCommand FindEmployeeCommand = new RoutedCommand();
+        public static RoutedCommand FindAllEmployeesCommand = new RoutedCommand();
+        public static RoutedCommand LoadAllHistoryCommand = new RoutedCommand();
+
         private Employee openedEmployee;
         private List<CashTransaction> salaryHistory;
         private List<Employee> foundEmployees;

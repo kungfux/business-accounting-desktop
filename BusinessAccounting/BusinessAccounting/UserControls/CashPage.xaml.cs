@@ -28,6 +28,9 @@ namespace BusinessAccounting.UserControls
             LoadHistory();
         }
 
+        public static RoutedCommand SaveRecordCommand = new RoutedCommand();
+        public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
+
         private const int preloadRecordsCount = 30;
         List<CashTransaction> history = new List<CashTransaction>();
         List<Employee> employees = new List<Employee>();

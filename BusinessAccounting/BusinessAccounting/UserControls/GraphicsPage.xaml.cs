@@ -21,6 +21,9 @@ namespace BusinessAccounting.UserControls
             InitializeComponent();
         }
 
+        public static RoutedCommand PrintChartCommand = new RoutedCommand();
+        public static RoutedCommand SaveChartCommand = new RoutedCommand();
+
         Chart chart;
 
         #region Functionality methods

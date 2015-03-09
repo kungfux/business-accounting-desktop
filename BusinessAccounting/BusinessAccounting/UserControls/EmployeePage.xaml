@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:c="clr-namespace:BusinessAccounting.UserControls"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:self="clr-namespace:BusinessAccounting.UserControls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
@@ -15,14 +16,14 @@
     </UserControl.Resources>
 
     <UserControl.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.New" Executed="New_Executed" CanExecute="New_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.Open" Executed="Open_Executed" CanExecute="Open_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.Replace" Executed="Edit_Executed" CanExecute="Edit_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.Save" Executed="Save_Executed" CanExecute="Save_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.Delete" Executed="Delete_Executed" CanExecute="Delete_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.Find" Executed="Find_Executed" CanExecute="Find_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.SelectAll" Executed="FindAll_Executed" CanExecute="FindAll_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.Replace" Executed="LoadAll_Executed" CanExecute="LoadAll_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.NewEmployeeCommand}" Executed="New_Executed" CanExecute="New_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.OpenEmployeeCommand}" Executed="Open_Executed" CanExecute="Open_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.EditEmployeeCommand}" Executed="Edit_Executed" CanExecute="Edit_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.SaveEmployeeCommand}" Executed="Save_Executed" CanExecute="Save_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.DeleteEmployeeCommand}" Executed="Delete_Executed" CanExecute="Delete_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.FindEmployeeCommand}" Executed="Find_Executed" CanExecute="Find_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}" Executed="FindAll_Executed" CanExecute="FindAll_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.LoadAllHistoryCommand}" Executed="LoadAll_Executed" CanExecute="LoadAll_CanExecute" />
     </UserControl.CommandBindings>
     
     <Grid>
@@ -149,10 +150,10 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0" Content="Создать" Command="ApplicationCommands.New"/>
-                                    <Button Grid.Column="1" Content="Редактировать" Command="ApplicationCommands.Replace"/>
-                                    <Button Grid.Column="2" Content="Сохранить"  Command="ApplicationCommands.Save"/>
-                                    <Button Grid.Column="3" Content="Удалить" Command="ApplicationCommands.Delete"/>
+                                    <Button Grid.Column="0" Content="Создать" Command="{x:Static self:EmployeePage.NewEmployeeCommand}"/>
+                                    <Button Grid.Column="1" Content="Редактировать" Command="{x:Static self:EmployeePage.EditEmployeeCommand}"/>
+                                    <Button Grid.Column="2" Content="Сохранить"  Command="{x:Static self:EmployeePage.SaveEmployeeCommand}"/>
+                                    <Button Grid.Column="3" Content="Удалить" Command="{x:Static self:EmployeePage.DeleteEmployeeCommand}"/>
                                 </Grid>
                                 
                             </Grid>
@@ -160,10 +161,10 @@
                         <GroupBox Grid.Row="1" Header="История зарплат" Name="headerSalaryHistory">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                 <Grid>
-                                    <!--<Grid.RowDefinitions>
+                                    <Grid.RowDefinitions>
                                         <RowDefinition />
                                         <RowDefinition Height="27" />
-                                    </Grid.RowDefinitions>-->
+                                    </Grid.RowDefinitions>
                                     <ListView Name="lvSalaryHistory" SelectionMode="Single">
                                         <ListView.View>
                                             <GridView>
@@ -183,7 +184,7 @@
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
-                                    <!--<Button Grid.Row="1" Content="Загрузить всю историю" Command="ApplicationCommands.Replace"/>-->
+                                    <Button Grid.Row="1" Content="Загрузить всю историю" Command="{x:Static self:EmployeePage.LoadAllHistoryCommand}"/>
                                 </Grid>
                             </ScrollViewer>
                         </GroupBox>
@@ -217,7 +218,7 @@
                             </ComboBox>
                             <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите данные" Controls:TextboxHelper.ClearTextButton="True"
                                      Name="inputSearchData"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="Поиск" Margin="0,5,0,0" Command="ApplicationCommands.Find"/>
+                            <Button Grid.Row="2" Grid.Column="1" Content="Поиск" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindEmployeeCommand}"/>
                             <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="250">
                                 <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="1">
                                     <Grid>
@@ -230,8 +231,8 @@
                                     </Grid>
                                 </Border>
                             </Grid>
-                            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Открыть досье" Margin="0,5,0,0" Command="ApplicationCommands.Open" />
-                            <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Content="Найти всех" Margin="0,0,0,0" Command="ApplicationCommands.SelectAll"/>
+                            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Открыть досье" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.OpenEmployeeCommand}" />
+                            <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Content="Найти всех" Margin="0,0,0,0" Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}"/>
                         </Grid>
                     </ScrollViewer>
                 </Grid>

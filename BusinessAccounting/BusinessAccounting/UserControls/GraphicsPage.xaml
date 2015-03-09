@@ -4,6 +4,7 @@
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:UserControls="clr-namespace:BusinessAccounting.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="700">
 
@@ -12,8 +13,8 @@
     </UserControl.Resources>
 
     <UserControl.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Print" Executed="PrintChart_Executed" CanExecute="PrintChart_CanExecute" />
-        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveChart_Executed" CanExecute="SaveChart_CanExecute" />
+        <CommandBinding Command="{x:Static UserControls:GraphicsPage.PrintChartCommand}" Executed="PrintChart_Executed" CanExecute="PrintChart_CanExecute" />
+        <CommandBinding Command="{x:Static UserControls:GraphicsPage.SaveChartCommand}" Executed="SaveChart_Executed" CanExecute="SaveChart_CanExecute" />
     </UserControl.CommandBindings>
     
     <Grid>
@@ -81,8 +82,8 @@
                             Name="pickerPeriodEnd" SelectedDateFormat="Long"/>
                         <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="comboDisplayValues" 
                                   ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>
-                        <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="ApplicationCommands.Print"/>
-                        <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="ApplicationCommands.Save"/>
+                        <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="{x:Static UserControls:GraphicsPage.PrintChartCommand}"/>
+                        <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static UserControls:GraphicsPage.SaveChartCommand}"/>
                     </Grid>
                 </ScrollViewer>
             </Grid>

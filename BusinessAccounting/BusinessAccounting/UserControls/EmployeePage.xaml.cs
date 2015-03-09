@@ -54,11 +54,11 @@ namespace BusinessAccounting.UserControls
 
             if (pShowAll)
             {
-                employees = global.sqlite.SelectTable(query);
+                employees = App.sqlite.SelectTable(query);
             }
             else
             {
-                employees = global.sqlite.SelectTable(query,
+                employees = App.sqlite.SelectTable(query,
                             new SQLiteParameter("@data", "%" + inputSearchData.Text + "%"));
             }
 
@@ -85,7 +85,7 @@ namespace BusinessAccounting.UserControls
         {
             if (lbEmployees.SelectedIndex != -1)
             {
-                DataRow r = global.sqlite.SelectRow("select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;",
+                DataRow r = App.sqlite.SelectRow("select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;",
                     new SQLiteParameter("@id", foundEmployees[lbEmployees.SelectedIndex].Id));
                 if (r == null)
                 {
@@ -119,7 +119,7 @@ namespace BusinessAccounting.UserControls
 
             salaryHistory = new List<CashTransaction>();
 
-            DataTable historyRecords = global.sqlite.SelectTable(query,
+            DataTable historyRecords = App.sqlite.SelectTable(query,
                 new SQLiteParameter("@emid", openedEmployee.Id));
             if (historyRecords != null)
             {
@@ -142,7 +142,7 @@ namespace BusinessAccounting.UserControls
             if (openedEmployee.Id != 0)
             {
                 // change record
-                return global.sqlite.ChangeData(
+                return App.sqlite.ChangeData(
                     "update ba_employees_cardindex set hired = @h, fired = @f, fullname = @name, document = @d, telephone = @t, address = @a, notes = @n where id = @id;",
                     new SQLiteParameter("@h", openedEmployee.Hired),
                     new SQLiteParameter("@f", openedEmployee.Fired),
@@ -156,7 +156,7 @@ namespace BusinessAccounting.UserControls
             else
             {
                 // save new
-                return global.sqlite.ChangeData(
+                return App.sqlite.ChangeData(
                     "insert into ba_employees_cardindex (hired, fired, fullname, document, telephone, address, notes) values (@h, @f, @name, @d, @t, @a, @n);",
                     new SQLiteParameter("@h", openedEmployee.Hired),
                     new SQLiteParameter("@f", openedEmployee.Fired),
@@ -170,7 +170,7 @@ namespace BusinessAccounting.UserControls
 
         private bool DeleteEmployee()
         {
-            return global.sqlite.ChangeData("delete from ba_employees_cardindex where id=@id",
+            return App.sqlite.ChangeData("delete from ba_employees_cardindex where id=@id",
                 new SQLiteParameter("@id", openedEmployee.Id)) > 0;
         }
 
@@ -218,7 +218,7 @@ namespace BusinessAccounting.UserControls
             MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                if (global.sqlite.ChangeData("delete from ba_cash_operations where id = @id;",
+                if (App.sqlite.ChangeData("delete from ba_cash_operations where id = @id;",
                         new SQLiteParameter("@id", record.id)) <= 0)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
@@ -235,7 +235,7 @@ namespace BusinessAccounting.UserControls
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + global.sqlite.LastOperationErrorMessage,
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastOperationErrorMessage,
                         MessageDialogStyle.Affirmative);
                 }
         }

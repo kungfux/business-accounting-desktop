@@ -41,7 +41,7 @@ namespace BusinessAccounting.UserControls
 
             history = new List<CashTransaction>();
 
-            DataTable historyRecords = global.sqlite.SelectTable(query);
+            DataTable historyRecords = App.sqlite.SelectTable(query);
             if (historyRecords != null)
             {
                 foreach (DataRow row in historyRecords.Rows)
@@ -67,7 +67,7 @@ namespace BusinessAccounting.UserControls
         {
             employees = new List<Employee>();
 
-            DataTable employeesData = global.sqlite.SelectTable("select id, fullname from ba_employees_cardindex where fired is null;");
+            DataTable employeesData = App.sqlite.SelectTable("select id, fullname from ba_employees_cardindex where fired is null;");
             if (employeesData != null && employeesData.Rows.Count > 0)
             {
                 foreach (DataRow r in employeesData.Rows)
@@ -89,7 +89,7 @@ namespace BusinessAccounting.UserControls
 
             if ((bool)SalaryMode.IsChecked)
             {
-                result = 2 == global.sqlite.PerformTransaction(new SQLiteQueryStatement[] {
+                result = 2 == App.sqlite.PerformTransaction(new SQLiteQueryStatement[] {
                     new SQLiteQueryStatement() {
                          QuerySql = "insert into ba_cash_operations (datestamp, summa, comment) values (@D, @s, @c);",
                          QueryParameters = new SQLiteParameter[] {
@@ -108,7 +108,7 @@ namespace BusinessAccounting.UserControls
             }
             else
             {
-                result = 1 == global.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
+                result = 1 == App.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
                     new SQLiteParameter("@d", inputDate.SelectedDate),
                     new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
                     new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null));
@@ -151,7 +151,7 @@ namespace BusinessAccounting.UserControls
             MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                if (global.sqlite.ChangeData("delete from ba_cash_operations where id = @id;",
+                if (App.sqlite.ChangeData("delete from ba_cash_operations where id = @id;",
                         new SQLiteParameter("@id", record.id)) <= 0)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
@@ -168,7 +168,7 @@ namespace BusinessAccounting.UserControls
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + global.sqlite.LastOperationErrorMessage,
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastOperationErrorMessage,
                         MessageDialogStyle.Affirmative);
                 }
         }

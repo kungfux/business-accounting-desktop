@@ -74,7 +74,7 @@ namespace BusinessAccounting.UserControls
             chart.Series[0].ChartType = SeriesChartType.Area;
 
             DataTable table =
-                global.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
@@ -116,7 +116,7 @@ namespace BusinessAccounting.UserControls
             chart.Series[0].Color = System.Drawing.Color.Maroon;
 
             DataTable table =
-                global.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
@@ -152,7 +152,7 @@ namespace BusinessAccounting.UserControls
             chart.Series[0].ChartType = SeriesChartType.Doughnut;
 
             DataRow row =
-                global.sqlite.SelectRow("select * from ((select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0), " +
+                App.sqlite.SelectRow("select * from ((select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0), " +
                 "(select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0));",
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
@@ -207,12 +207,12 @@ namespace BusinessAccounting.UserControls
             chart.Series[1].Color = System.Drawing.Color.Maroon;
 
             DataTable tableIncomes =
-                global.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
             DataTable tableCharges =
-                global.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
@@ -258,7 +258,7 @@ namespace BusinessAccounting.UserControls
                 if (visual is MetroWindow)
                 {
                     ((MetroWindow)visual).ShowMessageAsync("Проблемка", text +
-               Environment.NewLine + global.sqlite.LastOperationErrorMessage, MessageDialogStyle.Affirmative);
+               Environment.NewLine + App.sqlite.LastOperationErrorMessage, MessageDialogStyle.Affirmative);
                 }
         }
 

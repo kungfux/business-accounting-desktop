@@ -26,6 +26,7 @@ if [%1%]==[database-init] goto DatabaseInit
 if [%1%]==[database-fill] goto DatabaseFill
 if [%1%]==[database-all]  goto DatabaseInit
 if [%1%]==[clean]         goto Clean
+if [%1%]==[]		  goto DatabaseInit
 
 :: Display help
 :Help

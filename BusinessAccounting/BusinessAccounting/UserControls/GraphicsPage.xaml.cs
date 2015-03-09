@@ -24,6 +24,11 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand PrintChartCommand = new RoutedCommand();
         public static RoutedCommand SaveChartCommand = new RoutedCommand();
 
+        private const string sqlIncomes = "select datestamp, sum(summa) from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
+        private const string sqlCharges = "select datestamp, sum(summa) from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
+        private const string sqlCompare = "select * from ((select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0), " +
+                                          "(select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0));";
+
         Chart chart;
 
         #region Functionality methods
@@ -77,7 +82,7 @@ namespace BusinessAccounting.UserControls
             chart.Series[0].ChartType = SeriesChartType.Area;
 
             DataTable table =
-                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable(sqlIncomes,
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
@@ -119,7 +124,7 @@ namespace BusinessAccounting.UserControls
             chart.Series[0].Color = System.Drawing.Color.Maroon;
 
             DataTable table =
-                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable(sqlCharges,
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
@@ -155,8 +160,7 @@ namespace BusinessAccounting.UserControls
             chart.Series[0].ChartType = SeriesChartType.Doughnut;
 
             DataRow row =
-                App.sqlite.SelectRow("select * from ((select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0), " +
-                "(select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0));",
+                App.sqlite.SelectRow(sqlCompare,
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
@@ -210,12 +214,12 @@ namespace BusinessAccounting.UserControls
             chart.Series[1].Color = System.Drawing.Color.Maroon;
 
             DataTable tableIncomes =
-                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable(sqlIncomes,
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 
             DataTable tableCharges =
-                App.sqlite.SelectTable("select datestamp, summa from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 order by datestamp asc;",
+                App.sqlite.SelectTable(sqlCharges,
                 new SQLiteParameter("@d1", startDate),
                 new SQLiteParameter("@d2", endDate));
 

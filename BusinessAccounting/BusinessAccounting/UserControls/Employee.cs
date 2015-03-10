@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace BusinessAccounting.UserControls
 {
@@ -17,6 +14,7 @@ namespace BusinessAccounting.UserControls
         private string _telephone;
         private string _address;
         private string _notes;
+        private BitmapImage _photo;
 
         public int Id
         {
@@ -119,6 +117,19 @@ namespace BusinessAccounting.UserControls
             {
                 _notes = value;
                 OnPropertyChanged("Notes");
+            }
+        }
+
+        public BitmapImage Photo
+        {
+            get
+            {
+                return _photo;
+            }
+            set
+            {
+                _photo = value;
+                OnPropertyChanged("Photo");
             }
         }
 

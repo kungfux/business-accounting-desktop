@@ -36,7 +36,7 @@ CREATE TABLE [BA_EMPLOYEES_CARDINDEX]
 	[hired]		DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,-- when hired
 	[fired]		DATE,					-- when fired
 	[fullname]	VARCHAR NOT NULL,			-- employee full name
-	[photo]		VARCHAR,				-- employee photo, path to file
+	[photo]		BLOB,					-- employee photo, path to file
 	[document]	VARCHAR,				-- employee document number e.g. SSN
 	[telephone]	VARCHAR,				-- employee contact number
 	[address]	VARCHAR,				-- employee address

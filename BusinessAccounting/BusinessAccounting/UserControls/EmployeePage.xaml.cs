@@ -4,11 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace BusinessAccounting.UserControls
 {
@@ -30,6 +33,8 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand FindEmployeeCommand = new RoutedCommand();
         public static RoutedCommand FindAllEmployeesCommand = new RoutedCommand();
         public static RoutedCommand LoadAllHistoryCommand = new RoutedCommand();
+        public static RoutedCommand LookupPhotoCommand = new RoutedCommand();
+        public static RoutedCommand RemovePhotoCommand = new RoutedCommand();
 
         private Employee openedEmployee;
         private List<CashTransaction> salaryHistory;
@@ -113,9 +118,38 @@ namespace BusinessAccounting.UserControls
                     Notes = r.ItemArray[7].ToString()
                 };
 
+                LoadPhoto();
+
                 this.DataContext = openedEmployee;
                 LoadSalaryHistory();
                 ClearInputFields(false);
+            }
+        }
+
+        private void LoadPhoto()
+        {
+            // retrieve photo
+            System.Drawing.Image image = App.sqlite.GetImage("select photo from ba_employees_cardindex where id=@id;",
+                new SQLiteParameter("@id", openedEmployee.Id));
+
+            if (image != null)
+            {
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    image.Save(memory, ImageFormat.Png);
+                    memory.Position = 0;
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = memory;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.EndInit();
+
+                    openedEmployee.Photo = bitmapImage;
+                }
+            }
+            else
+            {
+                openedEmployee.Photo = new BitmapImage(new Uri("pack://application:,,,/Resources/image_noimage.png"));
             }
         }
 
@@ -202,6 +236,54 @@ namespace BusinessAccounting.UserControls
                 inputEmplPassport.Text = "";
                 inputEmplAddress.Text = "";
                 inputEmplNotes.Text = "";
+            }
+        }
+
+        private void ChoosePhoto()
+        {
+            System.Windows.Forms.OpenFileDialog ofDialog = new System.Windows.Forms.OpenFileDialog();
+            ofDialog.AddExtension = true;
+            ofDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
+            if (ofDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (ofDialog.FileName != "")
+                {
+                    try
+                    {
+                        System.Drawing.Image image = System.Drawing.Image.FromFile(ofDialog.FileName); // check that file is image
+                        if (image == null)
+                        {
+                            ShowMessage("Выбранный файл не является изображением и не может быть использован в качестве фотографии!");
+                        }
+                    }
+                    catch (Exception) 
+                    {
+                        ShowMessage("Выбранный файл не является изображением и не может быть использован в качестве фотографии!");
+                    }
+
+                    if (!App.sqlite.PutFile(ofDialog.FileName, "update ba_employees_cardindex set photo = @file where id = @id",
+                        new SQLiteParameter("@id", openedEmployee.Id)))
+                    {
+                        ShowMessage("Не удалось сохранить фотографию сотрудника!");
+                    }
+                    else
+                    {
+                        LoadPhoto();
+                    }
+                }
+            }
+        }
+
+        private void ClearPhoto()
+        {
+            if (App.sqlite.ChangeData("update ba_employees_cardindex set photo = null where id=@id;",
+                    new SQLiteParameter("@id", openedEmployee.Id)) > 0)
+            {
+                LoadPhoto();
+            }
+            else
+            {
+                ShowMessage("Не удалось удалить фотографию сотрудника!");
             }
         }
 
@@ -359,6 +441,29 @@ namespace BusinessAccounting.UserControls
         private void LoadAll_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             LoadSalaryHistory(true);
+        }
+
+        private void LookupPhoto_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ChoosePhoto();
+        }
+
+        private void LookupPhoto_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute =
+                openedEmployee != null && openedEmployee.Id != 0;
+        }
+
+        private void RemovePhoto_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ClearPhoto();
+        }
+
+        private void RemovePhoto_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute =
+                openedEmployee != null && openedEmployee.Id != 0 &&
+                openedEmployee.Photo != null;
         }
         #endregion
 

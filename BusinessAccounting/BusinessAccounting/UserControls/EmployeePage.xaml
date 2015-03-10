@@ -24,6 +24,8 @@
         <CommandBinding Command="{x:Static self:EmployeePage.FindEmployeeCommand}" Executed="Find_Executed" CanExecute="Find_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}" Executed="FindAll_Executed" CanExecute="FindAll_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.LoadAllHistoryCommand}" Executed="LoadAll_Executed" CanExecute="LoadAll_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.LookupPhotoCommand}" Executed="LookupPhoto_Executed" CanExecute="LookupPhoto_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.RemovePhotoCommand}" Executed="RemovePhoto_Executed" CanExecute="RemovePhoto_CanExecute" />
     </UserControl.CommandBindings>
     
     <Grid>
@@ -81,9 +83,9 @@
                                         <RowDefinition Height="27"/>
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <Image Grid.Row="0" Source="pack://application:,,,/Resources/image_noimage.png" />
-                                    <Button Grid.Row="1" Content="Выбрать фото" IsEnabled="False"/>
-                                    <Button Grid.Row="2" Content="Удалить фото" IsEnabled="False"/>
+                                    <Image Grid.Row="0" Source="{Binding Path=Photo}" /><!--Source="pack://application:,,,/Resources/image_noimage.png"-->
+                                    <Button Grid.Row="1" Content="Выбрать фото" Command="{x:Static self:EmployeePage.LookupPhotoCommand}"/>
+                                    <Button Grid.Row="2" Content="Удалить фото" Command="{x:Static self:EmployeePage.RemovePhotoCommand}"/>
                                 </Grid>
                             </Grid>
                             <Grid Grid.Column="1" Name="gridInputFields">
@@ -199,11 +201,11 @@
                                 <RowDefinition Height="27"/>
                                 <RowDefinition Height="27"/>
                                 <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
                                 <RowDefinition Height="27"/>
                                 <RowDefinition Height="27"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="32"/>
-                                <RowDefinition Height="27"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="130"/>
@@ -211,7 +213,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Content="Критерий поиска" HorizontalAlignment="Right"/>
                             <Label Grid.Row="1" Content="Данные для поиска" HorizontalAlignment="Right"/>
-                            <Label Grid.Row="4" Grid.ColumnSpan="2" Content="Результаты поиска" HorizontalAlignment="Center"/>
+                            <Label Grid.Row="5" Grid.ColumnSpan="2" Content="Результаты поиска:" HorizontalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Name="comboSearchCriteria">
                                 <ComboBoxItem Content="ФИО" Name="FullName" IsSelected="True"/>
                                 <ComboBoxItem Content="Телефон" Name="Phone"/>
@@ -219,7 +221,8 @@
                             <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите данные" Controls:TextboxHelper.ClearTextButton="True"
                                      Name="inputSearchData"/>
                             <Button Grid.Row="2" Grid.Column="1" Content="Поиск" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindEmployeeCommand}"/>
-                            <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="250">
+                            <Button Grid.Row="3" Grid.Column="1" Content="Найти всех" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}"/>
+                            <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Height="250">
                                 <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="1">
                                     <Grid>
                                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -231,8 +234,7 @@
                                     </Grid>
                                 </Border>
                             </Grid>
-                            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Открыть досье" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.OpenEmployeeCommand}" />
-                            <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Content="Найти всех" Margin="0,0,0,0" Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}"/>
+                            <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Content="Открыть досье" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.OpenEmployeeCommand}" />
                         </Grid>
                     </ScrollViewer>
                 </Grid>

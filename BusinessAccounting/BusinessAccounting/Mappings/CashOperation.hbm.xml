@@ -5,11 +5,11 @@
   
   <class name="CashOperation">
     <id name="Id">
-      <generator class="guid" />
+      <generator class="native" />
     </id>
-    <property name="Date" />
-    <property name="Sum" />
-    <property name="Comment" />
+    <property name="Date" not-null="true" />
+    <property name="Sum" not-null="true" />
+    <property name="Comment" not-null="false" />
   </class>
   
 </hibernate-mapping>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="BusinessAccounting"
+                   namespace="BusinessAccounting.Domain">
+
+  <class name="EmployeeCard">
+    <id name="Id">
+      <generator class="native" />
+    </id>
+    <property name="HiredDate" not-null="true" />
+    <property name="FiredDate" not-null="false" />
+    <property name="FullName" not-null="true" />
+    <property name="Photo" length="2147483647" not-null="false" />
+    <property name="DocumentInfo" not-null="false" />
+    <property name="PhoneNumber" not-null="false" />
+    <property name="Address" not-null="false" />
+    <property name="Notes" not-null="false" />
+  </class>
+
+</hibernate-mapping>

@@ -14,11 +14,12 @@ namespace BusinessAccounting
     {
         public App()
         {
-            var cfg = new Configuration();
-            cfg.Configure();
-            cfg.AddAssembly(typeof(CashOperation).Assembly);
+            var configuration = new Configuration();
+            configuration.Configure();
+            //configuration.AddAssembly(typeof(EmployeeCard).Assembly);
+            configuration.AddAssembly(typeof(CashOperation).Assembly);
 
-            new SchemaExport(cfg).Execute(false, true, false);
+            new SchemaExport(configuration).Execute(false, true, false);
         }
     }
 }

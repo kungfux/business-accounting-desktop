@@ -3,7 +3,7 @@
   <session-factory>
     <property name="connection.driver_class">NHibernate.Driver.SQLite20Driver</property>
     <property name="connection.connection_string">
-      Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true
+      Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;
     </property>
     <property name="dialect">NHibernate.Dialect.SQLiteDialect</property>
     <property name="show_sql">true</property>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="BusinessAccounting"
+                   namespace="BusinessAccounting.Domain">
+  
+  <class name="CashOperation">
+    <id name="Id">
+      <generator class="guid" />
+    </id>
+    <property name="Date" />
+    <property name="Sum" />
+    <property name="Comment" />
+  </class>
+  
+</hibernate-mapping>

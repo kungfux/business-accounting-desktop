@@ -84,10 +84,10 @@ namespace BusinessAccounting
 
             WindowDisplayed = true;
 
-            if (!App.sqlite.TestConnection("Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true", true, false))
-            {
-                this.ShowMessageAsync("Проблемка", "Не удалось установить соединение с базой данных.", MessageDialogStyle.Affirmative);
-            }
+            //if (!App.sqlite.TestConnection("Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true", true, false))
+            //{
+            //    this.ShowMessageAsync("Проблемка", "Не удалось установить соединение с базой данных.", MessageDialogStyle.Affirmative);
+            //}
 
             // open default page
             LoadPage(new UserControls.CashPage());

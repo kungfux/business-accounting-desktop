@@ -2,7 +2,6 @@
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Data;
-using System.Data.SQLite;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -67,206 +66,211 @@ namespace BusinessAccounting.UserControls
 
         private bool BuildIncomesChart(DateTime startDate, DateTime endDate)
         {
-            chart.Series.Add("");
-            chart.Titles.Add("График прибыли за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
-            chart.Series[0].LegendText = "Прибыль";
+            //chart.Series.Add("");
+            //chart.Titles.Add("График прибыли за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
+            //chart.Legends.Add("");
+            //chart.Legends[0].Title = "Легенда";
+            //chart.Series[0].LegendText = "Прибыль";
 
-            chart.ChartAreas.Add("Прибыль");
-            chart.ChartAreas[0].AxisX.Title = "Дата";
-            chart.ChartAreas[0].AxisY.Title = "Сумма";
+            //chart.ChartAreas.Add("Прибыль");
+            //chart.ChartAreas[0].AxisX.Title = "Дата";
+            //chart.ChartAreas[0].AxisY.Title = "Сумма";
 
-            chart.Series[0].XValueType = ChartValueType.Date;
+            //chart.Series[0].XValueType = ChartValueType.Date;
 
-            chart.Series[0].ChartType = SeriesChartType.Area;
+            //chart.Series[0].ChartType = SeriesChartType.Area;
 
-            DataTable table =
-                App.sqlite.SelectTable(sqlIncomes,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
+            //DataTable table =
+            //    App.sqlite.SelectTable(sqlIncomes,
+            //    new SQLiteParameter("@d1", startDate),
+            //    new SQLiteParameter("@d2", endDate));
 
-            if (table != null && table.Rows.Count > 0)
-            {
-                for (int a = 0; a < table.Rows.Count; a++)
-                {
-                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
-                        Convert.ToDouble(table.Rows[a].ItemArray[1])));
-                    if (comboDisplayValues.IsChecked == true)
-                    {
-                        chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
-                    }
-                }
-            }
-            else
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            return true;
+            //if (table != null && table.Rows.Count > 0)
+            //{
+            //    for (int a = 0; a < table.Rows.Count; a++)
+            //    {
+            //        chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
+            //            Convert.ToDouble(table.Rows[a].ItemArray[1])));
+            //        if (comboDisplayValues.IsChecked == true)
+            //        {
+            //            chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    ShowMessage("Нет данных для построения графика!");
+            //    return false;
+            //}
+            // return true;
+            throw new NotImplementedException("Not switched to ORM yet.");
         }
 
         private bool BuildChargesChart(DateTime startDate, DateTime endDate)
         {
-            chart.Series.Add("");
-            chart.Titles.Add("График расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
-            chart.Series[0].LegendText = "Расходы";
+            //chart.Series.Add("");
+            //chart.Titles.Add("График расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
+            //chart.Legends.Add("");
+            //chart.Legends[0].Title = "Легенда";
+            //chart.Series[0].LegendText = "Расходы";
 
-            chart.ChartAreas.Add("Расходы");
-            chart.ChartAreas[0].AxisX.Title = "Дата";
-            chart.ChartAreas[0].AxisY.Title = "Сумма";
+            //chart.ChartAreas.Add("Расходы");
+            //chart.ChartAreas[0].AxisX.Title = "Дата";
+            //chart.ChartAreas[0].AxisY.Title = "Сумма";
 
-            chart.Series[0].XValueType = ChartValueType.Date;
+            //chart.Series[0].XValueType = ChartValueType.Date;
 
-            chart.Series[0].ChartType = SeriesChartType.Area;
-            chart.Series[0].Color = System.Drawing.Color.Maroon;
+            //chart.Series[0].ChartType = SeriesChartType.Area;
+            //chart.Series[0].Color = System.Drawing.Color.Maroon;
 
-            DataTable table =
-                App.sqlite.SelectTable(sqlCharges,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
+            //DataTable table =
+            //    App.sqlite.SelectTable(sqlCharges,
+            //    new SQLiteParameter("@d1", startDate),
+            //    new SQLiteParameter("@d2", endDate));
 
-            if (table != null && table.Rows.Count > 0)
-            {
-                for (int a = 0; a < table.Rows.Count; a++)
-                {
-                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
-                        0 - Convert.ToDouble(table.Rows[a].ItemArray[1])));
-                    if (comboDisplayValues.IsChecked == true)
-                    {
-                        chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
-                    }
-                }
-            }
-            else
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            return true;
+            //if (table != null && table.Rows.Count > 0)
+            //{
+            //    for (int a = 0; a < table.Rows.Count; a++)
+            //    {
+            //        chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
+            //            0 - Convert.ToDouble(table.Rows[a].ItemArray[1])));
+            //        if (comboDisplayValues.IsChecked == true)
+            //        {
+            //            chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    ShowMessage("Нет данных для построения графика!");
+            //    return false;
+            //}
+            //return true;
+            throw new NotImplementedException("Not switched to ORM yet.");
         }
 
         private bool BuildCompareChart(DateTime startDate, DateTime endDate)
         {
-            chart.Series.Add("");
-            chart.Titles.Add("График сравнения за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
+            //chart.Series.Add("");
+            //chart.Titles.Add("График сравнения за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
+            //chart.Legends.Add("");
+            //chart.Legends[0].Title = "Легенда";
 
-            chart.ChartAreas.Add("");
+            //chart.ChartAreas.Add("");
 
-            chart.Series[0].ChartType = SeriesChartType.Doughnut;
+            //chart.Series[0].ChartType = SeriesChartType.Doughnut;
 
-            DataRow row =
-                App.sqlite.SelectRow(sqlCompare,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
+            //DataRow row =
+            //    App.sqlite.SelectRow(sqlCompare,
+            //    new SQLiteParameter("@d1", startDate),
+            //    new SQLiteParameter("@d2", endDate));
 
-            if (row != null)
-            {
-                double incomeSum = row.ItemArray[0] != DBNull.Value ? Convert.ToDouble(row.ItemArray[0]) : 0;
-                double chargesSum = row.ItemArray[1] != DBNull.Value ? 0 - Convert.ToDouble(row.ItemArray[1]) : 0;
+            //if (row != null)
+            //{
+            //    double incomeSum = row.ItemArray[0] != DBNull.Value ? Convert.ToDouble(row.ItemArray[0]) : 0;
+            //    double chargesSum = row.ItemArray[1] != DBNull.Value ? 0 - Convert.ToDouble(row.ItemArray[1]) : 0;
 
-                chart.Series[0].Points.Add(incomeSum);
-                chart.Series[0].Points[0].LegendText = "Доходы";
-                if (comboDisplayValues.IsChecked == true)
-                {
-                    chart.Series[0].Points[0].Label = incomeSum > 0 ? string.Format("{0:C}", incomeSum) : "";
-                }
+            //    chart.Series[0].Points.Add(incomeSum);
+            //    chart.Series[0].Points[0].LegendText = "Доходы";
+            //    if (comboDisplayValues.IsChecked == true)
+            //    {
+            //        chart.Series[0].Points[0].Label = incomeSum > 0 ? string.Format("{0:C}", incomeSum) : "";
+            //    }
 
-                chart.Series[0].Points.Add(chargesSum);
-                chart.Series[0].Points[1].LegendText = "Расходы";
-                if (comboDisplayValues.IsChecked == true)
-                {
-                    chart.Series[0].Points[1].Label = chargesSum > 0 ? string.Format("{0:C}", chargesSum) : "";
-                }
-            }
-            else
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            return true;
+            //    chart.Series[0].Points.Add(chargesSum);
+            //    chart.Series[0].Points[1].LegendText = "Расходы";
+            //    if (comboDisplayValues.IsChecked == true)
+            //    {
+            //        chart.Series[0].Points[1].Label = chargesSum > 0 ? string.Format("{0:C}", chargesSum) : "";
+            //    }
+            //}
+            //else
+            //{
+            //    ShowMessage("Нет данных для построения графика!");
+            //    return false;
+            //}
+            //return true;
+            throw new NotImplementedException("Not switched to ORM yet.");
         }
 
         private bool BuildIncomesChargesChart(DateTime startDate, DateTime endDate)
         {
-            chart.Series.Add("");
-            chart.Series.Add("");
-            chart.Titles.Add("График прибыли и расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
-            chart.Series[0].LegendText = "Прибыль";
-            chart.Series[1].LegendText = "Расходы";
+            //chart.Series.Add("");
+            //chart.Series.Add("");
+            //chart.Titles.Add("График прибыли и расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
+            //chart.Legends.Add("");
+            //chart.Legends[0].Title = "Легенда";
+            //chart.Series[0].LegendText = "Прибыль";
+            //chart.Series[1].LegendText = "Расходы";
 
-            chart.ChartAreas.Add("Прибыль");
-            chart.ChartAreas[0].AxisX.Title = "Дата";
-            chart.ChartAreas[0].AxisY.Title = "Сумма";
+            //chart.ChartAreas.Add("Прибыль");
+            //chart.ChartAreas[0].AxisX.Title = "Дата";
+            //chart.ChartAreas[0].AxisY.Title = "Сумма";
 
-            chart.Series[0].XValueType = ChartValueType.Date;
-            chart.Series[1].XValueType = ChartValueType.Date;
+            //chart.Series[0].XValueType = ChartValueType.Date;
+            //chart.Series[1].XValueType = ChartValueType.Date;
 
-            chart.Series[0].ChartType = SeriesChartType.Line;
-            chart.Series[1].ChartType = SeriesChartType.Line;
+            //chart.Series[0].ChartType = SeriesChartType.Line;
+            //chart.Series[1].ChartType = SeriesChartType.Line;
 
-            chart.Series[1].Color = System.Drawing.Color.Maroon;
+            //chart.Series[1].Color = System.Drawing.Color.Maroon;
 
-            DataTable tableIncomes =
-                App.sqlite.SelectTable(sqlIncomes,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
+            //DataTable tableIncomes =
+            //    App.sqlite.SelectTable(sqlIncomes,
+            //    new SQLiteParameter("@d1", startDate),
+            //    new SQLiteParameter("@d2", endDate));
 
-            DataTable tableCharges =
-                App.sqlite.SelectTable(sqlCharges,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
+            //DataTable tableCharges =
+            //    App.sqlite.SelectTable(sqlCharges,
+            //    new SQLiteParameter("@d1", startDate),
+            //    new SQLiteParameter("@d2", endDate));
 
-            if ((tableIncomes == null || tableIncomes.Rows.Count == 0) && (tableCharges == null || tableCharges.Rows.Count == 0))
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            else
-            {
-                if (tableIncomes != null)
-                {
-                    for (int a = 0; a < tableIncomes.Rows.Count; a++)
-                    {
-                        chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(tableIncomes.Rows[a].ItemArray[0]).ToOADate(),
-                            Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1])));
-                        if (comboDisplayValues.IsChecked == true)
-                        {
-                            chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1]));
-                        }
-                    }
-                }
+            //if ((tableIncomes == null || tableIncomes.Rows.Count == 0) && (tableCharges == null || tableCharges.Rows.Count == 0))
+            //{
+            //    ShowMessage("Нет данных для построения графика!");
+            //    return false;
+            //}
+            //else
+            //{
+            //    if (tableIncomes != null)
+            //    {
+            //        for (int a = 0; a < tableIncomes.Rows.Count; a++)
+            //        {
+            //            chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(tableIncomes.Rows[a].ItemArray[0]).ToOADate(),
+            //                Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1])));
+            //            if (comboDisplayValues.IsChecked == true)
+            //            {
+            //                chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1]));
+            //            }
+            //        }
+            //    }
 
-                if (tableCharges != null)
-                {
-                    for (int a = 0; a < tableCharges.Rows.Count; a++)
-                    {
-                        chart.Series[1].Points.Add(new DataPoint(Convert.ToDateTime(tableCharges.Rows[a].ItemArray[0]).ToOADate(),
-                            0 - Convert.ToDouble(tableCharges.Rows[a].ItemArray[1])));
-                        if (comboDisplayValues.IsChecked == true)
-                        {
-                            chart.Series[1].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableCharges.Rows[a].ItemArray[1]));
-                        }
-                    }
-                }
-            }
-            return true;
+            //    if (tableCharges != null)
+            //    {
+            //        for (int a = 0; a < tableCharges.Rows.Count; a++)
+            //        {
+            //            chart.Series[1].Points.Add(new DataPoint(Convert.ToDateTime(tableCharges.Rows[a].ItemArray[0]).ToOADate(),
+            //                0 - Convert.ToDouble(tableCharges.Rows[a].ItemArray[1])));
+            //            if (comboDisplayValues.IsChecked == true)
+            //            {
+            //                chart.Series[1].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableCharges.Rows[a].ItemArray[1]));
+            //            }
+            //        }
+            //    }
+            //}
+            //return true;
+            throw new NotImplementedException("Not switched to ORM yet.");
         }
 
         void ShowMessage(string text)
         {
-            for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is MetroWindow)
-                {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text +
-               Environment.NewLine + App.sqlite.LastOperationErrorMessage, MessageDialogStyle.Affirmative);
-                }
+            //for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+            //    if (visual is MetroWindow)
+            //    {
+            //        ((MetroWindow)visual).ShowMessageAsync("Проблемка", text +
+            //   Environment.NewLine + App.sqlite.LastOperationErrorMessage, MessageDialogStyle.Affirmative);
+            //    }
+            throw new NotImplementedException("Not switched to ORM yet.");
         }
 
         private void SaveChart()

@@ -77,15 +77,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Domain\CashOperation.cs" />
     <Compile Include="Domain\EmployeeCard.cs" />
+    <Compile Include="Domain\ICashOperationRepository.cs" />
+    <Compile Include="Domain\IEmployeeCardRepository.cs" />
+    <Compile Include="Repositories\CashOperationRepository.cs" />
+    <Compile Include="Repositories\NHibernateSession.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UserControls\CashPage.xaml.cs">
       <DependentUpon>CashPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CashTransaction.cs" />
     <Compile Include="UserControls\Employee.cs" />
     <Compile Include="UserControls\EmployeePage.xaml.cs">
       <DependentUpon>EmployeePage.xaml</DependentUpon>
@@ -93,7 +95,6 @@
     <Compile Include="UserControls\GraphicsPage.xaml.cs">
       <DependentUpon>GraphicsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CashTransaction.cs" />
     <Compile Include="UserControls\InverseBooleanConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

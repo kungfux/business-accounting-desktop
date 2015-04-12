@@ -1,4 +1,6 @@
-﻿using MahApps.Metro.Controls;
+﻿using BusinessAccounting.Domain;
+using BusinessAccounting.Repositories;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -30,13 +32,23 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
 
         private const int preloadRecordsCount = 30;
-        List<CashTransaction> history = new List<CashTransaction>();
+        ICollection<CashOperation> history;
         List<Employee> employees = new List<Employee>();
+        CashOperationRepository cashOperations = new CashOperationRepository();
 
         #region Functionality methods
         // load history of cash operations from db and fill listview
         private void LoadHistory(bool all = false)
         {
+            history = cashOperations.GetAll();
+            lvHistory.ItemsSource = history;
+
+            if (history.Count == 0)
+            {
+                groupHistory.Header = "Нет последних записей";
+                groupHistory.IsEnabled = false;
+            }
+
             //string query = string.Format("select id, datestamp, summa, comment from ba_cash_operations order by id desc {0};",
             //    all ? "" : "limit " + preloadRecordsCount);
 
@@ -62,7 +74,6 @@ namespace BusinessAccounting.UserControls
             //    groupHistory.Header = "Нет последних записей";
             //    groupHistory.IsEnabled = false;
             //}
-            throw new NotImplementedException("Not switched to ORM yet.");
         }
 
         private void LoadEmployees()

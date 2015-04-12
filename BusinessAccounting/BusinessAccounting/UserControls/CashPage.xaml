@@ -68,10 +68,10 @@
                     Name="lvHistory" SelectionMode="Single">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
-                            <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
-                            <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
-                            <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding comment}"/>
+                            <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding Id}" />
+                            <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                            <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding Sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                            <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding Comment}"/>
                             <!--<GridViewColumn Header="Сотрудник" Width="Auto" DisplayMemberBinding="{Binding employeeName}"/>-->
                             <GridViewColumn Width="Auto">
                                 <GridViewColumn.CellTemplate>

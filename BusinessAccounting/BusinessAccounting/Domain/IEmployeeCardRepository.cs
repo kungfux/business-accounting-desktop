@@ -7,8 +7,7 @@ namespace BusinessAccounting.Domain
     {
         void Add(EmployeeCard pEmployeeCard);
         void Update(EmployeeCard pEmployeeCard);
-        void Remove(EmployeeCard pEmployeeCard);
-        EmployeeCard GetById(Int64 pEmployeeCardId);
+        void Delete(EmployeeCard pEmployeeCard);
         ICollection<EmployeeCard> GetAll();
         ICollection<CashOperation> GetSalaryHistory(EmployeeCard pEmployeeCard);
     }

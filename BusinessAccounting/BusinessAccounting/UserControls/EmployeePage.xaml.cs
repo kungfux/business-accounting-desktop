@@ -1,4 +1,6 @@
-﻿using MahApps.Metro.Controls;
+﻿using BusinessAccounting.Domain;
+using BusinessAccounting.Repositories;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -35,16 +37,12 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand LookupPhotoCommand = new RoutedCommand();
         public static RoutedCommand RemovePhotoCommand = new RoutedCommand();
 
-        private Employee openedEmployee;
-        private List<CashTransaction> salaryHistory;
-        private List<Employee> foundEmployees;
-
-        private int preloadRecordsCount = 10;
+        IEmployeeCardRepository emplCardRepo = new EmployeeCardRepository();
 
         #region Functionality methods
         private void SearchEmployees(bool pShowAll = false)
         {
-            foundEmployees = new List<Employee>();
+            lbEmployees.ItemsSource = emplCardRepo.GetAll();
 
             //DataTable employees = null;
             //string query = "select id, fullname from ba_employees_cardindex";
@@ -92,7 +90,6 @@ namespace BusinessAccounting.UserControls
             //}
 
             //lbEmployees.ItemsSource = foundEmployees;
-            throw new NotImplementedException("Not switched to ORM yet.");
         }
 
         private void OpenEmployee()
@@ -381,17 +378,17 @@ namespace BusinessAccounting.UserControls
 
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            openedEmployee = new Employee();
-            this.DataContext = openedEmployee;
-            ClearInputFields(true);
+            //openedEmployee = new Employee();
+            //this.DataContext = openedEmployee;
+            //ClearInputFields(true);
         }
 
         private void Edit_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                openedEmployee != null && 
-                openedEmployee.Id != 0 &&
-                !pickerHiredDate.IsEnabled;
+            //e.CanExecute =
+            //    openedEmployee != null && 
+            //    openedEmployee.Id != 0 &&
+            //    !pickerHiredDate.IsEnabled;
         }
 
         private void Edit_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -401,50 +398,50 @@ namespace BusinessAccounting.UserControls
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                openedEmployee != null &&
-                pickerHiredDate.IsEnabled &&
-                pickerHiredDate.SelectedDate != null &&
-                (pickerFiredDate.SelectedDate != null ? pickerHiredDate.SelectedDate <= pickerFiredDate.SelectedDate : true) &&
-                inputEmplName.Text != "";
+            //e.CanExecute =
+            //    openedEmployee != null &&
+            //    pickerHiredDate.IsEnabled &&
+            //    pickerHiredDate.SelectedDate != null &&
+            //    (pickerFiredDate.SelectedDate != null ? pickerHiredDate.SelectedDate <= pickerFiredDate.SelectedDate : true) &&
+            //    inputEmplName.Text != "";
         }
 
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (SaveEmployee())
-            {
-                ClearInputFields(false, true);
-                openedEmployee = null;
-                this.DataContext = openedEmployee;
-            }
+            //if (SaveEmployee())
+            //{
+            //    ClearInputFields(false, true);
+            //    openedEmployee = null;
+            //    this.DataContext = openedEmployee;
+            //}
         }
 
         private void Delete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                openedEmployee != null && openedEmployee.Id != 0;
+            //e.CanExecute =
+            //    openedEmployee != null && openedEmployee.Id != 0;
         }
 
         private void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (DeleteEmployee())
-            {
-                ClearInputFields(false, true);
-                //foundEmployees.Remove(
-                //    foundEmployees.Find(
-                //        delegate(Employee empl) { return empl.Id == openedEmployee.Id; }));
-                //lbEmployees.ItemsSource = foundEmployees;
-                openedEmployee = null;
-                this.DataContext = openedEmployee;
-            }
+            //if (DeleteEmployee())
+            //{
+            //    ClearInputFields(false, true);
+            //    //foundEmployees.Remove(
+            //    //    foundEmployees.Find(
+            //    //        delegate(Employee empl) { return empl.Id == openedEmployee.Id; }));
+            //    //lbEmployees.ItemsSource = foundEmployees;
+            //    openedEmployee = null;
+            //    this.DataContext = openedEmployee;
+            //}
         }
 
         private void LoadAll_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = 
-                openedEmployee != null &&
-                openedEmployee.Id != 0 &&
-                lvSalaryHistory.Items.Count <= preloadRecordsCount;
+            //e.CanExecute = 
+            //    openedEmployee != null &&
+            //    openedEmployee.Id != 0 &&
+            //    lvSalaryHistory.Items.Count <= preloadRecordsCount;
         }
 
         private void LoadAll_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -459,8 +456,8 @@ namespace BusinessAccounting.UserControls
 
         private void LookupPhoto_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                openedEmployee != null && openedEmployee.Id != 0;
+            //e.CanExecute =
+            //    openedEmployee != null && openedEmployee.Id != 0;
         }
 
         private void RemovePhoto_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -470,9 +467,9 @@ namespace BusinessAccounting.UserControls
 
         private void RemovePhoto_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                openedEmployee != null && openedEmployee.Id != 0 &&
-                openedEmployee.Photo != null;
+            //e.CanExecute =
+            //    openedEmployee != null && openedEmployee.Id != 0 &&
+            //    openedEmployee.Photo != null;
         }
         #endregion
 

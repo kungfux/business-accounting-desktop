@@ -7,8 +7,8 @@ namespace BusinessAccounting.Domain
     {
         void Add(CashOperation pCashOperation);
         void Update(CashOperation pCashOperation);
-        void Remove(CashOperation pCashOperation);
-        CashOperation GetById(Int64 pCashOperationId);
+        void Delete(CashOperation pCashOperation);
         ICollection<CashOperation> GetAll();
+        ICollection<CashOperation> GetLast50();
     }
 }

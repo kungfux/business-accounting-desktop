@@ -82,7 +82,8 @@
     <Compile Include="Domain\ICashOperationRepository.cs" />
     <Compile Include="Domain\IEmployeeCardRepository.cs" />
     <Compile Include="Repositories\CashOperationRepository.cs" />
-    <Compile Include="Repositories\NHibernateSession.cs" />
+    <Compile Include="Repositories\EmployeeCardRepository.cs" />
+    <Compile Include="Repositories\NHibernateSessionFactory.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UserControls\CashPage.xaml.cs">
       <DependentUpon>CashPage.xaml</DependentUpon>
@@ -121,7 +122,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

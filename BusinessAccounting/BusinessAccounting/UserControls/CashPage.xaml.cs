@@ -31,45 +31,18 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand SaveRecordCommand = new RoutedCommand();
         public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
 
-        private const int preloadRecordsCount = 30;
-        ICollection<CashOperation> history;
-        List<Employee> employees = new List<Employee>();
-        CashOperationRepository cashOperations = new CashOperationRepository();
+        ICashOperationRepository cashOperationRepo = new CashOperationRepository();
+        IEmployeeCardRepository employeeCardRepo = new EmployeeCardRepository();
 
         #region Functionality methods
         // load history of cash operations from db and fill listview
-        private void LoadHistory(bool all = false)
+        private void LoadHistory(bool pShowAll = false)
         {
-            history = cashOperations.GetAll();
-            lvHistory.ItemsSource = history;
+            lvHistory.ItemsSource = pShowAll 
+                ? cashOperationRepo.GetAll() 
+                : cashOperationRepo.GetLast50();
 
-            if (history.Count == 0)
-            {
-                groupHistory.Header = "Нет последних записей";
-                groupHistory.IsEnabled = false;
-            }
-
-            //string query = string.Format("select id, datestamp, summa, comment from ba_cash_operations order by id desc {0};",
-            //    all ? "" : "limit " + preloadRecordsCount);
-
-            //history = new List<CashTransaction>();
-
-            //DataTable historyRecords = App.sqlite.SelectTable(query);
-            //if (historyRecords != null)
-            //{
-            //    foreach (DataRow row in historyRecords.Rows)
-            //    {
-            //        history.Add(new CashTransaction()
-            //        {
-            //            id = Convert.ToInt32(row.ItemArray[0].ToString()),
-            //            date = Convert.ToDateTime(row.ItemArray[1]),
-            //            sum = decimal.Parse(row.ItemArray[2].ToString()),
-            //            comment = row.ItemArray[3].ToString()
-            //        });
-            //    }
-            //    lvHistory.ItemsSource = history;
-            //}
-            //else
+            //if (lvHistory.Items.Count == 0)
             //{
             //    groupHistory.Header = "Нет последних записей";
             //    groupHistory.IsEnabled = false;
@@ -78,70 +51,48 @@ namespace BusinessAccounting.UserControls
 
         private void LoadEmployees()
         {
-            // employees = new List<Employee>();
-
-            //DataTable employeesData = App.sqlite.SelectTable("select id, fullname from ba_employees_cardindex where fired is null;");
-            //if (employeesData != null && employeesData.Rows.Count > 0)
-            //{
-            //    foreach (DataRow r in employeesData.Rows)
-            //    {
-            //        employees.Add(new Employee()
-            //        {
-            //            Id = Convert.ToInt32(r.ItemArray[0]),
-            //            FullName = r.ItemArray[1].ToString()
-            //        });
-            //    }
-            //}
-            // comboEmployee.ItemsSource = employees;
-            throw new NotImplementedException("Not switched to ORM yet.");
+            comboEmployee.ItemsSource = employeeCardRepo.GetAll();
         }
 
         // save new cash operation to db
         private void SaveRecord()
         {
-            //bool result = false;
+            if ((bool)SalaryMode.IsChecked)
+            {
+                //result = 2 == App.sqlite.PerformTransaction(new SQLiteQueryStatement[] {
+                //    new SQLiteQueryStatement() {
+                //         QuerySql = "insert into ba_cash_operations (datestamp, summa, comment) values (@D, @s, @c);",
+                //         QueryParameters = new SQLiteParameter[] {
+                //            new SQLiteParameter("@d", inputDate.SelectedDate),
+                //            new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
+                //            new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null)
+                //          }
+                //    },
+                //    new SQLiteQueryStatement() {
+                //        QuerySql = "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.id) from ba_cash_operations));",
+                //        QueryParameters = new SQLiteParameter[] {
+                //            new SQLiteParameter("@e", employees[comboEmployee.SelectedIndex].Id)
+                //        }
+                //    }
+                //});
+            }
+            else
+            {
+                var newCashOperation = new CashOperation() 
+                { 
+                    Date = (DateTime)inputDate.SelectedDate,
+                    Sum = Convert.ToDecimal(inputSum.Text),
+                    Comment = inputComment.Text != "" ? inputComment.Text : null
 
-            //if ((bool)SalaryMode.IsChecked)
-            //{
-            //    result = 2 == App.sqlite.PerformTransaction(new SQLiteQueryStatement[] {
-            //        new SQLiteQueryStatement() {
-            //             QuerySql = "insert into ba_cash_operations (datestamp, summa, comment) values (@D, @s, @c);",
-            //             QueryParameters = new SQLiteParameter[] {
-            //                new SQLiteParameter("@d", inputDate.SelectedDate),
-            //                new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
-            //                new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null)
-            //              }
-            //        },
-            //        new SQLiteQueryStatement() {
-            //            QuerySql = "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.id) from ba_cash_operations));",
-            //            QueryParameters = new SQLiteParameter[] {
-            //                new SQLiteParameter("@e", employees[comboEmployee.SelectedIndex].Id)
-            //            }
-            //        }
-            //    });
-            //}
-            //else
-            //{
-            //    result = 1 == App.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
-            //        new SQLiteParameter("@d", inputDate.SelectedDate),
-            //        new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
-            //        new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null));
-            //}
+                };
+                cashOperationRepo.Add(newCashOperation);
 
-            //if (result)
-            //{
-            //    inputDate.SelectedDate = null;
-            //    inputSum.Text = "";
-            //    inputComment.Text = "";
-            //    comboEmployee.SelectedIndex = -1;
-            //    LoadHistory();
-            //}
-            //else
-            //{
-            //    ShowMessage("Не удалось сохранить запись в базе данных!");
-            //    return;
-            //}
-            throw new NotImplementedException("Not switched to ORM yet.");
+                inputDate.SelectedDate = null;
+                inputSum.Text = "";
+                inputComment.Text = "";
+                comboEmployee.SelectedIndex = -1;
+                LoadHistory();
+            }
         }
 
         private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)
@@ -179,16 +130,16 @@ namespace BusinessAccounting.UserControls
             throw new NotImplementedException("Not switched to ORM yet.");
         }
 
-        private void ShowMessage(string text)
-        {
-            //for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-            //    if (visual is MetroWindow)
-            //    {
-            //        ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastOperationErrorMessage,
-            //            MessageDialogStyle.Affirmative);
-            //    }
-            throw new NotImplementedException("Not switched to ORM yet.");
-        }
+        //private void ShowMessage(string text)
+        //{
+        //    //for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+        //    //    if (visual is MetroWindow)
+        //    //    {
+        //    //        ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastOperationErrorMessage,
+        //    //            MessageDialogStyle.Affirmative);
+        //    //    }
+        //    throw new NotImplementedException("Not switched to ORM yet.");
+        //}
         #endregion
 
         #region Commands
@@ -220,7 +171,8 @@ namespace BusinessAccounting.UserControls
 
         private void LoadHistory_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = lvHistory.Items.Count <= preloadRecordsCount;
+            //e.CanExecute = lvHistory.Items.Count <= preloadRecordsCount;
+            e.CanExecute = true;
         }
 
         private void LoadHistory_Executed(object sender, ExecutedRoutedEventArgs e)

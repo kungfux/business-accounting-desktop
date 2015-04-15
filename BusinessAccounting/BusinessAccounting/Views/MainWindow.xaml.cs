@@ -51,5 +51,11 @@ namespace BusinessAccounting.Views
                 Debug.WriteLine("No WindowPosition setting stored.");
             }
         }
+
+        private void TopHeaderGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Move window by mouse
+            this.DragMove();
+        }
     }
 }

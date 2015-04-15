@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BusinessAccounting.Domain
+namespace BusinessAccounting.Model
 {
     class CashOperation
     {

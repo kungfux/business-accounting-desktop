@@ -1,4 +1,4 @@
-﻿using BusinessAccounting.Domain;
+﻿using BusinessAccounting.Model;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;

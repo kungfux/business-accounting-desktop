@@ -40,6 +40,7 @@ namespace BusinessAccounting.Views
                 Rect bounds = Properties.Settings.Default.WindowPosition;
                 this.Top = bounds.Top;
                 this.Left = bounds.Left;
+
                 if (this.SizeToContent == SizeToContent.Manual)
                 {
                     this.Width = bounds.Width;

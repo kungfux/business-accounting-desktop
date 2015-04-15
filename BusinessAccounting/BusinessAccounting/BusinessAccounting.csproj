@@ -39,14 +39,12 @@
     <StartupObject>BusinessAccounting.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro">
-      <HintPath>..\packages\MahApps.Metro.0.14.0.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
@@ -77,10 +75,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Domain\CashOperation.cs" />
-    <Compile Include="Domain\EmployeeCard.cs" />
-    <Compile Include="Domain\ICashOperationRepository.cs" />
-    <Compile Include="Domain\IEmployeeCardRepository.cs" />
+    <Compile Include="Model\CashOperation.cs" />
+    <Compile Include="Model\EmployeeCard.cs" />
+    <Compile Include="Model\ICashOperationRepository.cs" />
+    <Compile Include="Model\IEmployeeCardRepository.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -89,42 +87,9 @@
     <Compile Include="Repositories\CashOperationRepository.cs" />
     <Compile Include="Repositories\EmployeeCardRepository.cs" />
     <Compile Include="Repositories\NHibernateSessionFactory.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="UserControls\CashPage.xaml.cs">
-      <DependentUpon>CashPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\CashTransaction.cs" />
-    <Compile Include="UserControls\Employee.cs" />
-    <Compile Include="UserControls\EmployeePage.xaml.cs">
-      <DependentUpon>EmployeePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\GraphicsPage.xaml.cs">
-      <DependentUpon>GraphicsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\InverseBooleanConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="UserControls\CashPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\EmployeePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\GraphicsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -145,23 +110,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\image_menu.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\image_cash.png" />
-    <Resource Include="Resources\image_clock.png" />
-    <Resource Include="Resources\image_graph.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\image_man.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\image_noimage.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="hibernate.cfg.xml">

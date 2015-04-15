@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace BusinessAccounting.Domain
+namespace BusinessAccounting.Model
 {
     class EmployeeCard
     {

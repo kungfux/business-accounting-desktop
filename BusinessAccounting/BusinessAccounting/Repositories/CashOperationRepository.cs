@@ -1,4 +1,4 @@
-﻿using BusinessAccounting.Domain;
+﻿using BusinessAccounting.Model;
 using NHibernate;
 using System.Collections.Generic;
 

@@ -1,61 +1,62 @@
 ﻿using BusinessAccounting.Model;
 using NHibernate;
+using NHibernate.Criterion;
 using System.Collections.Generic;
 
 namespace BusinessAccounting.Repositories
 {
-    class CashOperationRepository : ICashOperationRepository
+    public class CashRepository : ICashRepository
     {
-        public void Add(CashOperation pCashOperation)
+        public void Add(Cash pCash)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {
-                session.Save(pCashOperation);
+                session.Save(pCash);
                 transaction.Commit();
             }
         }
 
-        public void Update(CashOperation pCashOperation)
+        public void Update(Cash pCash)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {
-                session.Update(pCashOperation);
+                session.Update(pCash);
                 transaction.Commit();
             }
         }
 
-        public void Delete(CashOperation pCashOperation)
+        public void Delete(Cash pCash)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {
-                session.Delete(pCashOperation);
+                session.Delete(pCash);
                 transaction.Commit();
             }
         }
 
-        public ICollection<CashOperation> GetAll()
+        public Cash GetById(long pId)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             {
-                var cashOperations = session
-                    .CreateCriteria(typeof(CashOperation))
-                    .List<CashOperation>();
-                return cashOperations;
+                var result = session
+                    .CreateCriteria(typeof(Cash))
+                    .Add(Restrictions.Eq("Id", pId))
+                    .UniqueResult<Cash>();
+                return result;
             }
         }
 
-        public ICollection<CashOperation> GetLast50()
+        public ICollection<Cash> GetAll()
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             {
-                var cashOperations = session
-                    .CreateCriteria(typeof(CashOperation))
-                    .SetMaxResults(50)
-                    .List<CashOperation>();
-                return cashOperations;
+                var result = session
+                    .CreateCriteria(typeof(Cash))
+                    .List<Cash>();
+                return result;
             }
         }
     }

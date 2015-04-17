@@ -6,7 +6,7 @@ using System.IO;
 
 namespace BusinessAccounting.Repositories
 {
-    class NHibernateSessionFactory
+    public class NHibernateSessionFactory
     {
         static Configuration configuration;
 
@@ -14,7 +14,7 @@ namespace BusinessAccounting.Repositories
         {
             configuration = new Configuration();
             configuration.Configure();
-            configuration.AddAssembly(typeof(CashOperation).Assembly);
+            configuration.AddAssembly(typeof(Cash).Assembly);
 
             if (!File.Exists("ba.sqlite"))
             {

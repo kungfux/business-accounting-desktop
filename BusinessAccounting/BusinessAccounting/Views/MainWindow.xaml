@@ -1,20 +1,47 @@
 ﻿<Window x:Class="BusinessAccounting.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title=""
-        Width="1024"
-        Height="768"
-        WindowStartupLocation="CenterScreen"
-        WindowStyle="None"
-        Loaded="Window_Loaded"
-        Closing="Window_Closing">
+        Title="" Width="1000" Height="700" WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    
+    <Window.Resources>
+        <BitmapImage x:Key="Logo" UriSource="../Resources/Logo.png" />
+        <BitmapImage x:Key="Cogwheel" UriSource="../Resources/Cogwheel.png" />
+    </Window.Resources>
+    
     <Grid Background="LightGray">
-        <Grid Name="TopHeaderGrid"
-              VerticalAlignment="Top"
-              Height="50"
-              Background="White"
+        <Grid Name="TopHeaderGrid" VerticalAlignment="Top" Height="64" Background="White"
               MouseLeftButtonDown="TopHeaderGrid_MouseLeftButtonDown">
-            
+            <Grid.Effect>
+                <DropShadowEffect ShadowDepth="1"/>
+            </Grid.Effect>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <!-- Comapny info panel  -->
+            <WrapPanel Grid.Column="0">
+                <Image Height="64" Width="64" Name="imageCompanyLogo" Source="{Binding CompanyLogo}" />
+                <Label Foreground="Black" Name="labelCompanyName">
+                    <Binding Path="CompanyName" FallbackValue="COMPANY NAME" />
+                </Label>
+            </WrapPanel>
+            <!-- Calendar panel -->
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                <Label Name="labelTodayDate" Foreground="Blue">
+                    <Binding Path="Text" FallbackValue="01 January 2015" />
+                </Label>
+            </StackPanel>
+            <!-- Main menu panel -->
+            <WrapPanel Grid.Column="2">
+                <Label Content="DASHBOARD" />
+                <Label Content="CASH" />
+                <Label Content="EMPLOYEE" />
+                <Label Content="CHART" />
+                <Label Content="REPORT" />
+                <Image Height="16" Width="16" Source="{StaticResource Cogwheel}" />
+            </WrapPanel>
         </Grid>
     </Grid>
 </Window>

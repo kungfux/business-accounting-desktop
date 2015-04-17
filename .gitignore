@@ -2,3 +2,5 @@
 /BusinessAccounting/BusinessAccounting/bin
 /BusinessAccounting/*.suo
 /BusinessAccounting/packages
+/BusinessAccounting/BusinessAccountingTests/obj
+/BusinessAccounting/BusinessAccountingTests/bin

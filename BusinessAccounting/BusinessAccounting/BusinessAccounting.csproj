@@ -75,18 +75,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\CashOperation.cs" />
-    <Compile Include="Model\EmployeeCard.cs" />
-    <Compile Include="Model\ICashOperationRepository.cs" />
-    <Compile Include="Model\IEmployeeCardRepository.cs" />
+    <Compile Include="Model\Cash.cs" />
+    <Compile Include="Model\Employee.cs" />
+    <Compile Include="Model\ICashRepository.cs" />
+    <Compile Include="Model\IEmployeeRepository.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\CashOperationRepository.cs" />
-    <Compile Include="Repositories\EmployeeCardRepository.cs" />
+    <Compile Include="Repositories\CashRepository.cs" />
+    <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\NHibernateSessionFactory.cs" />
+    <Compile Include="ViewModel\HeaderCompany.cs" />
+    <Compile Include="ViewModel\MainWindow\TodayDate.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -118,10 +120,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mappings\CashOperation.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Cash.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mappings\EmployeeCard.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Employee.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cogwheel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.96.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.96.0\build\net45\System.Data.SQLite.Core.targets')" />

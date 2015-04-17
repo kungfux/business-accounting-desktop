@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessAccounting.ViewModel;
+using BusinessAccounting.ViewModel.MainWindow;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -57,6 +59,14 @@ namespace BusinessAccounting.Views
         {
             // Move window by mouse
             this.DragMove();
+        }
+
+        private void SetDataContext()
+        {
+            var hCompany = new HeaderCompany();
+            this.DataContext = hCompany;
+
+            labelTodayDate.DataContext = new TodayDate();
         }
     }
 }

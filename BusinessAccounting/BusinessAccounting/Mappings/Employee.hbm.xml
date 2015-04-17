@@ -3,7 +3,7 @@
                    assembly="BusinessAccounting"
                    namespace="BusinessAccounting.Model">
 
-  <class name="EmployeeCard">
+  <class name="Employee">
     <id name="Id">
       <generator class="native" />
     </id>
@@ -15,6 +15,14 @@
     <property name="PhoneNumber" not-null="false" />
     <property name="Address" not-null="false" />
     <property name="Notes" not-null="false" />
+    <!--<set name="Salary">
+      <key column="Id" />
+      <one-to-many class="Cash"/>
+    </set>-->
+    <list name="Salary" table="Salary">
+      <key column="EmployeeId" />
+      <element column="CashId" />
+    </list>
   </class>
 
 </hibernate-mapping>

@@ -15,14 +15,10 @@
     <property name="PhoneNumber" not-null="false" />
     <property name="Address" not-null="false" />
     <property name="Notes" not-null="false" />
-    <!--<set name="Salary">
-      <key column="Id" />
+    <set name="Salary">
+      <key column="SalaryId" />
       <one-to-many class="Cash"/>
-    </set>-->
-    <list name="Salary" table="Salary">
-      <key column="EmployeeId" />
-      <element column="CashId" />
-    </list>
+    </set>
   </class>
 
 </hibernate-mapping>

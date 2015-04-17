@@ -65,7 +65,7 @@ namespace BusinessAccounting.Repositories
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {
-                session.Save(pCash, pEmployee.Id);
+                //session.Save(pEmployee, pCash);
                 transaction.Commit();
             }
         }

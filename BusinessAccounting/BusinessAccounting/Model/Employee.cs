@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace BusinessAccounting.Model
@@ -22,7 +22,7 @@ namespace BusinessAccounting.Model
         public virtual string PhoneNumber { get; set; }
         public virtual string Address { get; set; }
         public virtual string Notes { get; set; }
-        public virtual Cash Salary { get; set; }
+        public virtual ICollection<Cash> Salary { get; set; }
 
         public override bool Equals(object other)
         {

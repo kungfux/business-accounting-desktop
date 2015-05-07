@@ -2,7 +2,7 @@
 
 namespace BusinessAccounting.Model
 {
-    public class Cash
+    public class Transaction
     {
         long id; // identifier
 
@@ -18,7 +18,7 @@ namespace BusinessAccounting.Model
 
         public override bool Equals(object other)
         {
-            Cash cash = other as Cash;
+            Transaction cash = other as Transaction;
             return this.Id == cash.Id ? true : false;
         }
     }

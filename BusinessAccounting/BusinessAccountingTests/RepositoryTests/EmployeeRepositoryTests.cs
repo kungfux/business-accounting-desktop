@@ -2,7 +2,7 @@
 using BusinessAccounting.Repositories;
 using NUnit.Framework;
 using System;
-using System.IO;
+using System.Collections.Generic;
 
 namespace BusinessAccountingTests.RepositoryTests
 {
@@ -14,7 +14,7 @@ namespace BusinessAccountingTests.RepositoryTests
         {
             var employeeRepo = new EmployeeRepository();
 
-            var employee = new Employee() { FullName = "Name1", HiredDate = DateTime.Today  };
+            var employee = new Employee() { Name = "Name1", Hired = DateTime.Today  };
             employeeRepo.Add(employee);
             Assert.AreEqual(employee, employeeRepo.GetById(1));
         }
@@ -24,13 +24,11 @@ namespace BusinessAccountingTests.RepositoryTests
         {
             var employeeRepo = new EmployeeRepository();
 
-            var employee = new Employee() { FullName = "Name2", HiredDate = DateTime.Today };
+            var employee = new Employee() { Name = "Name2", Hired = DateTime.Today };
+            var cash = new Transaction() { Date = DateTime.Now, Sum = 1m, Comment = "Salary" };
+
+            employee.Salary = new List<Transaction>() { cash };
             employeeRepo.Add(employee);
-
-            var cash = new Cash() { Date = DateTime.Now, Sum = 1m, Comment = "Salary" };
-
-            var employee2 = employeeRepo.GetById(1);
-            employeeRepo.AddSalary(employee2, cash);
         }
     }
 }

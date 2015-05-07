@@ -60,7 +60,7 @@ namespace BusinessAccounting.Repositories
             }
         }
 
-        public void AddSalary(Employee pEmployee, Cash pCash)
+        public void AddSalary(Employee pEmployee, Transaction pCash)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
@@ -70,14 +70,14 @@ namespace BusinessAccounting.Repositories
             }
         }
 
-        public ICollection<Cash> GetSalary(Employee pEmployee)
+        public ICollection<Transaction> GetSalary(Employee pEmployee)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             {
                 var cashOperation = session
-                    .CreateCriteria(typeof(Cash))
+                    .CreateCriteria(typeof(Transaction))
                     .Add(Restrictions.Eq("Id", pEmployee.Id))
-                    .List<Cash>();
+                    .List<Transaction>();
                 return cashOperation;
             }
         }

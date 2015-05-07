@@ -10,7 +10,7 @@ namespace BusinessAccounting.Model
         void Delete(Employee pEmployee);
         Employee GetById(long Id);
         ICollection<Employee> GetAll();
-        void AddSalary(Employee pEmployee, Cash pCash);
-        ICollection<Cash> GetSalary(Employee pEmployee);
+        void AddSalary(Employee pEmployee, Transaction pCash);
+        ICollection<Transaction> GetSalary(Employee pEmployee);
     }
 }

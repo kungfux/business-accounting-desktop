@@ -75,16 +75,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Cash.cs" />
+    <Compile Include="Model\Group.cs" />
+    <Compile Include="Model\Maintenance.cs" />
+    <Compile Include="Model\Taxes.cs" />
+    <Compile Include="Model\Transaction.cs" />
     <Compile Include="Model\Employee.cs" />
-    <Compile Include="Model\ICashRepository.cs" />
+    <Compile Include="Model\ITransactionRepository.cs" />
     <Compile Include="Model\IEmployeeRepository.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\CashRepository.cs" />
+    <Compile Include="Repositories\TransactionRepository.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\NHibernateSessionFactory.cs" />
     <Compile Include="ViewModel\HeaderCompany.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="Documentation\ClassDiagram.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

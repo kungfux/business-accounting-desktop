@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BusinessAccounting.Model.Transaction">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAAAAgAAAAAAAAAAAAAABAAAAAAAAAgQ=</HashCode>
+      <FileName>Model\Transaction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BusinessAccounting.Model.Employee">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACiACAAAAAAACAAgBAAAAQAAAAAAAECAAAAIABAAgA=</HashCode>
+      <FileName>Model\Employee.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Transaction" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BusinessAccounting.Maintenance">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <AssociationLine Name="SpendManagementGroup" Type="BusinessAccounting.SpendManagementGroup" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.5" Y="1.438" />
+        <Point X="7.875" Y="1.438" />
+        <Point X="7.875" Y="2.875" />
+        <Point X="7.5" Y="2.875" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AACCAEAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Model\Maintenance.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Transaction" />
+      <Property Name="SpendManagementGroup" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BusinessAccounting.SpendManagementGroup">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Model\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

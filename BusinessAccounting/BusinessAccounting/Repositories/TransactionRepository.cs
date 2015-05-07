@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace BusinessAccounting.Repositories
 {
-    public class CashRepository : ICashRepository
+    public class TransactionRepository : ITransactionRepository
     {
-        public void Add(Cash pCash)
+        public void Add(Transaction pCash)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
@@ -17,7 +17,7 @@ namespace BusinessAccounting.Repositories
             }
         }
 
-        public void Update(Cash pCash)
+        public void Update(Transaction pCash)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
@@ -27,7 +27,7 @@ namespace BusinessAccounting.Repositories
             }
         }
 
-        public void Delete(Cash pCash)
+        public void Delete(Transaction pCash)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
@@ -37,25 +37,25 @@ namespace BusinessAccounting.Repositories
             }
         }
 
-        public Cash GetById(long pId)
+        public Transaction GetById(long pId)
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             {
                 var result = session
-                    .CreateCriteria(typeof(Cash))
+                    .CreateCriteria(typeof(Transaction))
                     .Add(Restrictions.Eq("Id", pId))
-                    .UniqueResult<Cash>();
+                    .UniqueResult<Transaction>();
                 return result;
             }
         }
 
-        public ICollection<Cash> GetAll()
+        public ICollection<Transaction> GetAll()
         {
             using (ISession session = NHibernateSessionFactory.OpenSession())
             {
                 var result = session
-                    .CreateCriteria(typeof(Cash))
-                    .List<Cash>();
+                    .CreateCriteria(typeof(Transaction))
+                    .List<Transaction>();
                 return result;
             }
         }

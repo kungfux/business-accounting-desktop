@@ -14,15 +14,26 @@ namespace BusinessAccounting.Model
             protected set { id = value; }
         }
 
-        public virtual DateTime HiredDate { get; set; }
-        public virtual DateTime FiredDate { get; set; }
-        public virtual string FullName { get; set; }
+        public virtual DateTime Hired { get; set; }
+        public virtual DateTime Fired { get; set; }
+        public virtual string Name { get; set; }
         public virtual Image Photo { get; set; }
-        public virtual string DocumentInfo { get; set; }
-        public virtual string PhoneNumber { get; set; }
+        public virtual string Passport { get; set; }
+        public virtual string Phone { get; set; }
         public virtual string Address { get; set; }
         public virtual string Notes { get; set; }
-        public virtual ICollection<Cash> Salary { get; set; }
+        public virtual ICollection<Transaction> Salary { get; set; }
+
+        public Transaction Transaction
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
 
         public override bool Equals(object other)
         {

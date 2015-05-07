@@ -14,7 +14,7 @@ namespace BusinessAccounting.Repositories
         {
             configuration = new Configuration();
             configuration.Configure();
-            configuration.AddAssembly(typeof(Cash).Assembly);
+            configuration.AddAssembly(typeof(Transaction).Assembly);
 
             if (!File.Exists("ba.sqlite"))
             {

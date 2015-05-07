@@ -12,9 +12,9 @@ namespace BusinessAccountingTests.RepositoryTests
         [Test]
         public void AddCash()
         {
-            var cashRepo = new CashRepository();
+            var cashRepo = new TransactionRepository();
 
-            var cash = new Cash() { Date = DateTime.Now, Sum = 1.0m, Comment = "first comment" };
+            var cash = new Transaction() { Date = DateTime.Now, Sum = 1.0m, Comment = "first comment" };
             cashRepo.Add(cash);
             Assert.AreEqual(cash, cashRepo.GetById(1));
         }

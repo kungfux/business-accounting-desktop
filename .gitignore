@@ -1,6 +1,5 @@
 /BusinessAccounting/BusinessAccounting/obj
 /BusinessAccounting/BusinessAccounting/bin
-/ImportUtility/bin
-/ImportUtility/obj
-/BusinessAccounting/*.suo
-/ImportUtility/*.suo
+/BusinessAccounting/.vs
+*.suo
+*.user

@@ -188,7 +188,8 @@ namespace BusinessAccounting.UserControls
                     comboEmployee != null &&
                     comboEmployee.SelectedIndex != -1 && // employee is selected
                     decimal.TryParse(inputSum.Text, out sum) && // sum is entered
-                    sum < 0 // sum is less then zero because you spent money
+                    sum <= 0 // sum is less then zero because you spent money
+                    // or equals if it is a trial period for person
                 )
                 ||
                 !(bool)SalaryMode.IsChecked &

@@ -4,9 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:libcc="clr-namespace:BusinessAccountingControls;assembly=BusinessAccountingControls"
     Title="Business Accounting Universal"
-    Height="450"
-    Width="850"
-    WindowStartupLocation="CenterScreen">
+    Closing="BusinessAccountingWindow_Closing">
     <Grid>
         <TextBlock Text="Here goes the content!"/>
     </Grid>

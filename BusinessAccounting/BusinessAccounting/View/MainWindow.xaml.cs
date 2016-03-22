@@ -1,12 +1,11 @@
-﻿using System;
-using System.Windows;
+﻿using BusinessAccountingControls;
 
-namespace BusinessAccounting
+namespace BusinessAccounting.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : BusinessAccountingWindow
     {
         public MainWindow()
         {

@@ -6,6 +6,6 @@
     Title="Business Accounting Universal"
     Closing="BusinessAccountingWindow_Closing">
     <Grid>
-        <TextBlock Text="Here goes the content!"/>
+        <TextBlock Text="{DynamicResource test}"/>
     </Grid>
 </libcc:BusinessAccountingWindow>

@@ -11,25 +11,34 @@ namespace BusinessAccounting.View
         public MainWindow()
         {
             InitializeComponent();
-
-            this.Top = Properties.Settings.Default.Top;
-            this.Left = Properties.Settings.Default.Left;
-            this.Height = Properties.Settings.Default.Height;
-            this.Width = Properties.Settings.Default.Width;
-            
-            if (Properties.Settings.Default.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Maximized;
-            }
+            LoadAndRestoreWindowSize();
         }
 
         private void BusinessAccountingWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            SaveWindowSize();
+        }
+
+        private void LoadAndRestoreWindowSize()
+        {
+            Top = Properties.Settings.Default.Top;
+            Left = Properties.Settings.Default.Left;
+            Height = Properties.Settings.Default.Height;
+            Width = Properties.Settings.Default.Width;
+
+            if (Properties.Settings.Default.WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void SaveWindowSize()
         {
             Properties.Settings.Default.Top = RestoreBounds.Top;
             Properties.Settings.Default.Left = RestoreBounds.Left;
             Properties.Settings.Default.Height = RestoreBounds.Height;
             Properties.Settings.Default.Width = RestoreBounds.Width;
-            Properties.Settings.Default.WindowState = this.WindowState;
+            Properties.Settings.Default.WindowState = WindowState;
 
             Properties.Settings.Default.Save();
         }

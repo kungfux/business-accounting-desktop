@@ -1,5 +1,5 @@
-/BusinessAccounting/BusinessAccounting/obj
-/BusinessAccounting/BusinessAccounting/bin
-/BusinessAccounting/.vs
+obj
+bin
+.vs
 *.suo
 *.user

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessAccounting.Model;
+using BusinessAccounting.Model.Entity;
+using System;
 using System.Threading;
 using System.Windows;
 
@@ -9,6 +11,7 @@ namespace BusinessAccounting
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             SetLanguageDictionary();
+            InitDatabase();
         }
 
         private void SetLanguageDictionary()
@@ -27,6 +30,16 @@ namespace BusinessAccounting
                     break;
             }
             this.Resources.MergedDictionaries.Add(dict);
+        }
+
+        private void InitDatabase()
+        {
+            var context = new DatabaseContext();
+
+            //foreach (var EmployeePosition in context.Set<EmployeePosition>())
+            //{
+            //    MessageBox.Show(EmployeePosition.Name);
+            //}
         }
     }
 }

@@ -3,3 +3,5 @@ bin
 .vs
 *.suo
 *.user
+BusinessAccounting/packages/*
+!BusinessAccounting/packages/repositories.config

@@ -29,7 +29,7 @@ namespace BusinessAccounting
                     dict.Source = new Uri("Resources\\StringResources.en-US.xaml", UriKind.Relative);
                     break;
             }
-            this.Resources.MergedDictionaries.Add(dict);
+            Resources.MergedDictionaries.Add(dict);
         }
 
         private void InitDatabase()

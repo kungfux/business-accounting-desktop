@@ -22,6 +22,9 @@ namespace BusinessAccounting.Model
             ConfigureDocument(dbModelBuilder);
             ConfigureTransaction(dbModelBuilder);
 
+            ConfigureActivityType(dbModelBuilder);
+            ConfigureActivity(dbModelBuilder);
+
             var init = new DatabaseInit(dbModelBuilder);
             Database.SetInitializer(init);
         }
@@ -73,6 +76,19 @@ namespace BusinessAccounting.Model
 
             dbModelBuilder.Entity<Transaction>()
                 .HasOptional(t => t.Document)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(false);
+        }
+
+        private static void ConfigureActivityType(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<ActivityType>();
+        }
+
+        private static void ConfigureActivity(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<Activity>()
+                .HasOptional(t => t.Type)
                 .WithOptionalDependent()
                 .WillCascadeOnDelete(false);
         }

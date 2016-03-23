@@ -69,8 +69,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Model\Entity\ActivityType.cs" />
     <Compile Include="Model\DatabaseContext.cs" />
     <Compile Include="Model\DatabaseInit.cs" />
+    <Compile Include="Model\Entity\Activity.cs" />
     <Compile Include="Model\Entity\Document.cs" />
     <Compile Include="Model\Entity\Employee.cs" />
     <Compile Include="Model\Entity\EmployeePosition.cs" />
@@ -162,6 +164,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.99.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />

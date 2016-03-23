@@ -18,6 +18,8 @@ namespace BusinessAccounting.Model
             ConfigureExpenditures(context);
             ConfigureProperty(context);
             ConfigureTransaction(context);
+            ConfigureActivityTypes(context);
+            ConfigureActivities(context);
         }
 
         private void ConfigureEmployeePositions(DatabaseContext context)
@@ -160,6 +162,51 @@ namespace BusinessAccounting.Model
             foreach (Transaction transaction in Transactions)
             {
                 context.Set<Transaction>().Add(transaction);
+            }
+        }
+
+        private void ConfigureActivityTypes(DatabaseContext context)
+        {
+            var ActivityTypes = new ActivityType[]
+            {
+                new ActivityType()
+                {
+                    Title = "Call",
+                    Color = System.Drawing.Color.Blue.Name
+                },
+                new ActivityType()
+                {
+                    Title = "Event",
+                    Color = System.Drawing.Color.Green.Name
+                },
+                new ActivityType()
+                {
+                    Title = "Alert",
+                    Color = System.Drawing.Color.Red.Name
+                }
+            };
+
+            foreach (ActivityType activityType in ActivityTypes)
+            {
+                context.Set<ActivityType>().Add(activityType);
+            }
+        }
+
+        private void ConfigureActivities(DatabaseContext context)
+        {
+            var Activities = new Activity[]
+            {
+                new Activity()
+                {
+                    Type = context.Set<ActivityType>().Local[0],
+                    DueDate = DateTime.Now.AddDays(10),
+                    Description = "Call Zhi Bao"
+                }
+            };
+
+            foreach (Activity activity in Activities)
+            {
+                context.Set<Activity>().Add(activity);
             }
         }
     }

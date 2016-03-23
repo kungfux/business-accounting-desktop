@@ -36,10 +36,11 @@ namespace BusinessAccounting
         {
             var context = new DatabaseContext();
 
-            //foreach (var EmployeePosition in context.Set<EmployeePosition>())
-            //{
-            //    MessageBox.Show(EmployeePosition.Name);
-            //}
+            // TODO: Remove next lines
+            foreach (var EmployeePosition in context.Set<EmployeePosition>())
+            {
+                //MessageBox.Show(EmployeePosition.Name);
+            }
         }
     }
 }

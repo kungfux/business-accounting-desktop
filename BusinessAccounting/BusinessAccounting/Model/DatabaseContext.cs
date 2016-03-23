@@ -15,6 +15,12 @@ namespace BusinessAccounting.Model
         protected override void OnModelCreating(DbModelBuilder dbModelBuilder)
         {
             ConfigureEmployeePosition(dbModelBuilder);
+            ConfigureEmployee(dbModelBuilder);
+
+            ConfigureExpedinture(dbModelBuilder);
+            ConfigureProperty(dbModelBuilder);
+            ConfigureDocument(dbModelBuilder);
+            ConfigureTransaction(dbModelBuilder);
 
             var init = new DatabaseInit(dbModelBuilder);
             Database.SetInitializer(init);
@@ -22,7 +28,53 @@ namespace BusinessAccounting.Model
 
         private static void ConfigureEmployeePosition(DbModelBuilder dbModelBuilder)
         {
-            dbModelBuilder.Entity<EmployeePosition>().ToTable("Base.EmployeePositions");
+            dbModelBuilder.Entity<EmployeePosition>();
+        }
+
+        private static void ConfigureEmployee(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<Employee>()
+                .HasOptional(t => t.Position)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(false);
+        }
+
+        private static void ConfigureExpedinture(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<Expenditure>();
+        }
+
+        private static void ConfigureProperty(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<Property>();
+        }
+
+        private static void ConfigureDocument(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<Document>();
+        }
+
+        private static void ConfigureTransaction(DbModelBuilder dbModelBuilder)
+        {
+            dbModelBuilder.Entity<Transaction>()
+                .HasOptional(t => t.Employee)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(false);
+
+            dbModelBuilder.Entity<Transaction>()
+                .HasOptional(t => t.Expenditure)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(false);
+
+            dbModelBuilder.Entity<Transaction>()
+                .HasOptional(t => t.Property)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(false);
+
+            dbModelBuilder.Entity<Transaction>()
+                .HasOptional(t => t.Document)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(false);
         }
     }
 }

@@ -3,9 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:libcc="clr-namespace:BusinessAccountingControls;assembly=BusinessAccountingControls"
-    Title="Business Accounting Universal"
-    Closing="BusinessAccountingWindow_Closing">
-    <Grid>
+    Title="{DynamicResource AppName}"
+    Closing="Window_Closing">
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            
+        </StackPanel>
         <TextBlock Text="{DynamicResource test}"/>
-    </Grid>
+    </StackPanel>
 </libcc:BusinessAccountingWindow>

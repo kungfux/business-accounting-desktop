@@ -59,6 +59,9 @@ namespace BusinessAccountingControls
             if (closeButton != null)
                 closeButton.Click += CloseClick;
 
+            Label WindowTitle = GetTemplateChild("labelTitle") as Label;
+            WindowTitle.Content = Title;
+
             Label moveRectangle = GetTemplateChild("labelTitle") as Label;
             if (moveRectangle != null)
             {
@@ -78,9 +81,6 @@ namespace BusinessAccountingControls
                     }
                 }
             }
-
-            Label WindowTitle = GetTemplateChild("labelTitle") as Label;
-            WindowTitle.Content = Title;
 
             base.OnApplyTemplate();
         }

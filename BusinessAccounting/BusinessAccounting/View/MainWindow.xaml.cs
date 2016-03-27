@@ -1,5 +1,6 @@
 ﻿using BusinessAccountingControls;
 using System.Windows;
+using System.ComponentModel;
 
 namespace BusinessAccounting.View
 {
@@ -12,11 +13,6 @@ namespace BusinessAccounting.View
         {
             InitializeComponent();
             LoadAndRestoreWindowSize();
-        }
-
-        private void BusinessAccountingWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            SaveWindowSize();
         }
 
         private void LoadAndRestoreWindowSize()
@@ -41,6 +37,11 @@ namespace BusinessAccounting.View
             Properties.Settings.Default.WindowState = WindowState;
 
             Properties.Settings.Default.Save();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            SaveWindowSize();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BusinessAccounting.Model;
 using BusinessAccounting.Model.Entity;
 using BusinessAccounting.View;
+using log4net;
 using System;
 using System.Threading;
 using System.Windows;
@@ -9,8 +10,12 @@ namespace BusinessAccounting
 {
     public partial class App : Application
     {
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            log4net.Config.XmlConfigurator.Configure();
+
             SetLanguageDictionary();
             InitDatabase();
 
@@ -32,6 +37,7 @@ namespace BusinessAccounting
 
         private void DisplayExceptionToUser(Exception pException)
         {
+            Log.Error(pException.Message, pException);
             new DialogBox(null, this.FindResource("AppException").ToString(), DialogBoxType.Error, pException).ShowDialog();
         }
 

@@ -23,8 +23,8 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <AssociationLine Name="Position" Type="BusinessAccounting.Model.Entity.EmployeePosition">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.796" Y="0.164" />
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.921" Y="0.185" Height="0.182" Width="0.816" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -51,7 +51,7 @@
     </AssociationLine>
     <AssociationLine Name="Expenditure" Type="BusinessAccounting.Model.Entity.Expenditure">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.685" Y="2.516" />
+        <Position X="0.748" Y="2.495" />
       </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="Property" Type="BusinessAccounting.Model.Entity.Property">
@@ -137,9 +137,10 @@
       <Method Name="ActivityType" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAEAAEAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>Model\Entity\ActivityType.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

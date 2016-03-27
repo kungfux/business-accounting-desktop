@@ -1,5 +1,6 @@
 ﻿using BusinessAccounting.Model;
 using BusinessAccounting.Model.Entity;
+using BusinessAccounting.View;
 using System;
 using System.Threading;
 using System.Windows;
@@ -12,6 +13,26 @@ namespace BusinessAccounting
         {
             SetLanguageDictionary();
             InitDatabase();
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(Application_UnhandledExceptionEventHandler);
+        }
+
+        private void Application_UnhandledExceptionEventHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            DisplayExceptionToUser(e);
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            DisplayExceptionToUser(e.Exception);
+            e.Handled = true;
+        }
+
+        private void DisplayExceptionToUser(Exception pException)
+        {
+            new DialogBox(null, this.FindResource("AppException").ToString(), DialogBoxType.Error, pException).ShowDialog();
         }
 
         private void SetLanguageDictionary()

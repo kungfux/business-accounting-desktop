@@ -3,5 +3,11 @@
                     xmlns:local="clr-namespace:BusinessAccounting.Resources"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
+    <system:String x:Key="AppName">Business Accounting Universe</system:String>
+    <system:String x:Key="AppException">Что-то пошло не так. Дополнительная информация указана ниже.</system:String>
+    <system:String x:Key="DialogBoxMessage">СООБЩЕНИЕ</system:String>
+    <system:String x:Key="DialogBoxWarning">ПРЕДУПРЕЖДЕНИЕ</system:String>
+    <system:String x:Key="DialogBoxError">ОШИБКА</system:String>
+    <system:String x:Key="ButtonOK">ОК</system:String>
     <system:String x:Key="test">Здесь будет контент!</system:String>
 </ResourceDictionary>

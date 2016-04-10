@@ -5,6 +5,7 @@
 
     <system:String x:Key="AppName">Business Accounting Universe</system:String>
     <system:String x:Key="AppException">Something gone wrong. Additional information can be found below.</system:String>
+    <system:String x:Key="AppLowLevelException">Something gone wrong. Additional information can be found in the log.</system:String>
     <system:String x:Key="DialogBoxMessage">MESSAGE</system:String>
     <system:String x:Key="DialogBoxWarning">WARNING</system:String>
     <system:String x:Key="DialogBoxError">ERROR</system:String>

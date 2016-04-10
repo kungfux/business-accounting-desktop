@@ -15,6 +15,24 @@ namespace BusinessAccounting.View
         {
             InitializeComponent();
 
+            if (owner == null && 
+                (Application.Current.MainWindow == null ||
+                Application.Current.MainWindow.GetType() != typeof(MainWindow)))
+            {
+                // Low-level error occur
+                if (pException != null)
+                {
+                    BoxMessage = pException.Message;
+                }
+                else
+                {
+                    BoxMessage = this.FindResource("AppLowLevelException").ToString();
+                }
+
+                MessageBox.Show(BoxMessage, this.FindResource("AppName").ToString(), MessageBoxButton.OK);
+                return;
+            }
+
             Owner = owner ?? Application.Current.MainWindow;
 
             switch(pType)

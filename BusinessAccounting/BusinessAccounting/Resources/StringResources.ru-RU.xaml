@@ -5,6 +5,7 @@
 
     <system:String x:Key="AppName">Business Accounting Universe</system:String>
     <system:String x:Key="AppException">Что-то пошло не так. Дополнительная информация указана ниже.</system:String>
+    <system:String x:Key="AppLowLevelException">Что-то пошло не так. Дополнительная информация записана в журнал.</system:String>
     <system:String x:Key="DialogBoxMessage">СООБЩЕНИЕ</system:String>
     <system:String x:Key="DialogBoxWarning">ПРЕДУПРЕЖДЕНИЕ</system:String>
     <system:String x:Key="DialogBoxError">ОШИБКА</system:String>

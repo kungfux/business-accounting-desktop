@@ -29,14 +29,12 @@ namespace BusinessAccounting.Model
                 new EmployeePosition()
                 {
                     Name = "Director",
-                    Rate = 100,
-                    IsActive = true
+                    Rate = 100
                 },
                 new EmployeePosition()
                 {
                     Name = "Employee",
-                    Rate = 10,
-                    IsActive = true
+                    Rate = 10
                 },
                 new EmployeePosition()
                 {

@@ -10,10 +10,12 @@ namespace BusinessAccounting.Model.Entity
         public string Name { get; set; }
         public decimal Rate { get; set; }
         public bool IsActive { get; set; }
+        public bool IsBillable { get; set; }
 
         public EmployeePosition()
         {
             IsActive = true;
+            IsBillable = true;
         }
     }
 }

@@ -38,7 +38,7 @@ namespace BusinessAccounting
         private void DisplayExceptionToUser(Exception pException)
         {
             Log.Error(pException.Message, pException);
-            new DialogBox(null, this.FindResource("AppException").ToString(), DialogBoxType.Error, pException).ShowDialog();
+            new DialogBox(null, this.FindResource("AppExceptionMessage").ToString(), DialogBoxType.Error, pException).ShowDialog();
         }
 
         private void SetLanguageDictionary()

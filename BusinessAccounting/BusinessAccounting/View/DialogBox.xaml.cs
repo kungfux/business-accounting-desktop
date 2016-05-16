@@ -26,7 +26,7 @@ namespace BusinessAccounting.View
                 }
                 else
                 {
-                    BoxMessage = this.FindResource("AppLowLevelException").ToString();
+                    BoxMessage = this.FindResource("AppLowLevelExceptionMessage").ToString();
                 }
 
                 MessageBox.Show(BoxMessage, this.FindResource("AppName").ToString(), MessageBoxButton.OK);
@@ -38,17 +38,17 @@ namespace BusinessAccounting.View
             switch(pType)
             {
                 case DialogBoxType.Information:
-                    BoxAutoTitle = this.FindResource("DialogBoxMessage").ToString();
+                    BoxAutoTitle = this.FindResource("DialogBoxMessageCaption").ToString().ToUpper();
                     BoxAutoIcon = @"pack://application:,,,/BusinessAccounting;component/Resources/Images/Information.png";
                     BoxAutoBackgroundColor = new SolidColorBrush(Colors.Blue);
                     break;
                 case DialogBoxType.Warning:
-                    BoxAutoTitle = this.FindResource("DialogBoxWarning").ToString();
+                    BoxAutoTitle = this.FindResource("DialogBoxWarningCaption").ToString().ToUpper();
                     BoxAutoIcon = @"pack://application:,,,/BusinessAccounting;component/Resources/Images/Warning.png";
                     BoxAutoBackgroundColor = new SolidColorBrush(Colors.Orange);
                     break;
                 case DialogBoxType.Error:
-                    BoxAutoTitle = this.FindResource("DialogBoxError").ToString();
+                    BoxAutoTitle = this.FindResource("DialogBoxErrorCaption").ToString().ToUpper();
                     BoxAutoIcon = @"pack://application:,,,/BusinessAccounting;component/Resources/Images/Error.png";
                     BoxAutoBackgroundColor = new SolidColorBrush(Colors.Red);
                     break;

@@ -4,11 +4,11 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <system:String x:Key="AppName">Business Accounting Universe</system:String>
-    <system:String x:Key="AppException">Что-то пошло не так. Дополнительная информация указана ниже.</system:String>
-    <system:String x:Key="AppLowLevelException">Что-то пошло не так. Дополнительная информация записана в журнал.</system:String>
-    <system:String x:Key="DialogBoxMessage">СООБЩЕНИЕ</system:String>
-    <system:String x:Key="DialogBoxWarning">ПРЕДУПРЕЖДЕНИЕ</system:String>
-    <system:String x:Key="DialogBoxError">ОШИБКА</system:String>
-    <system:String x:Key="ButtonOK">ОК</system:String>
+    <system:String x:Key="AppExceptionMessage">Что-то пошло не так. Дополнительная информация указана ниже.</system:String>
+    <system:String x:Key="AppLowLevelExceptionMessage">Что-то пошло не так. Дополнительная информация записана в журнал.</system:String>
+    <system:String x:Key="DialogBoxMessageCaption">Сообщение</system:String>
+    <system:String x:Key="DialogBoxWarningCaption">Предупреждение</system:String>
+    <system:String x:Key="DialogBoxErrorCaption">Ошибка</system:String>
+    <system:String x:Key="OK">ОК</system:String>
     <system:String x:Key="test">Здесь будет контент!</system:String>
 </ResourceDictionary>

@@ -57,7 +57,7 @@
             </Expander>
             <Button HorizontalAlignment="Right" Width="50" Margin="0,0,15,5" 
                     Style="{DynamicResource RoundedButtonStyle}" Click="Close_Click" 
-                    FontSize="14" Content="{DynamicResource ButtonOK}"/>
+                    FontSize="14" Content="{DynamicResource OK}"/>
         </StackPanel>
     </Border>
 </Window>

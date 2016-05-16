@@ -64,9 +64,9 @@ namespace BusinessAccounting
             var context = new DatabaseContext();
 
             // TODO: Remove next lines
-            foreach (var EmployeePosition in context.Set<EmployeePosition>())
+            foreach (var ContactPosition in context.Set<JobTitle>())
             {
-                //MessageBox.Show(EmployeePosition.Name);
+                //MessageBox.Show(ContactPosition.Name);
             }
         }
     }

@@ -13,8 +13,8 @@ namespace BusinessAccounting.Model
 
         protected override void Seed(DatabaseContext context)
         {
-            ConfigureEmployeePositions(context);
-            ConfigureEmployees(context);
+            ConfigureContactsPositions(context);
+            ConfigureContacts(context);
             ConfigureExpenditures(context);
             ConfigureProperty(context);
             ConfigureTransaction(context);
@@ -22,68 +22,81 @@ namespace BusinessAccounting.Model
             ConfigureActivities(context);
         }
 
-        private void ConfigureEmployeePositions(DatabaseContext context)
+        private void ConfigureContactsPositions(DatabaseContext context)
         {
-            var Positions = new EmployeePosition[]
+            var Positions = new JobTitle[]
             {
-                new EmployeePosition()
+                new JobTitle()
                 {
                     Name = "Director",
                     Rate = 100
                 },
-                new EmployeePosition()
+                new JobTitle()
                 {
                     Name = "Employee",
                     Rate = 10
                 },
-                new EmployeePosition()
+                new JobTitle()
                 {
                     Name = "Provider",
                     Rate = 15.5M,
-                    IsActive = false
+                    IsActive = false,
+                    IsBillable = false
                 }
             };
 
-            foreach (EmployeePosition position in Positions)
+            foreach (JobTitle position in Positions)
             {
-                context.Set<EmployeePosition>().Add(position);
+                context.Set<JobTitle>().Add(position);
             }
         }
 
-        private void ConfigureEmployees(DatabaseContext context)
+        private void ConfigureContacts(DatabaseContext context)
         {
-            var Employees = new Employee[]
+            var Contacts = new Contact[]
             {
-                new Employee()
+                new Contact()
                 {
                      Name = "Jessie Spike",
                      Hired = DateTime.Now,
-                     PhoneNumber = "+123456789012",
-                     Position = context.Set<EmployeePosition>().Local[0]
+                     Phone = "+123456789012",
+                     JobTitle = context.Set<JobTitle>().Local[0]
                 },
-                new Employee()
+                new Contact()
                 {
                      Name = "Zhi Bao",
                      Hired = DateTime.Now,
-                     PhoneNumber = "+123456789012",
+                     Phone = "+123456789012",
                      Document = "Passport",
                      Address = "ARAMARK Ltd.\r\n30 Commercial Road\r\nFratton\r\nPORTSMOUTH\r\nHampshire\r\nPO1 1AA\r\nRoyaume-Uni",
                      Notes = "Trial period 3 mo",
-                     Position = context.Set<EmployeePosition>().Local[1]
+                     JobTitle = context.Set<JobTitle>().Local[1]
                 },
-                new Employee()
+                new Contact()
                 {
                      Name = "Kolya Nikolai",
                      Hired = DateTime.Now,
                      Fired = DateTime.Now,
-                     PhoneNumber = "+123456789012",
-                     Position = context.Set<EmployeePosition>().Local[2]
+                     Phone = "+123456789012",
+                     JobTitle = context.Set<JobTitle>().Local[2]
+                },
+                new Contact()
+                {
+                    Name = "Maggie Cabrera",
+                    Company = "Corona",
+                    JobTitle = context.Set<JobTitle>().Local[2],
+                    Phone = "+123456789012",
+                    CellPhone = "+123456789012",
+                    Email = "Maggie.Cabrera@corona.com",
+                    Birthday = DateTime.Now.AddYears(-30),
+                    Address = "9933 Route 6 " + Environment.NewLine + "Branford, CT 06405",
+                    Notes = "Agreement #14-3 2/20/2016"
                 }
             };
 
-            foreach (Employee employee in Employees)
+            foreach (Contact contact in Contacts)
             {
-                context.Set<Employee>().Add(employee);
+                context.Set<Contact>().Add(contact);
             }
         }
 
@@ -151,7 +164,7 @@ namespace BusinessAccounting.Model
                 new Transaction()
                 {
                     Value = -100,
-                    Employee = context.Set<Employee>().Local[2],
+                    Contact = context.Set<Contact>().Local[2],
                     Expenditure = context.Set<Expenditure>().Local[2],
                     Comment = "Salary"
                 }

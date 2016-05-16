@@ -1,40 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="BusinessAccounting.Model.Entity.EmployeePosition">
-    <Position X="0.5" Y="3.75" Width="1.5" />
-    <Members>
-      <Method Name="EmployeePosition" Hidden="true" />
-    </Members>
+  <Class Name="BusinessAccounting.Model.Entity.JobTitle">
+    <Position X="0.5" Y="4.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>QAACAAAAAAAAAAAAEAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Model\Entity\EmployeePosition.cs</FileName>
+      <HashCode>QAACAAAAAAAAAAAAEAAAAAQAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Model\Entity\JobTitle.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.229" Collapsed="true" />
-  </Class>
-  <Class Name="BusinessAccounting.Model.Entity.Employee">
-    <Position X="0.5" Y="0.5" Width="1.5" />
-    <Members>
-      <Method Name="Employee" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
-    <AssociationLine Name="Position" Type="BusinessAccounting.Model.Entity.EmployeePosition">
-      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-0.921" Y="0.185" Height="0.182" Width="0.816" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <TypeIdentifier>
-      <HashCode>AAAiAAAAAAAAACAgAAAAQAQAAAAIAAECAAAAAABAAAA=</HashCode>
-      <FileName>Model\Entity\Employee.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Position" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.131" Collapsed="true" />
   </Class>
   <Class Name="BusinessAccounting.Model.Entity.Transaction">
     <Position X="3.25" Y="0.5" Width="1.5" />
@@ -44,11 +19,6 @@
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
-    <AssociationLine Name="Employee" Type="BusinessAccounting.Model.Entity.Employee">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.35" Y="0.07" />
-      </MemberNameLabel>
-    </AssociationLine>
     <AssociationLine Name="Expenditure" Type="BusinessAccounting.Model.Entity.Expenditure">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.748" Y="2.495" />
@@ -65,19 +35,19 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAACAAAEAAAAAAAAAAAAAAAACAAAAAADAAAgAQAAAAE=</HashCode>
+      <HashCode>AAACAAAEAAAAAAAACAAAAAAAAAAAAAADAAAgAQAAAAE=</HashCode>
       <FileName>Model\Entity\Transaction.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Employee" />
       <Property Name="Expenditure" />
       <Property Name="Property" />
       <Property Name="Document" />
+      <Property Name="Contact" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="BusinessAccounting.Model.Entity.Document">
-    <Position X="4" Y="3.75" Width="1.5" />
+    <Position X="4" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAEAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\Entity\Document.cs</FileName>
@@ -85,7 +55,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="BusinessAccounting.Model.Entity.Expenditure">
-    <Position X="5.75" Y="3.75" Width="1.5" />
+    <Position X="5.75" Y="4.5" Width="1.5" />
     <Members>
       <Method Name="Expenditure" Hidden="true" />
     </Members>
@@ -99,7 +69,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="BusinessAccounting.Model.Entity.Property">
-    <Position X="2.25" Y="3.75" Width="1.5" />
+    <Position X="2.25" Y="4.5" Width="1.5" />
     <Members>
       <Method Name="Property" Hidden="true" />
     </Members>
@@ -132,7 +102,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="BusinessAccounting.Model.Entity.ActivityType">
-    <Position X="7.5" Y="3.75" Width="1.5" />
+    <Position X="7.5" Y="4.5" Width="1.5" />
     <Members>
       <Method Name="ActivityType" Hidden="true" />
     </Members>
@@ -141,6 +111,26 @@
       <FileName>Model\Entity\ActivityType.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BusinessAccounting.Model.Entity.Contact">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <AssociationLine Name="JobTitle" Type="BusinessAccounting.Model.Entity.JobTitle" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.911" />
+        <Point X="1.25" Y="4.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.838" Y="0.247" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAiAAAAACAAACAAAAAAAAQAAAgIAAECAAAAJABIAAA=</HashCode>
+      <FileName>Model\Entity\Contact.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="JobTitle" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

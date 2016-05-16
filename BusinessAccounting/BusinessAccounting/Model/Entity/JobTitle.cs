@@ -2,7 +2,7 @@
 
 namespace BusinessAccounting.Model.Entity
 {
-    public class EmployeePosition : IEntity
+    public class JobTitle : IEntity
     {
         public int Id { get; set; }
 
@@ -12,7 +12,7 @@ namespace BusinessAccounting.Model.Entity
         public bool IsActive { get; set; }
         public bool IsBillable { get; set; }
 
-        public EmployeePosition()
+        public JobTitle()
         {
             IsActive = true;
             IsBillable = true;

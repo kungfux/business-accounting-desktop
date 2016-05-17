@@ -29,7 +29,8 @@ namespace BusinessAccounting.View
                     BoxMessage = this.FindResource("AppLowLevelExceptionMessage").ToString();
                 }
 
-                MessageBox.Show(BoxMessage, this.FindResource("AppName").ToString(), MessageBoxButton.OK);
+                MessageBox.Show(BoxMessage, this.FindResource("AppName").ToString(), MessageBoxButton.OK, MessageBoxImage.Stop);
+                App.Current.Shutdown();
                 return;
             }
 

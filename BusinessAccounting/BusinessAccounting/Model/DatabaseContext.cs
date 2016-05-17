@@ -14,7 +14,7 @@ namespace BusinessAccounting.Model
 
         protected override void OnModelCreating(DbModelBuilder dbModelBuilder)
         {
-            ConfigureContactPosition(dbModelBuilder);
+            ConfigureJobTitles(dbModelBuilder);
             ConfigureContact(dbModelBuilder);
 
             ConfigureExpedinture(dbModelBuilder);
@@ -29,7 +29,7 @@ namespace BusinessAccounting.Model
             Database.SetInitializer(init);
         }
 
-        private static void ConfigureContactPosition(DbModelBuilder dbModelBuilder)
+        private static void ConfigureJobTitles(DbModelBuilder dbModelBuilder)
         {
             dbModelBuilder.Entity<JobTitle>();
         }
@@ -65,8 +65,8 @@ namespace BusinessAccounting.Model
                 .WillCascadeOnDelete(false);
 
             dbModelBuilder.Entity<Transaction>()
-                .HasOptional(t => t.Expenditure)
-                .WithOptionalDependent()
+                .HasRequired(t => t.Expenditure)
+                .WithRequiredDependent()
                 .WillCascadeOnDelete(false);
 
             dbModelBuilder.Entity<Transaction>()
@@ -88,8 +88,8 @@ namespace BusinessAccounting.Model
         private static void ConfigureActivity(DbModelBuilder dbModelBuilder)
         {
             dbModelBuilder.Entity<Activity>()
-                .HasOptional(t => t.Type)
-                .WithOptionalDependent()
+                .HasRequired(t => t.Type)
+                .WithRequiredDependent()
                 .WillCascadeOnDelete(false);
         }
     }

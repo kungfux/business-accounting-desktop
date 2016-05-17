@@ -8,7 +8,7 @@ namespace BusinessAccounting.Model.Entity
         public int Id { get; set; }
 
         [Required]
-        public ActivityType Type { get; set; }
+        public virtual ActivityType Type { get; set; }
         public DateTime DueDate { get; set; }
 
         [Required]

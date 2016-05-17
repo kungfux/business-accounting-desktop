@@ -13,7 +13,7 @@ namespace BusinessAccounting.Model
 
         protected override void Seed(DatabaseContext context)
         {
-            ConfigureContactsPositions(context);
+            ConfigureJobTitles(context);
             ConfigureContacts(context);
             ConfigureExpenditures(context);
             ConfigureProperty(context);
@@ -22,7 +22,7 @@ namespace BusinessAccounting.Model
             ConfigureActivities(context);
         }
 
-        private void ConfigureContactsPositions(DatabaseContext context)
+        private void ConfigureJobTitles(DatabaseContext context)
         {
             var Positions = new JobTitle[]
             {

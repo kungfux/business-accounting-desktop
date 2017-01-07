@@ -1,6 +1,8 @@
-/BusinessAccounting/BusinessAccounting/obj
-/BusinessAccounting/BusinessAccounting/bin
-/ImportUtility/bin
-/ImportUtility/obj
-/BusinessAccounting/*.suo
-/ImportUtility/*.suo
+# Ignore Visual Studio user files
+*.suo
+*.user
+*.pyc
+.vs
+bin
+obj
+packages

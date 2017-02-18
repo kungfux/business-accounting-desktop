@@ -1,6 +1,6 @@
 ﻿using MetroFramework.Forms;
 
-namespace BusinessAccountingUniverse.View
+namespace BusinessAccountingUniverse.Views
 {
     public partial class Form1 : MetroForm
     {

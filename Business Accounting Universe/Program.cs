@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
-using BusinessAccountingUniverse.View;
-using MetroFramework;
+using BusinessAccountingUniverse.Localization;
+using BusinessAccountingUniverse.Views;
 
 namespace BusinessAccountingUniverse
 {
-    internal class Program
+    internal static class Program
     {
         private const string MutexId = "d0b1994d-0a5d-4cd6-864f-7346fc81cc1f";
+
+        private static readonly Localize Localize = new Localize();
 
         [STAThread]
         internal static void Main()
@@ -18,9 +20,9 @@ namespace BusinessAccountingUniverse
             {
                 if (!singleApp)
                 {
-                    MessageBox.Show($"The program is already running.{Environment.NewLine}" + 
-                        "Running two or more simultaneous sessions is not recommended.",
-                        "Business Accounting Universe", 
+                    MessageBox.Show(
+                        string.Format(Localize.GetStringById("ProgramIsAlreadyRunning"), Environment.NewLine),
+                        Localize.ApplicationName, 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }

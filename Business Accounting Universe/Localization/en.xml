@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <Localization>
+    <Id>ProgramIsAlreadyRunning</Id>
+    <String>The program is already running.{0}Running two or more simultaneous sessions is not recommended.</String>
+  </Localization>
+</root>

@@ -1,4 +1,4 @@
-﻿namespace BusinessAccountingUniverse.View
+﻿namespace BusinessAccountingUniverse.Views
 {
     partial class Form1
     {

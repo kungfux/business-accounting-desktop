@@ -4,4 +4,12 @@
     <Id>ProgramIsAlreadyRunning</Id>
     <String>The program is already running.{0}Running two or more simultaneous sessions is not recommended.</String>
   </Localization>
+  <Localization>
+    <Id>UnhandledException</Id>
+    <String>We are sorry. Application experienced an error and will be closed.{0}Would you like to submit an issue?</String>
+  </Localization>
+  <Localization>
+    <Id>DetailsCopiedToClipboard</Id>
+    <String>Error details have been copied into the clipboard.</String>
+  </Localization>
 </root>

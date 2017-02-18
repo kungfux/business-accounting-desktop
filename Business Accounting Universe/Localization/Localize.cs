@@ -34,16 +34,14 @@ namespace BusinessAccountingUniverse.Localization
         private void GetXmlResource()
         {
             var assembly = Assembly.GetEntryAssembly();
-            var localizationFile = "";
-            Stream xmlStream = null;
 
             if (assembly == null)
             {
                 return;
             }
 
-            localizationFile = $"{assembly.GetName().Name}.Localization.{CurrentLanguage}.xml";
-            xmlStream = assembly.GetManifestResourceStream(localizationFile);
+            var localizationFile = $"{assembly.GetName().Name}.Localization.{CurrentLanguage}.xml";
+            var xmlStream = assembly.GetManifestResourceStream(localizationFile);
 
 
             if (_languageDataset == null)

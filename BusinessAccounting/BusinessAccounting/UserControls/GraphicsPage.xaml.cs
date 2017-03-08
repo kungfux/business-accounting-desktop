@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Windows;
@@ -19,269 +20,68 @@ namespace BusinessAccounting.UserControls
         public GraphicsPage()
         {
             InitializeComponent();
+
+            pickerPeriodStart.SelectedDate = new DateTime(2014, 1, 1);
+            pickerPeriodEnd.SelectedDate = new DateTime(2015, 12, 31);
         }
 
         public static RoutedCommand PrintChartCommand = new RoutedCommand();
         public static RoutedCommand SaveChartCommand = new RoutedCommand();
 
-        private const string ChartCircleType = "Circle";
-        private const string ChartLinearType = "Linear";
-
-        private const string SqlIncomes = 
-            "select datestamp, sum(summa) from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
-        private const string SqlCharges = 
-            "select datestamp, sum(summa) from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
-        private const string SqlIncomesAndCharges = 
-            "select * from ((select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0), " +
-            "(select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0));";
-
         private Chart _chart;
 
-        #region Functionality methods
-        private void PrintChart()
+        //private const string SqlIncomes = 
+        //    "select datestamp, sum(summa) from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
+        //private const string SqlCharges = 
+        //    "select datestamp, sum(summa) from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
+        //private const string SqlIncomesAndCharges = 
+        //    "select * from ((select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0), " +
+        //    "(select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0));";
+
+        private void BuildChart()
         {
             wfHost.Visibility = Visibility.Hidden;
 
-            _chart = new Chart();
-
             var startDate = pickerPeriodStart.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
+            var startTime = new TimeSpan(0, 0, 0);
+            startDate = startDate + startTime;
+
             var endDate = pickerPeriodEnd.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
+            var endTime = new TimeSpan(23, 59, 59);
+            endDate = endDate + endTime;
 
-            var chartReady = false;
-            var chartType = ((ComboBoxItem) comboChartType.SelectedItem).Name;
-            switch (((ComboBoxItem)comboDataType.SelectedItem).Name)
+            var isBuilt = false;
+            var selectedChart = ((ComboBoxItem) comboChart.SelectedItem).Name;
+            switch (selectedChart)
             {
-                case "Incomes":
-                    chartReady = chartType == ChartCircleType
-                        ? BuildIncomesCircleChart(startDate, endDate)
-                        : BuildIncomesLinearChart(startDate, endDate);
+                case "Circle":
+                    isBuilt = BuildCircleIncomesAndExpensesCustomDatesChart((bool) comboDisplayValues.IsChecked.Value,
+                        startDate, endDate);
                     break;
-                case "Charges":
-                    chartReady = chartType == ChartCircleType
-                        ? BuildChargesCircleChart(startDate, endDate)
-                        : BuildChargesLinearChart(startDate, endDate);
+                case "Column":
+                    isBuilt = BuildColumnIncomesAndExpensesPerYearChart((bool) comboDisplayValues.IsChecked.Value,
+                        startDate);
                     break;
-                case "IncomesAndCharges":
-                    chartReady = chartType == ChartCircleType
-                        ? BuildIncomesAndChargesCircleChart(startDate, endDate)
-                        : BuildIncomesAbdChargesLinearChart(startDate, endDate);
+                case "Line":
+                    isBuilt = BuildLineIncomesAndExpensesFor3YearsChart((bool) comboDisplayValues.IsChecked.Value,
+                        startDate);
                     break;
             }
 
-            if (chartReady)
+            if (isBuilt)
             {
-                wfHost.Child = _chart;
-                wfHost.Visibility = Visibility.Visible;
-            }
-        }
-
-        private bool BuildIncomesLinearChart(DateTime startDate, DateTime endDate)
-        {
-            _chart.Series.Add("");
-            _chart.Titles.Add("График прибыли за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            _chart.Legends.Add("");
-            _chart.Legends[0].Title = "Легенда";
-            _chart.Series[0].LegendText = "Прибыль";
-
-            _chart.ChartAreas.Add("Прибыль");
-            _chart.ChartAreas[0].AxisX.Title = "Дата";
-            _chart.ChartAreas[0].AxisY.Title = "Сумма";
-
-            _chart.Series[0].XValueType = ChartValueType.Date;
-
-            _chart.Series[0].ChartType = SeriesChartType.Area;
-
-            var table =
-                App.sqlite.SelectTable(SqlIncomes,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if (table != null && table.Rows.Count > 0)
-            {
-                for (int a = 0; a < table.Rows.Count; a++)
-                {
-                    _chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
-                        Convert.ToDouble(table.Rows[a].ItemArray[1])));
-                    if (comboDisplayValues.IsChecked == true)
-                    {
-                        _chart.Series[0].Points[a].Label = $"{Convert.ToDouble(table.Rows[a].ItemArray[1]):C}";
-                    }
-                }
+                DisplayChart();
             }
             else
             {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
+                ShowMessage("Не удалось построить график!");
             }
-            return true;
         }
 
-        private bool BuildIncomesCircleChart(DateTime startDate, DateTime endDate)
+        private void DisplayChart()
         {
-            throw new NotImplementedException();
-        }
-
-        private bool BuildChargesLinearChart(DateTime startDate, DateTime endDate)
-        {
-            _chart.Series.Add("");
-            _chart.Titles.Add(
-                $"График расходов за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}");
-            _chart.Legends.Add("");
-            _chart.Legends[0].Title = "Легенда";
-            _chart.Series[0].LegendText = "Расходы";
-
-            _chart.ChartAreas.Add("Расходы");
-            _chart.ChartAreas[0].AxisX.Title = "Дата";
-            _chart.ChartAreas[0].AxisY.Title = "Сумма";
-
-            _chart.Series[0].XValueType = ChartValueType.Date;
-
-            _chart.Series[0].ChartType = SeriesChartType.Area;
-            _chart.Series[0].Color = System.Drawing.Color.Maroon;
-
-            var table =
-                App.sqlite.SelectTable(SqlCharges,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if (table != null && table.Rows.Count > 0)
-            {
-                for (int a = 0; a < table.Rows.Count; a++)
-                {
-                    _chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
-                        0 - Convert.ToDouble(table.Rows[a].ItemArray[1])));
-                    if (comboDisplayValues.IsChecked == true)
-                    {
-                        _chart.Series[0].Points[a].Label = $"{Convert.ToDouble(table.Rows[a].ItemArray[1]):C}";
-                    }
-                }
-            }
-            else
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            return true;
-        }
-
-        private bool BuildChargesCircleChart(DateTime startDate, DateTime endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool BuildIncomesAbdChargesLinearChart(DateTime startDate, DateTime endDate)
-        {
-            _chart.Series.Add("");
-            _chart.Series.Add("");
-            _chart.Titles.Add(
-                $"График прибыли и расходов за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}");
-            _chart.Legends.Add("");
-            _chart.Legends[0].Title = "Легенда";
-            _chart.Series[0].LegendText = "Прибыль";
-            _chart.Series[1].LegendText = "Расходы";
-
-            _chart.ChartAreas.Add("Прибыль");
-            _chart.ChartAreas[0].AxisX.Title = "Дата";
-            _chart.ChartAreas[0].AxisY.Title = "Сумма";
-
-            _chart.Series[0].XValueType = ChartValueType.Date;
-            _chart.Series[1].XValueType = ChartValueType.Date;
-
-            _chart.Series[0].ChartType = SeriesChartType.Line;
-            _chart.Series[1].ChartType = SeriesChartType.Line;
-
-            _chart.Series[1].Color = System.Drawing.Color.Maroon;
-
-            var tableIncomes =
-                App.sqlite.SelectTable(SqlIncomes,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            var tableCharges =
-                App.sqlite.SelectTable(SqlCharges,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if ((tableIncomes == null || tableIncomes.Rows.Count == 0) && (tableCharges == null || tableCharges.Rows.Count == 0))
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            else
-            {
-                if (tableIncomes != null)
-                {
-                    for (int a = 0; a < tableIncomes.Rows.Count; a++)
-                    {
-                        _chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(tableIncomes.Rows[a].ItemArray[0]).ToOADate(),
-                            Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1])));
-                        if (comboDisplayValues.IsChecked == true)
-                        {
-                            _chart.Series[0].Points[a].Label =
-                                $"{Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1]):C}";
-                        }
-                    }
-                }
-
-                if (tableCharges != null)
-                {
-                    for (int a = 0; a < tableCharges.Rows.Count; a++)
-                    {
-                        _chart.Series[1].Points.Add(new DataPoint(Convert.ToDateTime(tableCharges.Rows[a].ItemArray[0]).ToOADate(),
-                            0 - Convert.ToDouble(tableCharges.Rows[a].ItemArray[1])));
-                        if (comboDisplayValues.IsChecked == true)
-                        {
-                            _chart.Series[1].Points[a].Label =
-                                $"{Convert.ToDouble(tableCharges.Rows[a].ItemArray[1]):C}";
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-
-        private bool BuildIncomesAndChargesCircleChart(DateTime startDate, DateTime endDate)
-        {
-            _chart.Series.Add("");
-            _chart.Titles.Add(
-                $"График сравнения за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}");
-            _chart.Legends.Add("");
-            _chart.Legends[0].Title = "Легенда";
-
-            _chart.ChartAreas.Add("");
-
-            _chart.Series[0].ChartType = SeriesChartType.Doughnut;
-
-            DataRow row =
-                App.sqlite.SelectRow(SqlIncomesAndCharges,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if (row != null)
-            {
-                double incomeSum = row.ItemArray[0] != DBNull.Value ? Convert.ToDouble(row.ItemArray[0]) : 0;
-                double chargesSum = row.ItemArray[1] != DBNull.Value ? 0 - Convert.ToDouble(row.ItemArray[1]) : 0;
-
-                _chart.Series[0].Points.Add(incomeSum);
-                _chart.Series[0].Points[0].LegendText = "Доходы";
-                if (comboDisplayValues.IsChecked == true)
-                {
-                    _chart.Series[0].Points[0].Label = incomeSum > 0 ? $"{incomeSum:C}" : "";
-                }
-
-                _chart.Series[0].Points.Add(chargesSum);
-                _chart.Series[0].Points[1].LegendText = "Расходы";
-                if (comboDisplayValues.IsChecked == true)
-                {
-                    _chart.Series[0].Points[1].Label = chargesSum > 0 ? $"{chargesSum:C}" : "";
-                }
-            }
-            else
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            return true;
+            wfHost.Child = _chart;
+            wfHost.Visibility = Visibility.Visible;
         }
 
         private void ShowMessage(string text)
@@ -289,7 +89,8 @@ namespace BusinessAccounting.UserControls
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", $"{text}{Environment.NewLine}{App.sqlite.LastOperationErrorMessage}");
+                    ((MetroWindow) visual).ShowMessageAsync("Проблемка",
+                        $"{text}{Environment.NewLine}{App.sqlite.LastOperationErrorMessage}");
                 }
         }
 
@@ -308,36 +109,227 @@ namespace BusinessAccounting.UserControls
                 }
             }
         }
-        #endregion
 
-        #region Commands
         private void PrintChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                comboChartType.SelectedIndex != -1 &
-                comboDataType.SelectedIndex != -1 &
+            if (comboChart.SelectedIndex == 0 &
                 pickerPeriodStart.SelectedDate != null &
                 pickerPeriodEnd.SelectedDate != null &
-                pickerPeriodStart.SelectedDate <= pickerPeriodEnd.SelectedDate;
+                pickerPeriodStart.SelectedDate <= pickerPeriodEnd.SelectedDate)
+            {
+                e.CanExecute = true;
+                return;
+            }
+
+            if (comboChart.SelectedIndex == 1 &
+                pickerPeriodStart.SelectedDate != null)
+            {
+                e.CanExecute = true;
+                return;
+            }
+
+            if (comboChart.SelectedIndex > 1)
+            {
+                e.CanExecute = true;
+                return;
+            }
         }
 
         private void PrintChart_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            PrintChart();
+            BuildChart();
         }
 
         private void SaveChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute =
                 wfHost != null &&
-                wfHost.Visibility == Visibility.Visible && // if WindowsFormsHost visible then _chart is built
-                _chart != null;
+                wfHost.Visibility == Visibility.Visible;
         }
 
         private void SaveChart_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveChart();
         }
-        #endregion
+
+        private bool BuildCircleIncomesAndExpensesCustomDatesChart(bool displayValues, DateTime startDate,
+            DateTime endDate)
+        {
+            const string sql =
+                "select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0 " +
+                "union " +
+                "select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0;";
+
+            _chart = new Chart();
+            _chart.Series.Add("");
+            _chart.Titles.Add(
+                $"Доходы и расходы за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}");
+            _chart.Legends.Add("");
+            _chart.Legends[0].Title = "Легенда";
+
+            _chart.ChartAreas.Add("");
+
+            _chart.Series[0].ChartType = SeriesChartType.Doughnut;
+
+            var result = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate),
+                new SQLiteParameter("@d2", endDate));
+
+            if (result != null && result.Rows.Count == 2)
+            {
+                var incomeSum = result.Rows[0].ItemArray[0] != DBNull.Value
+                    ? Convert.ToDouble(result.Rows[0].ItemArray[0])
+                    : 0;
+                var chargesSum = result.Rows.Count >= 2 && result.Rows[1].ItemArray[0] != DBNull.Value
+                    ? 0 - Convert.ToDouble(result.Rows[1].ItemArray[0])
+                    : 0;
+
+                _chart.Series[0].Points.Add(incomeSum);
+                _chart.Series[0].Points[0].LegendText = "Доходы";
+                if (displayValues)
+                {
+                    _chart.Series[0].Points[0].Label = $"{incomeSum:C}";
+                }
+
+                _chart.Series[0].Points.Add(chargesSum);
+                _chart.Series[0].Points[1].LegendText = "Расходы";
+                if (displayValues)
+                {
+                    _chart.Series[0].Points[1].Label = $"{chargesSum:C}";
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool BuildColumnIncomesAndExpensesPerYearChart(bool displayValues, DateTime date)
+        {
+            var startDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
+            var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
+
+            const string sqlIncomes =
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) as total " +
+                "from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 " +
+                "group by year, month;";
+            const string sqlCharges =
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) as total " +
+                "from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0 " +
+                "group by year, month;";
+
+            _chart = new Chart();
+            _chart.Series.Add("Доходы");
+            _chart.Series.Add("Расходы");
+            _chart.Titles.Add(
+                $"Доходы и расходы за {date.Year} год");
+            _chart.Legends.Add("");
+            _chart.Legends[0].Title = "Легенда";
+
+            _chart.ChartAreas.Add("");
+
+            _chart.Series[0].ChartType = SeriesChartType.Column;
+            _chart.Series[1].ChartType = SeriesChartType.Column;
+
+            var totalsIncomes = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            var totalsCharges = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+            bool emptyResults = false;
+
+            var resultIncomes = App.sqlite.SelectTable(sqlIncomes, new SQLiteParameter("@d1", startDate),
+                new SQLiteParameter("@d2", endDate));
+            if (resultIncomes != null && resultIncomes.Rows.Count >= 1)
+            {
+                for (var a = 0; a < resultIncomes.Rows.Count; a++)
+                {
+                    var month = Convert.ToInt32(resultIncomes.Rows[a].ItemArray[1]);
+                    totalsIncomes[month - 1] = Convert.ToDouble(resultIncomes.Rows[a].ItemArray[2]);
+                }
+            }
+            else
+            {
+                emptyResults = true;
+            }
+
+            var resultCharges = App.sqlite.SelectTable(sqlCharges, new SQLiteParameter("@d1", startDate),
+                new SQLiteParameter("@d2", endDate));
+            if (resultCharges != null && resultCharges.Rows.Count >= 1)
+            {
+                for (var a = 0; a < resultCharges.Rows.Count; a++)
+                {
+                    var month = Convert.ToInt32(resultCharges.Rows[a].ItemArray[1]);
+                    totalsCharges[month - 1] = 0 - Convert.ToDouble(resultCharges.Rows[a].ItemArray[2]);
+                }
+            }
+            else
+            {
+                if (emptyResults)
+                {
+                    return false;
+                }
+            }
+
+            for (int a = 0; a < 12; a++)
+            {
+                _chart.Series[0].Points.Add(totalsIncomes[a]);
+                _chart.Series[1].Points.Add(totalsCharges[a]);
+
+                if (displayValues)
+                {
+                    _chart.Series[0].Points[a].Label = $"{totalsIncomes[a]:C}";
+                    _chart.Series[1].Points[a].Label = $"{totalsCharges[a]:C}";
+                }
+            }
+
+            return true;
+        }
+
+        private bool BuildLineIncomesAndExpensesFor3YearsChart(bool displayValues, DateTime date)
+        {
+            var startDate1 = new DateTime(date.Year, 1, 1, 0, 0, 0);
+            var endDate1 = new DateTime(date.Year, 12, 31, 23, 59, 59);
+            var startDate2 = new DateTime(date.AddYears(-1).Year, 1, 1, 0, 0, 0);
+            var endDate2 = new DateTime(date.AddYears(-1).Year, 12, 31, 23, 59, 59);
+            var startDate3 = new DateTime(date.AddYears(-2).Year, 1, 1, 0, 0, 0);
+            var endDate3 = new DateTime(date.AddYears(-2).Year, 12, 31, 23, 59, 59);
+
+            const string sql = "select datestamp, sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0";
+
+            _chart = new Chart();
+            _chart.Series.Add($"{startDate1.Year}");
+            _chart.Series.Add($"{startDate2.Year}");
+            _chart.Series.Add($"{startDate3.Year}");
+            _chart.Titles.Add($"Доходы за {date.Year}-{date.AddYears(-2).Year} года");
+            _chart.Legends.Add("");
+
+            _chart.ChartAreas.Add("");
+
+            _chart.Series[0].ChartType = SeriesChartType.FastLine;
+            _chart.Series[1].ChartType = SeriesChartType.FastLine;
+            _chart.Series[2].ChartType = SeriesChartType.FastLine;
+
+            var resultIncomes = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate1), new SQLiteParameter("@d2", endDate1),
+                new SQLiteParameter("@d3", startDate2), new SQLiteParameter("@d4", endDate2),
+                new SQLiteParameter("@d5", startDate3), new SQLiteParameter("@d6", endDate3));
+            if (resultIncomes != null && resultIncomes.Rows.Count == 3)
+            {
+                _chart.Series[0].Points.Add(Convert.ToDouble(resultIncomes.Rows[0].ItemArray[0]));
+                _chart.Series[1].Points.Add(Convert.ToDouble(resultIncomes.Rows[0].ItemArray[0]));
+                _chart.Series[2].Points.Add(Convert.ToDouble(resultIncomes.Rows[0].ItemArray[0]));
+
+                if (displayValues)
+                {
+                    //_chart.Series[0].Points[0].Label = $"{totalsIncomes[a]:C}";
+                    //_chart.Series[1].Points[0].Label = $"{totalsCharges[a]:C}";
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

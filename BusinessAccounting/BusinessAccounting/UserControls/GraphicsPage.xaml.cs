@@ -1,7 +1,9 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
+using System.Data;
 using System.Data.SQLite;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -20,10 +22,11 @@ namespace BusinessAccounting.UserControls
             InitializeComponent();
         }
 
-        public static RoutedCommand PrintChartCommand = new RoutedCommand();
-        public static RoutedCommand SaveChartCommand = new RoutedCommand();
+        public static readonly RoutedCommand PrintChartCommand = new RoutedCommand();
+        public static readonly RoutedCommand SaveChartCommand = new RoutedCommand();
 
         private Chart _chart;
+        private readonly Font _titleFont = new Font("Arial", 16, System.Drawing.FontStyle.Bold);
 
         private void BuildChart()
         {
@@ -31,39 +34,35 @@ namespace BusinessAccounting.UserControls
 
             var startDate = pickerPeriodStart.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
             var endDate = pickerPeriodEnd.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
+            var displayValues = Convert.ToBoolean(comboDisplayValues.IsChecked.Value);
 
             var isBuilt = false;
+
             var selectedChart = ((ComboBoxItem)comboChart.SelectedItem).Name;
             switch (selectedChart)
             {
-                case "Circle":
-                    isBuilt = BuildTotalsChart(comboDisplayValues.IsChecked.Value,
-                        startDate, endDate);
+                case "Period":
+                    isBuilt = BuildTotalsChartForPeriod(displayValues, startDate, endDate);
                     break;
-                case "Column":
-                    isBuilt = BuildColumnIncomesAndExpensesPerYearChart(comboDisplayValues.IsChecked.Value,
-                        startDate);
+                case "Year":
+                    isBuilt = BuildTotalsChartForTheYear(displayValues, startDate);
                     break;
-                case "Line":
-                    isBuilt = BuildLineIncomesAndExpensesFor3YearsChart(comboDisplayValues.IsChecked.Value,
-                        startDate);
+                case "Year3":
+                    isBuilt = BuildTotalsChartFor3Years(displayValues, startDate);
                     break;
             }
 
             if (isBuilt)
             {
-                DisplayChart();
+                wfHost.Child = _chart;
+                wfHost.Visibility = Visibility.Visible;
             }
             else
             {
-                ShowMessage("Не удалось построить график!");
+                ShowMessage(string.IsNullOrEmpty(App.sqlite.LastOperationErrorMessage)
+                    ? "Нет данных для построения графика!"
+                    : $"Не удалось построить график! Ошибка:{Environment.NewLine}{App.sqlite.LastOperationErrorMessage}");
             }
-        }
-
-        private void DisplayChart()
-        {
-            wfHost.Child = _chart;
-            wfHost.Visibility = Visibility.Visible;
         }
 
         private void ShowMessage(string text)
@@ -71,8 +70,7 @@ namespace BusinessAccounting.UserControls
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка",
-                        $"{text}{Environment.NewLine}{App.sqlite.LastOperationErrorMessage}");
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text);
                 }
         }
 
@@ -127,20 +125,23 @@ namespace BusinessAccounting.UserControls
             SaveChart();
         }
 
-        private bool BuildTotalsChart(bool displayValues, DateTime startDate, DateTime endDate)
+        private bool BuildTotalsChartForPeriod(bool displayValues, DateTime startDate, DateTime endDate)
         {
-            const string sql =
-                "select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0 union " +
-                "select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0;";
+            const string sql = "select sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 "+
+                "union all select sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0";
 
             startDate = startDate + new TimeSpan(0, 0, 0);
             endDate = endDate + new TimeSpan(23, 59, 59);
 
             _chart = new Chart();
-            _chart.Series.Add("");
-            _chart.Titles.Add($"Итоги доходов и расходов за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}.");
+
+            var title = _chart.Titles.Add($"Сумма доходов и расходов за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}");
+            title.Font = _titleFont;
+
             _chart.Legends.Add("Легенда").Title = "Легенда";
             _chart.ChartAreas.Add("");
+
+            _chart.Series.Add("");          
             _chart.Series[0].ChartType = SeriesChartType.Doughnut;
 
             var result = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
@@ -172,7 +173,7 @@ namespace BusinessAccounting.UserControls
             return true;
         }
 
-        private bool BuildColumnIncomesAndExpensesPerYearChart(bool displayValues, DateTime date)
+        private bool BuildTotalsChartForTheYear(bool displayValues, DateTime date)
         {
             var startDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
             var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
@@ -188,28 +189,17 @@ namespace BusinessAccounting.UserControls
 
             _chart = new Chart();
 
-            _chart.ChartAreas.Add("");
-            _chart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            _chart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            _chart.ChartAreas[0].CursorX.Interval = 0;
-            _chart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            _chart.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
-            _chart.ChartAreas[0].AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
-            _chart.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSize = 0;
+            var title = _chart.Titles.Add($"Доходы и расходы за {date.Year} год помесячно");
+            title.Font = _titleFont;
+            _chart.Legends.Add("Легенда").Title = "Легенда";
 
-            _chart.ChartAreas[0].CursorY.IsUserEnabled = true;
-            _chart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-            _chart.ChartAreas[0].CursorY.Interval = 0;
-            _chart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-            _chart.ChartAreas[0].AxisY.ScrollBar.IsPositionedInside = true;
-            _chart.ChartAreas[0].AxisY.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
-            _chart.ChartAreas[0].AxisY.ScaleView.SmallScrollMinSize = 0;
+            _chart.ChartAreas.Add("");
+            _chart.ChartAreas[0].AxisX.Title = "Месяц";
+            _chart.ChartAreas[0].AxisY.Title = "Сумма";
+            MakeAreaZoomable(_chart.ChartAreas[0]);
 
             _chart.Series.Add("Доходы");
             _chart.Series.Add("Расходы");
-
-            _chart.Titles.Add($"Доходы и расходы за {date.Year} год");
-            _chart.Legends.Add("Легенда").Title = "Легенда";
 
             _chart.Series[0].ChartType = SeriesChartType.Column;
             _chart.Series[1].ChartType = SeriesChartType.Column;
@@ -262,81 +252,94 @@ namespace BusinessAccounting.UserControls
             return true;
         }
 
-        private bool BuildLineIncomesAndExpensesFor3YearsChart(bool displayValues, DateTime date)
+        private bool BuildTotalsChartFor3Years(bool displayValues, DateTime date)
         {
-            const string sql = "select datestamp, summa from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0";
+            const string sql = 
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) from BA_CASH_OPERATIONS " +
+                "where datestamp between @d1 and @d2 and summa > 0 group by year, month;";
 
             _chart = new Chart();
+            
+            var title = _chart.Titles.Add($"Доходы за {date.Year - 2}-{date.Year} годы");
+            title.Font = _titleFont;
+            _chart.Legends.Add("Легенда").Title = "Легенда";
+
             _chart.Series.Add($"{date.Year}");
             _chart.Series.Add($"{date.Year - 1}");
             _chart.Series.Add($"{date.Year - 2}");
-            _chart.Titles.Add($"Доходы за {date.Year}-{date.Year - 2} года");
-            _chart.Legends.Add("");
 
-            for (var a = 0; a < 3; a++)
-            {
-                _chart.ChartAreas.Add($"year{a + 1}");
-                _chart.ChartAreas[a].CursorX.IsUserEnabled = true;
-                _chart.ChartAreas[a].CursorX.IsUserSelectionEnabled = true;
-                _chart.ChartAreas[a].CursorX.Interval = 0;
-                _chart.ChartAreas[a].AxisX.ScaleView.Zoomable = true;
-                _chart.ChartAreas[a].AxisX.ScrollBar.IsPositionedInside = true;
-                _chart.ChartAreas[a].AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
-                _chart.ChartAreas[a].AxisX.ScaleView.SmallScrollMinSize = 0;
+            _chart.Series[0].LegendText = $"{date.Year}";
+            _chart.Series[0].ChartType = SeriesChartType.Line;
+            _chart.Series[0].BorderWidth = 5;
+            _chart.Series[1].LegendText = $"{date.Year - 1}";
+            _chart.Series[1].ChartType = SeriesChartType.Line;
+            _chart.Series[1].BorderWidth = 5;
+            _chart.Series[2].LegendText = $"{date.Year - 2}";
+            _chart.Series[2].ChartType = SeriesChartType.Line;
+            _chart.Series[2].BorderWidth = 5;
 
-                _chart.ChartAreas[a].CursorY.IsUserEnabled = true;
-                _chart.ChartAreas[a].CursorY.IsUserSelectionEnabled = true;
-                _chart.ChartAreas[a].CursorY.Interval = 0;
-                _chart.ChartAreas[a].AxisY.ScaleView.Zoomable = true;
-                _chart.ChartAreas[a].AxisY.ScrollBar.IsPositionedInside = true;
-                _chart.ChartAreas[a].AxisY.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
-                _chart.ChartAreas[a].AxisY.ScaleView.SmallScrollMinSize = 0;
-            }
-
-            _chart.Series[0].ChartType = SeriesChartType.FastLine;
-            _chart.Series[0].XValueType = ChartValueType.Date;
-            _chart.Series[0].ChartArea = "year1";
-
-            _chart.Series[1].ChartType = SeriesChartType.FastLine;
-            _chart.Series[1].XValueType = ChartValueType.Date;
-            _chart.Series[1].ChartArea = "year2";
-
-            _chart.Series[2].ChartType = SeriesChartType.FastLine;
-            _chart.Series[2].XValueType = ChartValueType.Date;
-            _chart.Series[2].ChartArea = "year3";
-
-            _chart.Legends.Add("Легенда").Title = "Легенда";
+            _chart.ChartAreas.Add("");
+            _chart.ChartAreas[0].AxisX.Title = "Месяц";
+            _chart.ChartAreas[0].AxisY.Title = "Сумма";
+            MakeAreaZoomable(_chart.ChartAreas[0]);
 
             var startDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
             var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
+
+            var values = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            var emptyDataCount = 0;
 
             for (var a = 0; a < 3; a++)
             {
                 var data = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
                 if (data != null && data.Rows.Count > 0)
                 {
-                    for (var row = 0; row < data.Rows.Count; row++)
+                    foreach (DataRow row in data.Rows)
                     {
-                        _chart.Series[a].Points.Add(
-                            new DataPoint(Convert.ToDateTime(data.Rows[row].ItemArray[0]).ToOADate(),
-                            Convert.ToDouble(data.Rows[row].ItemArray[1])));
+                        var month = Convert.ToInt32(row.ItemArray[1]) - 1;
+                        var sum = Convert.ToDouble(row.ItemArray[2]);
+                        values[month] = sum;
+                    }
 
+                    for (var i = 0; i < 12; i++)
+                    {
+                        _chart.Series[a].Points.Add(new DataPoint(i + 1, values[i]));
                         if (displayValues)
                         {
-                            _chart.Series[a].Points[row].Label = $"{Convert.ToDouble(data.Rows[row].ItemArray[1]):C}";
+                            _chart.Series[a].Points[i].Label = $"{values[i]:C}";
                         }
                     }
                 }
                 else
                 {
-                    _chart.Series[a].Points.Add(startDate.ToOADate());
+                    emptyDataCount++;
                 }
 
                 startDate = startDate.AddYears(-1);
                 endDate = endDate.AddYears(-1);
+                values = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             }
 
-            return true;
+            return emptyDataCount < 3;
+        }
+
+        private static void MakeAreaZoomable(ChartArea chartArea)
+        {
+            chartArea.CursorX.IsUserEnabled = true;
+            chartArea.CursorX.IsUserSelectionEnabled = true;
+            chartArea.CursorX.Interval = 0;
+            chartArea.AxisX.ScaleView.Zoomable = true;
+            chartArea.AxisX.ScrollBar.IsPositionedInside = true;
+            chartArea.AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
+            chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
+
+            chartArea.CursorY.IsUserEnabled = true;
+            chartArea.CursorY.IsUserSelectionEnabled = true;
+            chartArea.CursorY.Interval = 0;
+            chartArea.AxisY.ScaleView.Zoomable = true;
+            chartArea.AxisY.ScrollBar.IsPositionedInside = true;
+            chartArea.AxisY.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
+            chartArea.AxisY.ScaleView.SmallScrollMinSize = 0;
         }
     }
 }

@@ -74,12 +74,12 @@
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Данные" HorizontalAlignment="Right"/>
-                            <Label Grid.Row="1" Grid.Column="0" Content="Период" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="0" Grid.Column="0" Content="Данные за" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="1" Grid.Column="0" Content="Период / год" HorizontalAlignment="Right"/>
                             <ComboBox Grid.Row="0" Grid.Column="1" Name="comboChart">
-                                <ComboBoxItem Content="За период" Name="Circle" IsSelected="True"/>
-                                <ComboBoxItem Content="За год" Name="Column"/>
-                                <ComboBoxItem Content="За 3 года" Name="Line"/>
+                                <ComboBoxItem Content="Выбранный период" Name="Period" IsSelected="True"/>
+                                <ComboBoxItem Content="Статистика за год" Name="Year"/>
+                                <ComboBoxItem Content="Сравнение за 3 года" Name="Year3"/>
                             </ComboBox>
                             <DatePicker Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Начальная дата" FirstDayOfWeek="Monday" 
                                 Name="pickerPeriodStart" SelectedDateFormat="Short"/>

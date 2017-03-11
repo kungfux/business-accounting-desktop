@@ -3,6 +3,7 @@ using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Data;
 using System.Data.SQLite;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -21,296 +22,324 @@ namespace BusinessAccounting.UserControls
             InitializeComponent();
         }
 
-        public static RoutedCommand PrintChartCommand = new RoutedCommand();
-        public static RoutedCommand SaveChartCommand = new RoutedCommand();
+        public static readonly RoutedCommand PrintChartCommand = new RoutedCommand();
+        public static readonly RoutedCommand SaveChartCommand = new RoutedCommand();
 
-        private const string sqlIncomes = "select datestamp, sum(summa) from ba_cash_operations where summa > 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
-        private const string sqlCharges = "select datestamp, sum(summa) from ba_cash_operations where summa < 0 and datestamp >= @d1 and datestamp <= @d2 group by datestamp order by datestamp asc;";
-        private const string sqlCompare = "select * from ((select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa > 0), " +
-                                          "(select sum(summa) from ba_cash_operations where datestamp >= @d1 and datestamp <= @d2 and summa < 0));";
+        private Chart _chart;
+        private readonly Font _titleFont = new Font("Arial", 16, System.Drawing.FontStyle.Bold);
 
-        Chart chart;
-
-        #region Functionality methods
-        private void PrintChart()
+        private void BuildChart()
         {
             wfHost.Visibility = Visibility.Hidden;
 
-            chart = new Chart();
+            var startDate = pickerPeriodStart.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
+            var endDate = pickerPeriodEnd.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
+            var displayValues = Convert.ToBoolean(comboDisplayValues.IsChecked.Value);
 
-            DateTime startDate = (DateTime)pickerPeriodStart.SelectedDate;
-            DateTime endDate = (DateTime)pickerPeriodEnd.SelectedDate;
+            var isBuilt = false;
 
-            bool chartReady = false;
-            switch (((ComboBoxItem)comboChartType.SelectedItem).Name)
+            var selectedChart = ((ComboBoxItem)comboChart.SelectedItem).Name;
+            switch (selectedChart)
             {
-                case "Incomes":
-                    chartReady = BuildIncomesChart(startDate, endDate);
+                case "Period":
+                    isBuilt = BuildTotalsChartForPeriod(displayValues, startDate, endDate);
                     break;
-                case "Charges":
-                    chartReady = BuildChargesChart(startDate, endDate);
+                case "Year":
+                    isBuilt = BuildTotalsChartForTheYear(displayValues, startDate);
                     break;
-                case "IncomesCharges":
-                    chartReady = BuildIncomesChargesChart(startDate, endDate);
-                    break;
-                case "Compare":
-                    chartReady = BuildCompareChart(startDate, endDate);
+                case "Year3":
+                    isBuilt = BuildTotalsChartFor3Years(displayValues, startDate);
                     break;
             }
 
-            if (chartReady)
+            if (isBuilt)
             {
-                wfHost.Child = chart;
+                wfHost.Child = _chart;
                 wfHost.Visibility = Visibility.Visible;
             }
-        }
-
-        private bool BuildIncomesChart(DateTime startDate, DateTime endDate)
-        {
-            chart.Series.Add("");
-            chart.Titles.Add("График прибыли за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
-            chart.Series[0].LegendText = "Прибыль";
-
-            chart.ChartAreas.Add("Прибыль");
-            chart.ChartAreas[0].AxisX.Title = "Дата";
-            chart.ChartAreas[0].AxisY.Title = "Сумма";
-
-            chart.Series[0].XValueType = ChartValueType.Date;
-
-            chart.Series[0].ChartType = SeriesChartType.Area;
-
-            DataTable table =
-                App.sqlite.SelectTable(sqlIncomes,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if (table != null && table.Rows.Count > 0)
-            {
-                for (int a = 0; a < table.Rows.Count; a++)
-                {
-                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
-                        Convert.ToDouble(table.Rows[a].ItemArray[1])));
-                    if (comboDisplayValues.IsChecked == true)
-                    {
-                        chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
-                    }
-                }
-            }
             else
             {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
+                ShowMessage(string.IsNullOrEmpty(App.sqlite.LastOperationErrorMessage)
+                    ? "Нет данных для построения графика!"
+                    : $"Не удалось построить график! Ошибка:{Environment.NewLine}{App.sqlite.LastOperationErrorMessage}");
             }
-            return true;
         }
 
-        private bool BuildChargesChart(DateTime startDate, DateTime endDate)
-        {
-            chart.Series.Add("");
-            chart.Titles.Add("График расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
-            chart.Series[0].LegendText = "Расходы";
-
-            chart.ChartAreas.Add("Расходы");
-            chart.ChartAreas[0].AxisX.Title = "Дата";
-            chart.ChartAreas[0].AxisY.Title = "Сумма";
-
-            chart.Series[0].XValueType = ChartValueType.Date;
-
-            chart.Series[0].ChartType = SeriesChartType.Area;
-            chart.Series[0].Color = System.Drawing.Color.Maroon;
-
-            DataTable table =
-                App.sqlite.SelectTable(sqlCharges,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if (table != null && table.Rows.Count > 0)
-            {
-                for (int a = 0; a < table.Rows.Count; a++)
-                {
-                    chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(table.Rows[a].ItemArray[0]).ToOADate(),
-                        0 - Convert.ToDouble(table.Rows[a].ItemArray[1])));
-                    if (comboDisplayValues.IsChecked == true)
-                    {
-                        chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(table.Rows[a].ItemArray[1]));
-                    }
-                }
-            }
-            else
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            return true;
-        }
-
-        private bool BuildCompareChart(DateTime startDate, DateTime endDate)
-        {
-            chart.Series.Add("");
-            chart.Titles.Add("График сравнения за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
-
-            chart.ChartAreas.Add("");
-
-            chart.Series[0].ChartType = SeriesChartType.Doughnut;
-
-            DataRow row =
-                App.sqlite.SelectRow(sqlCompare,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if (row != null)
-            {
-                double incomeSum = row.ItemArray[0] != DBNull.Value ? Convert.ToDouble(row.ItemArray[0]) : 0;
-                double chargesSum = row.ItemArray[1] != DBNull.Value ? 0 - Convert.ToDouble(row.ItemArray[1]) : 0;
-
-                chart.Series[0].Points.Add(incomeSum);
-                chart.Series[0].Points[0].LegendText = "Доходы";
-                if (comboDisplayValues.IsChecked == true)
-                {
-                    chart.Series[0].Points[0].Label = incomeSum > 0 ? string.Format("{0:C}", incomeSum) : "";
-                }
-
-                chart.Series[0].Points.Add(chargesSum);
-                chart.Series[0].Points[1].LegendText = "Расходы";
-                if (comboDisplayValues.IsChecked == true)
-                {
-                    chart.Series[0].Points[1].Label = chargesSum > 0 ? string.Format("{0:C}", chargesSum) : "";
-                }
-            }
-            else
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            return true;
-        }
-
-        private bool BuildIncomesChargesChart(DateTime startDate, DateTime endDate)
-        {
-            chart.Series.Add("");
-            chart.Series.Add("");
-            chart.Titles.Add("График прибыли и расходов за период " + Environment.NewLine + "с " + startDate.ToString("dd MMMM yyyy") + " по " + endDate.ToString("dd MMMM yyyy"));
-            chart.Legends.Add("");
-            chart.Legends[0].Title = "Легенда";
-            chart.Series[0].LegendText = "Прибыль";
-            chart.Series[1].LegendText = "Расходы";
-
-            chart.ChartAreas.Add("Прибыль");
-            chart.ChartAreas[0].AxisX.Title = "Дата";
-            chart.ChartAreas[0].AxisY.Title = "Сумма";
-
-            chart.Series[0].XValueType = ChartValueType.Date;
-            chart.Series[1].XValueType = ChartValueType.Date;
-
-            chart.Series[0].ChartType = SeriesChartType.Line;
-            chart.Series[1].ChartType = SeriesChartType.Line;
-
-            chart.Series[1].Color = System.Drawing.Color.Maroon;
-
-            DataTable tableIncomes =
-                App.sqlite.SelectTable(sqlIncomes,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            DataTable tableCharges =
-                App.sqlite.SelectTable(sqlCharges,
-                new SQLiteParameter("@d1", startDate),
-                new SQLiteParameter("@d2", endDate));
-
-            if ((tableIncomes == null || tableIncomes.Rows.Count == 0) && (tableCharges == null || tableCharges.Rows.Count == 0))
-            {
-                ShowMessage("Нет данных для построения графика!");
-                return false;
-            }
-            else
-            {
-                if (tableIncomes != null)
-                {
-                    for (int a = 0; a < tableIncomes.Rows.Count; a++)
-                    {
-                        chart.Series[0].Points.Add(new DataPoint(Convert.ToDateTime(tableIncomes.Rows[a].ItemArray[0]).ToOADate(),
-                            Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1])));
-                        if (comboDisplayValues.IsChecked == true)
-                        {
-                            chart.Series[0].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableIncomes.Rows[a].ItemArray[1]));
-                        }
-                    }
-                }
-
-                if (tableCharges != null)
-                {
-                    for (int a = 0; a < tableCharges.Rows.Count; a++)
-                    {
-                        chart.Series[1].Points.Add(new DataPoint(Convert.ToDateTime(tableCharges.Rows[a].ItemArray[0]).ToOADate(),
-                            0 - Convert.ToDouble(tableCharges.Rows[a].ItemArray[1])));
-                        if (comboDisplayValues.IsChecked == true)
-                        {
-                            chart.Series[1].Points[a].Label = string.Format("{0:C}", Convert.ToDouble(tableCharges.Rows[a].ItemArray[1]));
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-
-        void ShowMessage(string text)
+        private void ShowMessage(string text)
         {
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text +
-               Environment.NewLine + App.sqlite.LastOperationErrorMessage, MessageDialogStyle.Affirmative);
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text);
                 }
         }
 
         private void SaveChart()
         {
-            System.Windows.Forms.SaveFileDialog sfDialog = new System.Windows.Forms.SaveFileDialog();
-            sfDialog.AddExtension = true;
-            sfDialog.Filter = "Png (PNG)|*.png";
+            var sfDialog = new System.Windows.Forms.SaveFileDialog
+            {
+                AddExtension = true,
+                Filter = "Png (PNG)|*.png"
+            };
             if (sfDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 if (sfDialog.FileName != "")
                 {
-                    chart.SaveImage(sfDialog.FileName, ChartImageFormat.Png);
+                    _chart.SaveImage(sfDialog.FileName, ChartImageFormat.Png);
                 }
             }
         }
-        #endregion
 
-        #region Commands
         private void PrintChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                comboChartType.SelectedIndex != -1 & // type of chart is selected
-                pickerPeriodStart.SelectedDate != null & // start date is selected
-                pickerPeriodEnd.SelectedDate != null & // end date is selected
-                pickerPeriodStart.SelectedDate <= pickerPeriodEnd.SelectedDate; // start date is earlier then end date
+            if (comboChart.SelectedIndex == 0 &
+                pickerPeriodStart.SelectedDate != null &
+                pickerPeriodEnd.SelectedDate != null &
+                pickerPeriodStart.SelectedDate <= pickerPeriodEnd.SelectedDate)
+            {
+                e.CanExecute = true;
+                return;
+            }
+
+            if (comboChart.SelectedIndex >= 1 &&
+                pickerPeriodStart.SelectedDate != null)
+            {
+                e.CanExecute = true;
+            }
         }
 
         private void PrintChart_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            PrintChart();
+            BuildChart();
         }
 
         private void SaveChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute =
                 wfHost != null &&
-                wfHost.Visibility == Visibility.Visible && // if WindowsFormsHost visible than chart is built
-                chart != null;
+                wfHost.Visibility == Visibility.Visible;
         }
 
         private void SaveChart_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveChart();
         }
-        #endregion
+
+        private bool BuildTotalsChartForPeriod(bool displayValues, DateTime startDate, DateTime endDate)
+        {
+            const string sql = "select sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 "+
+                "union all select sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0";
+
+            startDate = startDate + new TimeSpan(0, 0, 0);
+            endDate = endDate + new TimeSpan(23, 59, 59);
+
+            _chart = new Chart();
+
+            var title = _chart.Titles.Add($"Сумма доходов и расходов за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}");
+            title.Font = _titleFont;
+
+            _chart.Legends.Add("Легенда").Title = "Легенда";
+            _chart.ChartAreas.Add("");
+
+            _chart.Series.Add("");          
+            _chart.Series[0].ChartType = SeriesChartType.Doughnut;
+
+            var result = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+
+            if (result != null && result.Rows.Count == 2)
+            {
+                var incomeSum = result.Rows[0].ItemArray[0] != DBNull.Value ? Convert.ToDouble(result.Rows[0].ItemArray[0]) : 0;
+                var chargesSum = result.Rows.Count >= 2 && result.Rows[1].ItemArray[0] != DBNull.Value ? 0 - Convert.ToDouble(result.Rows[1].ItemArray[0]) : 0;
+
+                _chart.Series[0].Points.Add(incomeSum);
+                _chart.Series[0].Points[0].LegendText = "Доходы";
+                if (displayValues)
+                {
+                    _chart.Series[0].Points[0].Label = $"{incomeSum:C}";
+                }
+
+                _chart.Series[0].Points.Add(chargesSum);
+                _chart.Series[0].Points[1].LegendText = "Расходы";
+                if (displayValues)
+                {
+                    _chart.Series[0].Points[1].Label = $"{chargesSum:C}";
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool BuildTotalsChartForTheYear(bool displayValues, DateTime date)
+        {
+            var startDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
+            var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
+
+            const string sqlIncomes =
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) as total " +
+                "from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 " +
+                "group by year, month;";
+            const string sqlCharges =
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) as total " +
+                "from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0 " +
+                "group by year, month;";
+
+            _chart = new Chart();
+
+            var title = _chart.Titles.Add($"Доходы и расходы за {date.Year} год помесячно");
+            title.Font = _titleFont;
+            _chart.Legends.Add("Легенда").Title = "Легенда";
+
+            _chart.ChartAreas.Add("");
+            _chart.ChartAreas[0].AxisX.Title = "Месяц";
+            _chart.ChartAreas[0].AxisY.Title = "Сумма";
+            MakeAreaZoomable(_chart.ChartAreas[0]);
+
+            _chart.Series.Add("Доходы");
+            _chart.Series.Add("Расходы");
+
+            _chart.Series[0].ChartType = SeriesChartType.Column;
+            _chart.Series[1].ChartType = SeriesChartType.Column;
+
+            var totalsIncomes = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            var totalsCharges = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            var emptyResults = false;
+
+            var resultIncomes = App.sqlite.SelectTable(sqlIncomes, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            if (resultIncomes != null && resultIncomes.Rows.Count >= 1)
+            {
+                for (var a = 0; a < resultIncomes.Rows.Count; a++)
+                {
+                    var month = Convert.ToInt32(resultIncomes.Rows[a].ItemArray[1]);
+                    totalsIncomes[month - 1] = Convert.ToDouble(resultIncomes.Rows[a].ItemArray[2]);
+                }
+            }
+            else
+            {
+                emptyResults = true;
+            }
+
+            var resultCharges = App.sqlite.SelectTable(sqlCharges, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            if (resultCharges != null && resultCharges.Rows.Count >= 1)
+            {
+                for (var a = 0; a < resultCharges.Rows.Count; a++)
+                {
+                    var month = Convert.ToInt32(resultCharges.Rows[a].ItemArray[1]);
+                    totalsCharges[month - 1] = 0 - Convert.ToDouble(resultCharges.Rows[a].ItemArray[2]);
+                }
+            }
+            else if (emptyResults)
+            {
+                return false;
+            }
+
+            for (var a = 0; a < 12; a++)
+            {
+                _chart.Series[0].Points.Add(totalsIncomes[a]);
+                _chart.Series[1].Points.Add(totalsCharges[a]);
+
+                if (displayValues)
+                {
+                    _chart.Series[0].Points[a].Label = $"{totalsIncomes[a]:C}";
+                    _chart.Series[1].Points[a].Label = $"{totalsCharges[a]:C}";
+                }
+            }
+
+            return true;
+        }
+
+        private bool BuildTotalsChartFor3Years(bool displayValues, DateTime date)
+        {
+            const string sql = 
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) from BA_CASH_OPERATIONS " +
+                "where datestamp between @d1 and @d2 and summa > 0 group by year, month;";
+
+            _chart = new Chart();
+            
+            var title = _chart.Titles.Add($"Доходы за {date.Year - 2}-{date.Year} годы");
+            title.Font = _titleFont;
+            _chart.Legends.Add("Легенда").Title = "Легенда";
+
+            _chart.Series.Add($"{date.Year}");
+            _chart.Series.Add($"{date.Year - 1}");
+            _chart.Series.Add($"{date.Year - 2}");
+
+            _chart.Series[0].LegendText = $"{date.Year}";
+            _chart.Series[0].ChartType = SeriesChartType.Line;
+            _chart.Series[0].BorderWidth = 5;
+            _chart.Series[1].LegendText = $"{date.Year - 1}";
+            _chart.Series[1].ChartType = SeriesChartType.Line;
+            _chart.Series[1].BorderWidth = 5;
+            _chart.Series[2].LegendText = $"{date.Year - 2}";
+            _chart.Series[2].ChartType = SeriesChartType.Line;
+            _chart.Series[2].BorderWidth = 5;
+
+            _chart.ChartAreas.Add("");
+            _chart.ChartAreas[0].AxisX.Title = "Месяц";
+            _chart.ChartAreas[0].AxisY.Title = "Сумма";
+            MakeAreaZoomable(_chart.ChartAreas[0]);
+
+            var startDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
+            var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
+
+            var values = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            var emptyDataCount = 0;
+
+            for (var a = 0; a < 3; a++)
+            {
+                var data = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+                if (data != null && data.Rows.Count > 0)
+                {
+                    foreach (DataRow row in data.Rows)
+                    {
+                        var month = Convert.ToInt32(row.ItemArray[1]) - 1;
+                        var sum = Convert.ToDouble(row.ItemArray[2]);
+                        values[month] = sum;
+                    }
+
+                    for (var i = 0; i < 12; i++)
+                    {
+                        _chart.Series[a].Points.Add(new DataPoint(i + 1, values[i]));
+                        if (displayValues)
+                        {
+                            _chart.Series[a].Points[i].Label = $"{values[i]:C}";
+                        }
+                    }
+                }
+                else
+                {
+                    emptyDataCount++;
+                }
+
+                startDate = startDate.AddYears(-1);
+                endDate = endDate.AddYears(-1);
+                values = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            }
+
+            return emptyDataCount < 3;
+        }
+
+        private static void MakeAreaZoomable(ChartArea chartArea)
+        {
+            chartArea.CursorX.IsUserEnabled = true;
+            chartArea.CursorX.IsUserSelectionEnabled = true;
+            chartArea.CursorX.Interval = 0;
+            chartArea.AxisX.ScaleView.Zoomable = true;
+            chartArea.AxisX.ScrollBar.IsPositionedInside = true;
+            chartArea.AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
+            chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
+
+            chartArea.CursorY.IsUserEnabled = true;
+            chartArea.CursorY.IsUserSelectionEnabled = true;
+            chartArea.CursorY.Interval = 0;
+            chartArea.AxisY.ScaleView.Zoomable = true;
+            chartArea.AxisY.ScrollBar.IsPositionedInside = true;
+            chartArea.AxisY.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
+            chartArea.AxisY.ScaleView.SmallScrollMinSize = 0;
+        }
     }
 }

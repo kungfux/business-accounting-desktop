@@ -90,6 +90,7 @@
       <DependentUpon>GraphicsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CashTransaction.cs" />
+    <Compile Include="UserControls\IndexToBooleanConverter.cs" />
     <Compile Include="UserControls\InverseBooleanConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

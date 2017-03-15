@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/hnjj82rhfae58yue/branch/master?svg=true)](https://ci.appveyor.com/project/kungfux/business-accounting/branch/master)
+
 ## Business Accounting
 
 Business Accounting is a standalone desktop application written in WPF that aims for the accounting of funds for small businesses. All data are being stored in standalone SQLite database.

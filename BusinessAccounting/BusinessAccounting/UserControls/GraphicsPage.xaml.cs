@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
 using System.Windows.Media;
+using XDatabase;
 
 namespace BusinessAccounting.UserControls
 {
@@ -59,9 +60,9 @@ namespace BusinessAccounting.UserControls
             }
             else
             {
-                ShowMessage(string.IsNullOrEmpty(App.sqlite.LastOperationErrorMessage)
+                ShowMessage(string.IsNullOrEmpty(App.sqlite.LastErrorMessage)
                     ? "Нет данных для построения графика!"
-                    : $"Не удалось построить график! Ошибка:{Environment.NewLine}{App.sqlite.LastOperationErrorMessage}");
+                    : $"Не удалось построить график! Ошибка:{Environment.NewLine}{App.sqlite.LastErrorMessage}");
             }
         }
 
@@ -144,7 +145,7 @@ namespace BusinessAccounting.UserControls
             _chart.Series.Add("");          
             _chart.Series[0].ChartType = SeriesChartType.Doughnut;
 
-            var result = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            var result = App.sqlite.SelectTable(sql, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
 
             if (result != null && result.Rows.Count == 2)
             {
@@ -209,7 +210,7 @@ namespace BusinessAccounting.UserControls
 
             var emptyResults = false;
 
-            var resultIncomes = App.sqlite.SelectTable(sqlIncomes, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            var resultIncomes = App.sqlite.SelectTable(sqlIncomes, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
             if (resultIncomes != null && resultIncomes.Rows.Count >= 1)
             {
                 for (var a = 0; a < resultIncomes.Rows.Count; a++)
@@ -223,7 +224,7 @@ namespace BusinessAccounting.UserControls
                 emptyResults = true;
             }
 
-            var resultCharges = App.sqlite.SelectTable(sqlCharges, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            var resultCharges = App.sqlite.SelectTable(sqlCharges, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
             if (resultCharges != null && resultCharges.Rows.Count >= 1)
             {
                 for (var a = 0; a < resultCharges.Rows.Count; a++)
@@ -291,7 +292,7 @@ namespace BusinessAccounting.UserControls
 
             for (var a = 0; a < 3; a++)
             {
-                var data = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+                var data = App.sqlite.SelectTable(sql, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
                 if (data != null && data.Rows.Count > 0)
                 {
                     foreach (DataRow row in data.Rows)

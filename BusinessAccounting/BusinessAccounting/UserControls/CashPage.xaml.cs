@@ -7,10 +7,10 @@ using System.Data.SQLite;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Xclass.Database;
+using XDatabase;
+using XDatabase.Core;
 
 namespace BusinessAccounting.UserControls
 {
@@ -90,31 +90,48 @@ namespace BusinessAccounting.UserControls
         {
             bool result = false;
 
-            if ((bool)SalaryMode.IsChecked)
+            if ((bool) SalaryMode.IsChecked)
             {
-                result = 2 == App.sqlite.PerformTransaction(new SQLiteQueryStatement[] {
-                    new SQLiteQueryStatement() {
-                         QuerySql = "insert into ba_cash_operations (datestamp, summa, comment) values (@D, @s, @c);",
-                         QueryParameters = new SQLiteParameter[] {
-                            new SQLiteParameter("@d", inputDate.SelectedDate),
-                            new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
-                            new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null)
-                          }
-                    },
-                    new SQLiteQueryStatement() {
-                        QuerySql = "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.id) from ba_cash_operations));",
-                        QueryParameters = new SQLiteParameter[] {
-                            new SQLiteParameter("@e", employees[comboEmployee.SelectedIndex].Id)
-                        }
-                    }
-                });
+                const string insertTransactionSql =
+                    "insert into ba_cash_operations (datestamp, summa, comment) values (@D, @s, @c);";
+                const string insertSalarySql =
+                    "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.id) from ba_cash_operations));";
+
+                App.sqlite.BeginTransaction();
+
+                result = App.sqlite.Insert(insertTransactionSql,
+                    new XParameter("@d", inputDate.SelectedDate),
+                    new XParameter("@s", Convert.ToDecimal(inputSum.Text)),
+                    new XParameter("@c", inputComment.Text != "" ? inputComment.Text : null)) >=
+                         (int) XQuery.XResult.ChangesApplied;
+
+                if (!result)
+                {
+                    App.sqlite.RollbackTransaction();
+                }
+
+                result = App.sqlite.Insert(insertSalarySql,
+                    new XParameter("@e", employees[comboEmployee.SelectedIndex].Id)) >=
+                         (int) XQuery.XResult.ChangesApplied;
+
+                if (!result)
+                {
+                    App.sqlite.RollbackTransaction();
+                }
+                else
+                {
+                    result = App.sqlite.CommitTransaction();
+                }
             }
             else
             {
-                result = 1 == App.sqlite.ChangeData("insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);",
-                    new SQLiteParameter("@d", inputDate.SelectedDate),
-                    new SQLiteParameter("@s", Convert.ToDecimal(inputSum.Text)),
-                    new SQLiteParameter("@c", inputComment.Text != "" ? inputComment.Text : null));
+                const string insertSql =
+                    "insert into ba_cash_operations (datestamp, summa, comment) values (@d, @s, @c);";
+                result = App.sqlite.Insert(insertSql,
+                    new XParameter("@d", inputDate.SelectedDate),
+                    new XParameter("@s", Convert.ToDecimal(inputSum.Text)),
+                    new XParameter("@c", inputComment.Text != "" ? inputComment.Text : null)) >=
+                         (int) XQuery.XResult.ChangesApplied;
             }
 
             if (result)
@@ -154,8 +171,9 @@ namespace BusinessAccounting.UserControls
             MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                if (App.sqlite.ChangeData("delete from ba_cash_operations where id = @id;",
-                        new SQLiteParameter("@id", record.id)) <= 0)
+                const string deleteTransactionSql = "delete from ba_cash_operations where id = @id;";
+                if (App.sqlite.Delete(deleteTransactionSql,
+                        new XParameter("@id", record.id)) <= (int)XQuery.XResult.NothingChanged)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
                 }
@@ -171,7 +189,7 @@ namespace BusinessAccounting.UserControls
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastOperationErrorMessage,
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastErrorMessage,
                         MessageDialogStyle.Affirmative);
                 }
         }

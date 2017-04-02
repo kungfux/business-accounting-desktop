@@ -84,9 +84,14 @@ namespace BusinessAccounting
 
             WindowDisplayed = true;
 
-            if (!App.sqlite.TestConnection("Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true", true, false))
+            const string connection = "Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true";
+            if (App.sqlite.TestConnection(connection))
             {
-                this.ShowMessageAsync("Проблемка", "Не удалось установить соединение с базой данных.", MessageDialogStyle.Affirmative);
+                App.sqlite.ConnectionString = connection;
+            }
+            else
+            {
+                this.ShowMessageAsync("Проблемка", "Не удалось установить соединение с базой данных.");
             }
 
             // open default page

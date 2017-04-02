@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using XDatabase;
 
 namespace BusinessAccounting.UserControls
 {
@@ -73,7 +74,7 @@ namespace BusinessAccounting.UserControls
             else
             {
                 employees = App.sqlite.SelectTable(query,
-                            new SQLiteParameter("@data", "%" + inputSearchData.Text + "%"));
+                    new XParameter("@data", "%" + inputSearchData.Text + "%"));
             }
 
             if (employees != null && employees.Rows.Count > 0)
@@ -100,7 +101,7 @@ namespace BusinessAccounting.UserControls
             if (lbEmployees.SelectedIndex != -1)
             {
                 DataRow r = App.sqlite.SelectRow("select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;",
-                    new SQLiteParameter("@id", foundEmployees[lbEmployees.SelectedIndex].Id));
+                    new XParameter("@id", foundEmployees[lbEmployees.SelectedIndex].Id));
                 if (r == null)
                 {
                     ShowMessage("Сотрудник не найден.");
@@ -129,8 +130,8 @@ namespace BusinessAccounting.UserControls
         private void LoadPhoto()
         {
             // retrieve photo
-            System.Drawing.Image image = App.sqlite.GetImage("select photo from ba_employees_cardindex where id=@id;",
-                new SQLiteParameter("@id", openedEmployee.Id));
+            System.Drawing.Image image = App.sqlite.SelectBinaryAsImage("select photo from ba_employees_cardindex where id=@id;",
+                new XParameter("@id", openedEmployee.Id));
 
             if (image != null)
             {
@@ -163,7 +164,7 @@ namespace BusinessAccounting.UserControls
             salaryHistory = new List<CashTransaction>();
 
             DataTable historyRecords = App.sqlite.SelectTable(query,
-                new SQLiteParameter("@emid", openedEmployee.Id));
+                new XParameter("@emid", openedEmployee.Id));
             if (historyRecords != null)
             {
                 foreach (DataRow row in historyRecords.Rows)
@@ -185,36 +186,36 @@ namespace BusinessAccounting.UserControls
             if (openedEmployee.Id != 0)
             {
                 // change record
-                return App.sqlite.ChangeData(
+                return App.sqlite.Update(
                     "update ba_employees_cardindex set hired = @h, fired = @f, fullname = @name, document = @d, telephone = @t, address = @a, notes = @n where id = @id;",
-                    new SQLiteParameter("@h", openedEmployee.Hired),
-                    new SQLiteParameter("@f", openedEmployee.Fired),
-                    new SQLiteParameter("@name", openedEmployee.FullName),
-                    new SQLiteParameter("@d", openedEmployee.Document),
-                    new SQLiteParameter("@t", openedEmployee.Telephone),
-                    new SQLiteParameter("@a", openedEmployee.Address),
-                    new SQLiteParameter("@n", openedEmployee.Notes),
-                    new SQLiteParameter("@id", openedEmployee.Id)) > 0;
+                    new XParameter("@h", openedEmployee.Hired),
+                    new XParameter("@f", openedEmployee.Fired),
+                    new XParameter("@name", openedEmployee.FullName),
+                    new XParameter("@d", openedEmployee.Document),
+                    new XParameter("@t", openedEmployee.Telephone),
+                    new XParameter("@a", openedEmployee.Address),
+                    new XParameter("@n", openedEmployee.Notes),
+                    new XParameter("@id", openedEmployee.Id)) > 0;
             }
             else
             {
                 // save new
-                return App.sqlite.ChangeData(
+                return App.sqlite.Insert(
                     "insert into ba_employees_cardindex (hired, fired, fullname, document, telephone, address, notes) values (@h, @f, @name, @d, @t, @a, @n);",
-                    new SQLiteParameter("@h", openedEmployee.Hired),
-                    new SQLiteParameter("@f", openedEmployee.Fired),
-                    new SQLiteParameter("@name", openedEmployee.FullName),
-                    new SQLiteParameter("@d", openedEmployee.Document),
-                    new SQLiteParameter("@t", openedEmployee.Telephone),
-                    new SQLiteParameter("@a", openedEmployee.Address),
-                    new SQLiteParameter("@n", openedEmployee.Notes)) > 0;
+                    new XParameter("@h", openedEmployee.Hired),
+                    new XParameter("@f", openedEmployee.Fired),
+                    new XParameter("@name", openedEmployee.FullName),
+                    new XParameter("@d", openedEmployee.Document),
+                    new XParameter("@t", openedEmployee.Telephone),
+                    new XParameter("@a", openedEmployee.Address),
+                    new XParameter("@n", openedEmployee.Notes)) > 0;
             }
         }
 
         private bool DeleteEmployee()
         {
-            return App.sqlite.ChangeData("delete from ba_employees_cardindex where id=@id",
-                new SQLiteParameter("@id", openedEmployee.Id)) > 0;
+            return App.sqlite.Delete("delete from ba_employees_cardindex where id=@id",
+                new XParameter("@id", openedEmployee.Id)) > 0;
         }
 
         private void ClearInputFields(bool isEnabled, bool clearValues = false)
@@ -261,8 +262,8 @@ namespace BusinessAccounting.UserControls
                         ShowMessage("Выбранный файл не является изображением и не может быть использован в качестве фотографии!");
                     }
 
-                    if (!App.sqlite.PutFile(ofDialog.FileName, "update ba_employees_cardindex set photo = @file where id = @id",
-                        new SQLiteParameter("@id", openedEmployee.Id)))
+                    if (!App.sqlite.InsertFileIntoCell(ofDialog.FileName, "update ba_employees_cardindex set photo = @file where id = @id", "@file",
+                        new XParameter("@id", openedEmployee.Id)))
                     {
                         ShowMessage("Не удалось сохранить фотографию сотрудника!");
                     }
@@ -276,8 +277,8 @@ namespace BusinessAccounting.UserControls
 
         private void ClearPhoto()
         {
-            if (App.sqlite.ChangeData("update ba_employees_cardindex set photo = null where id=@id;",
-                    new SQLiteParameter("@id", openedEmployee.Id)) > 0)
+            if (App.sqlite.Update("update ba_employees_cardindex set photo = null where id=@id;",
+                    new XParameter("@id", openedEmployee.Id)) > 0)
             {
                 LoadPhoto();
             }
@@ -309,8 +310,8 @@ namespace BusinessAccounting.UserControls
             MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                if (App.sqlite.ChangeData("delete from ba_cash_operations where id = @id;",
-                        new SQLiteParameter("@id", record.id)) <= 0)
+                if (App.sqlite.Delete("delete from ba_cash_operations where id = @id;",
+                        new XParameter("@id", record.id)) <= 0)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
                 }
@@ -326,7 +327,7 @@ namespace BusinessAccounting.UserControls
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
                 if (visual is MetroWindow)
                 {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastOperationErrorMessage,
+                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.sqlite.LastErrorMessage,
                         MessageDialogStyle.Affirmative);
                 }
         }

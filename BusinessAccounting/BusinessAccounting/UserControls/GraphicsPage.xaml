@@ -1,21 +1,21 @@
 ﻿<UserControl x:Class="BusinessAccounting.UserControls.GraphicsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:UserControls="clr-namespace:BusinessAccounting.UserControls"
+             xmlns:userControls="clr-namespace:BusinessAccounting.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="700">
 
     <UserControl.Resources>
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_graph.png" />
-        <UserControls:IndexToBooleanConverter x:Key="IndexToBooleanConverter"/>
+        <userControls:IndexToBooleanConverter x:Key="IndexToBooleanConverter"/>
     </UserControl.Resources>
 
     <UserControl.CommandBindings>
-        <CommandBinding Command="{x:Static UserControls:GraphicsPage.PrintChartCommand}" Executed="PrintChart_Executed" CanExecute="PrintChart_CanExecute" />
-        <CommandBinding Command="{x:Static UserControls:GraphicsPage.SaveChartCommand}" Executed="SaveChart_Executed" CanExecute="SaveChart_CanExecute" />
+        <CommandBinding Command="{x:Static userControls:GraphicsPage.PrintChartCommand}" Executed="PrintChart_Executed" CanExecute="PrintChart_CanExecute" />
+        <CommandBinding Command="{x:Static userControls:GraphicsPage.SaveChartCommand}" Executed="SaveChart_Executed" CanExecute="SaveChart_CanExecute" />
     </UserControl.CommandBindings>
 
     <Grid>
@@ -53,7 +53,7 @@
             <GroupBox
                 Grid.Column="0"
                 Header="График">
-                <WindowsFormsHost Margin="5,5,5,5" Name="wfHost" Visibility="Hidden"/>
+                <WindowsFormsHost Margin="5,5,5,5" Name="WfHost" Visibility="Hidden"/>
             </GroupBox>
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Width="1" />
             <GroupBox
@@ -76,20 +76,20 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Данные за" HorizontalAlignment="Right"/>
                             <Label Grid.Row="1" Grid.Column="0" Content="Период / год" HorizontalAlignment="Right"/>
-                            <ComboBox Grid.Row="0" Grid.Column="1" Name="comboChart">
+                            <ComboBox Grid.Row="0" Grid.Column="1" Name="ComboChart">
                                 <ComboBoxItem Content="Выбранный период" Name="Period" IsSelected="True"/>
                                 <ComboBoxItem Content="Статистика за год" Name="Year"/>
                                 <ComboBoxItem Content="Сравнение за 3 года" Name="Year3"/>
                             </ComboBox>
-                            <DatePicker Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Начальная дата" FirstDayOfWeek="Monday" 
-                                Name="pickerPeriodStart" SelectedDateFormat="Short"/>
-                            <DatePicker Grid.Row="2" Grid.Column="1" Controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" 
-                                Name="pickerPeriodEnd" SelectedDateFormat="Short"
-                                        IsEnabled="{Binding ElementName=comboChart, Path=SelectedIndex, Converter={StaticResource IndexToBooleanConverter}}"/>
-                            <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="comboDisplayValues" 
+                            <DatePicker Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Начальная дата" FirstDayOfWeek="Monday" 
+                                Name="PickerPeriodStart" SelectedDateFormat="Short"/>
+                            <DatePicker Grid.Row="2" Grid.Column="1" controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" 
+                                Name="PickerPeriodEnd" SelectedDateFormat="Short"
+                                        IsEnabled="{Binding ElementName=ComboChart, Path=SelectedIndex, Converter={StaticResource IndexToBooleanConverter}}"/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="ComboDisplayValues" 
                                       ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>
-                            <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="{x:Static UserControls:GraphicsPage.PrintChartCommand}"/>
-                            <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static UserControls:GraphicsPage.SaveChartCommand}"/>
+                            <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.PrintChartCommand}"/>
+                            <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.SaveChartCommand}"/>
                         </Grid>
                     </ScrollViewer>
                 </Grid>

@@ -10,7 +10,7 @@ namespace BusinessAccounting
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -49,10 +49,12 @@ namespace BusinessAccounting
             {
                 GridMenu.Visibility = Visibility.Visible;
             }
-            DoubleAnimation animation = new DoubleAnimation();
-            animation.From = GridMenu.Opacity > 0 ? 1 : 0;
-            animation.To = GridMenu.Opacity > 0 ? 0 : 1;
-            animation.Duration = new Duration(TimeSpan.FromSeconds(0.5));
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                From = GridMenu.Opacity > 0 ? 1 : 0,
+                To = GridMenu.Opacity > 0 ? 0 : 1,
+                Duration = new Duration(TimeSpan.FromSeconds(0.5))
+            };
             animation.Completed += animation_Completed;
             GridMenu.BeginAnimation(OpacityProperty, animation);
         }
@@ -73,21 +75,21 @@ namespace BusinessAccounting
             UserControlGrid.Children.Add(pPage);
         }
 
-        private bool WindowDisplayed = false;
+        private bool _windowDisplayed;
 
         protected override void OnContentRendered(EventArgs e)
         {
             base.OnContentRendered(e);
 
-            if (WindowDisplayed)
+            if (_windowDisplayed)
                 return;
 
-            WindowDisplayed = true;
+            _windowDisplayed = true;
 
-            const string connection = "Data Source=ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true";
-            if (App.sqlite.TestConnection(connection))
+            const string connection = "Data Source=ba.Sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true";
+            if (App.Sqlite.TestConnection(connection))
             {
-                App.sqlite.ConnectionString = connection;
+                App.Sqlite.ConnectionString = connection;
             }
             else
             {

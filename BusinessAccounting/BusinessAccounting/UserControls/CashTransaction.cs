@@ -8,9 +8,9 @@ namespace BusinessAccounting.UserControls
 {
     public class CashTransaction
     {
-        public int id {get; set;}
-        public DateTime date { get; set; }
-        public decimal sum { get; set; }
-        public string comment { get; set; }
+        public int Id {get; set;}
+        public DateTime Date { get; set; }
+        public decimal Sum { get; set; }
+        public string Comment { get; set; }
     }
 }

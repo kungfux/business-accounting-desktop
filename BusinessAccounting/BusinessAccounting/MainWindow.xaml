@@ -21,6 +21,12 @@
         <Image x:Key="ImageGraph" Source="pack://application:,,,/Resources/image_graph.png" />
     </controls:MetroWindow.Resources>
 
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button Name="OpenDbFolder" Content="база данных" Click="OpenDbFolder_OnClick"/>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+    
     <!-- this grid contain menu button -->
     <Grid>
         <Grid.Triggers>

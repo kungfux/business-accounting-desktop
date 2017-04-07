@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using MahApps.Metro.Controls;
@@ -88,6 +90,19 @@ namespace BusinessAccounting
 
             // open default page
             LoadPage(new UserControls.CashPage());
+        }
+
+        private void OpenDbFolder_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start("explorer",
+                    $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}");
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

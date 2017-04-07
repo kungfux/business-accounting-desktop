@@ -32,18 +32,19 @@ Name: quicklaunchicon; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescripti
 [Files]
 Source: "BusinessAccounting\BusinessAccounting\bin\Release\x86\SQLite.Interop.dll"; DestDir: "{app}\x86"
 Source: "BusinessAccounting\BusinessAccounting\bin\Release\x64\SQLite.Interop.dll"; DestDir: "{app}\x64"
-Source: "BusinessAccounting\BusinessAccounting\bin\Release\BusinessAccounting.exe"; DestDir: "{app}"
+Source: "BusinessAccounting\BusinessAccounting\bin\Release\Business Accounting.exe"; DestDir: "{app}"
+Source: "BusinessAccounting\BusinessAccounting\bin\Release\Business Accounting.exe.config"; DestDir: "{app}"
 Source: "BusinessAccounting\BusinessAccounting\bin\Release\MahApps.Metro.dll"; DestDir: "{app}"
 Source: "BusinessAccounting\BusinessAccounting\bin\Release\XDatabase.dll"; DestDir: "{app}"
 Source: "BusinessAccounting\BusinessAccounting\bin\Release\System.Data.SQLite.dll"; DestDir: "{app}"
 Source: "BusinessAccounting\BusinessAccounting\bin\Release\MySql.Data.dll"; DestDir: "{app}"
 Source: "BusinessAccounting\BusinessAccounting\bin\Release\System.Windows.Interactivity.dll"; DestDir: "{app}"
-Source: "Database\ba.sqlite"; DestDir: "{app}"; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "Database\ba.sqlite"; DestDir: "{userappdata}\Business Accounting"; Flags: onlyifdoesntexist uninsneveruninstall
 
 [Icons]
-Name: "{group}\Business Accounting"; Filename: "{app}\BusinessAccounting.exe"; WorkingDir: "{app}"
+Name: "{group}\Business Accounting"; Filename: "{app}\Business Accounting.exe"; WorkingDir: "{app}"
 Name: "{group}\Uninstall Business Accounting"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\Business Accounting"; Filename: "{app}\BusinessAccounting.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\Business Accounting"; Filename: "{app}\Business Accounting.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\BusinessAccounting.exe"; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,Business Accounting}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Business Accounting.exe"; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,Business Accounting}"; Flags: nowait postinstall skipifsilent

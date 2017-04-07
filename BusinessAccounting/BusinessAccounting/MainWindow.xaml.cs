@@ -59,7 +59,7 @@ namespace BusinessAccounting
             GridMenu.BeginAnimation(OpacityProperty, animation);
         }
 
-        void animation_Completed(object sender, EventArgs e)
+        private void animation_Completed(object sender, EventArgs e)
         {
             // hide objects if they are not visible already
             // to avoid clicks
@@ -85,16 +85,6 @@ namespace BusinessAccounting
                 return;
 
             _windowDisplayed = true;
-
-            const string connection = "Data Source=ba.Sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true";
-            if (App.Sqlite.TestConnection(connection))
-            {
-                App.Sqlite.ConnectionString = connection;
-            }
-            else
-            {
-                this.ShowMessageAsync("Проблемка", "Не удалось установить соединение с базой данных.");
-            }
 
             // open default page
             LoadPage(new UserControls.CashPage());

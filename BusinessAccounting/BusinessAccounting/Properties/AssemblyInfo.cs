@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Business Accounting")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Fuks Alexander")]
+[assembly: AssemblyCompany("Alexander Fuks")]
 [assembly: AssemblyProduct("Business Accounting")]
-[assembly: AssemblyCopyright("Copyright © Fuks Alexander 2014")]
+[assembly: AssemblyCopyright("Copyright © Alexander Fuks 2014-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]

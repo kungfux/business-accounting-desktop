@@ -51,7 +51,7 @@ Name: quicklaunchicon; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescripti
 Source: "{#CompiledBinPath}\x86\SQLite.Interop.dll"; DestDir: "{app}\x86"
 Source: "{#CompiledBinPath}\x64\SQLite.Interop.dll"; DestDir: "{app}\x64"
 Source: "{#CompiledBinPath}\Business Accounting.exe"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Business Accounting.exe.config"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Business Accounting.exe.config"; DestDir: "{app}"; Flags: confirmoverwrite uninsneveruninstall
 Source: "{#CompiledBinPath}\MahApps.Metro.dll"; DestDir: "{app}"
 Source: "{#CompiledBinPath}\XDatabase.dll"; DestDir: "{app}"
 Source: "{#CompiledBinPath}\System.Data.SQLite.dll"; DestDir: "{app}"

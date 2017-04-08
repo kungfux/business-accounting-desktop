@@ -23,7 +23,7 @@
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <Button Name="OpenDbFolder" Content="база данных" Click="OpenDbFolder_OnClick"/>
+            <Button Name="OpenDbFolder" Content="Открыть папку с БД" Click="OpenDbFolder_OnClick"/>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
     

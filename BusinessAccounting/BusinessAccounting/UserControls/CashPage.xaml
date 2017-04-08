@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:BusinessAccounting.UserControls"
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,6 +12,7 @@
     d:DesignHeight="450" d:DesignWidth="850">
     
     <UserControl.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_cash.png" />
     </UserControl.Resources>
 
@@ -67,46 +69,55 @@
             </DockPanel>
         </GroupBox>
 
-        <GridSplitter Grid.Row="1" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}" />
 
         <GroupBox Grid.Row="1" Grid.Column="2" Header="Добавить запись в журнал">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="27"/>
-                    <RowDefinition Height="32"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <Label Grid.Row="1" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <Label Grid.Row="2" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <Label Grid.Row="6" Content="Режим зарплаты" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" />
-                <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите сумму" controls:TextboxHelper.ClearTextButton="True" Name="InputSum"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="4" controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
-                <controls:ToggleSwitch Grid.Row="6" Grid.Column="1" OnLabel="" OffLabel="" Name="SalaryMode" Margin="0,5,0,0" IsCheckedChanged="SalaryMode_IsCheckedChanged" HorizontalAlignment="Left"/>
-                <Button Grid.Row="8" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:CashPage.SaveRecordCommand}"/>
-                <Grid Grid.Row="7" Grid.ColumnSpan="2" Visibility="Collapsed" Name="GridSalary">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="110"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Label Content="Сотрудник" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
-                    <ComboBox Grid.Column="1" Name="ComboEmployee" DisplayMemberPath="FullName"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" />
+                                       
+                    <Label Grid.Row="1" Grid.Column="0" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                    <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите сумму" controls:TextboxHelper.ClearTextButton="True" Name="InputSum"/>
+
+                    <Label Grid.Row="2" Grid.Column="0" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                    <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="4" controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
+
+                    <Label Grid.Row="6" Grid.Column="0" Content="Режим зарплаты" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                    <controls:ToggleSwitch Grid.Row="6" Grid.Column="1" OnLabel="" OffLabel="" Name="SalaryMode" Margin="0,5,0,0" IsCheckedChanged="SalaryMode_IsCheckedChanged" HorizontalAlignment="Left"/>
+
+                    <Label Grid.Row="7" Grid.Column="0" Content="Сотрудник" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Visibility="{Binding IsChecked, ElementName=SalaryMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <ComboBox Grid.Row="7" Grid.Column="1" Name="ComboEmployee" DisplayMemberPath="FullName" Visibility="{Binding IsChecked, ElementName=SalaryMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                    <Button Grid.Row="8" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:CashPage.SaveRecordCommand}"/>
+                    
+                    <!--<Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed" Name="GridSalary">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="27"/>
+                        </Grid.RowDefinitions>
+                    </Grid>-->
                 </Grid>
-            </Grid>
+            </ScrollViewer>
         </GroupBox>
     </Grid>
 </UserControl>

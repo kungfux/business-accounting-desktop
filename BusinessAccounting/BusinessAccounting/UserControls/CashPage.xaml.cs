@@ -232,8 +232,7 @@ namespace BusinessAccounting.UserControls
 
         private void SalaryMode_IsCheckedChanged(object sender, EventArgs e)
         {
-            GridSalary.Visibility = SalaryMode.IsChecked.HasValue && (bool)SalaryMode.IsChecked ? Visibility.Visible : Visibility.Collapsed;
-            if (SalaryMode.IsChecked.HasValue && (bool)SalaryMode.IsChecked)
+            if (ComboEmployee.Items.Count == 0)
             {
                 LoadEmployees();
             }

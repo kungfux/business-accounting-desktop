@@ -3,7 +3,7 @@
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:c="clr-namespace:BusinessAccounting.UserControls"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:self="clr-namespace:BusinessAccounting.UserControls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -88,7 +88,7 @@
                                     <Button Grid.Row="2" Content="Удалить фото" Command="{x:Static self:EmployeePage.RemovePhotoCommand}"/>
                                 </Grid>
                             </Grid>
-                            <Grid Grid.Column="1" Name="gridInputFields">
+                            <Grid Grid.Column="1" Name="GridInputFields">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
                                     <ColumnDefinition />
@@ -116,34 +116,34 @@
                                 <Label Grid.Row="5" Grid.Column="0" Content="Адрес проживания" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                 <Label Grid.Row="7" Grid.Column="0" Content="Заметки" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
-                                <DatePicker Grid.Column="1" Controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long"
-                                            SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="pickerHiredDate"/>
-                                <DatePicker Grid.Column="3" Controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long"
-                                            SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="pickerFiredDate"/>
+                                <DatePicker Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long"
+                                            SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="PickerHiredDate"/>
+                                <DatePicker Grid.Column="3" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long"
+                                            SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="PickerFiredDate"/>
 
                                 <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
-                                         Controls:TextboxHelper.Watermark="Введите фамилию, имя и отчество сотрудника" 
-                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
-                                         Name="inputEmplName" Text="{Binding Path=FullName}"/>
+                                         controls:TextboxHelper.Watermark="Введите фамилию, имя и отчество сотрудника" 
+                                         controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         Name="InputEmplName" Text="{Binding Path=FullName}"/>
                                 <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
-                                         Controls:TextboxHelper.Watermark="Введите контактный номер телефона" 
-                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
-                                         Name="inputEmplPhone" Text="{Binding Path=Telephone}"/>
+                                         controls:TextboxHelper.Watermark="Введите контактный номер телефона" 
+                                         controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         Name="InputEmplPhone" Text="{Binding Path=Telephone}"/>
                                 <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
-                                         Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Введите паспортные данные" 
-                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         Grid.RowSpan="2" controls:TextboxHelper.Watermark="Введите паспортные данные" 
+                                         controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
                                          VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
-                                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplPassport" Text="{Binding Path=Document}"/>
+                                         AutoWordSelection="True" TextWrapping="Wrap" Name="InputEmplPassport" Text="{Binding Path=Document}"/>
                                 <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True"
-                                         Grid.RowSpan="2" Controls:TextboxHelper.Watermark="Введите адрес проживания" 
-                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         Grid.RowSpan="2" controls:TextboxHelper.Watermark="Введите адрес проживания" 
+                                         controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
                                          VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
-                                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplAddress" Text="{Binding Path=Address}"/>
+                                         AutoWordSelection="True" TextWrapping="Wrap" Name="InputEmplAddress" Text="{Binding Path=Address}"/>
                                 <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="3" IsReadOnly="True"
-                                         Controls:TextboxHelper.Watermark="Введите прочие данные" 
-                                         Controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
+                                         controls:TextboxHelper.Watermark="Введите прочие данные" 
+                                         controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" 
                                          VerticalScrollBarVisibility="Auto" AcceptsReturn="True" 
-                                         AutoWordSelection="True" TextWrapping="Wrap" Name="inputEmplNotes" Text="{Binding Path=Notes}"/>
+                                         AutoWordSelection="True" TextWrapping="Wrap" Name="InputEmplNotes" Text="{Binding Path=Notes}"/>
 
                                 <Grid Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3">
                                     <Grid.ColumnDefinitions>
@@ -160,22 +160,22 @@
                                 
                             </Grid>
                         </Grid>
-                        <GroupBox Grid.Row="1" Header="История зарплат" Name="headerSalaryHistory">
+                        <GroupBox Grid.Row="1" Header="История зарплат" Name="HeaderSalaryHistory">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                         <RowDefinition Height="27" />
                                     </Grid.RowDefinitions>
-                                    <ListView Name="lvSalaryHistory" SelectionMode="Single">
+                                    <ListView Name="LvSalaryHistory" SelectionMode="Single">
                                         <ListView.View>
                                             <GridView>
-                                                <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding id}" />
+                                                <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding Id}" />
                                                 <GridViewColumn Header="Дата" Width="Auto"
-                                                                DisplayMemberBinding="{Binding date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                                                                DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
                                                 <GridViewColumn Header="Сумма" Width="Auto"
-                                                                DisplayMemberBinding="{Binding sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
-                                                <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding comment}"/>
+                                                                DisplayMemberBinding="{Binding Sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                                                <GridViewColumn Header="Комментарий" Width="200" DisplayMemberBinding="{Binding Comment}"/>
                                                 <GridViewColumn Width="Auto">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
@@ -214,12 +214,12 @@
                             <Label Content="Критерий поиска" HorizontalAlignment="Right"/>
                             <Label Grid.Row="1" Content="Данные для поиска" HorizontalAlignment="Right"/>
                             <Label Grid.Row="5" Grid.ColumnSpan="2" Content="Результаты поиска:" HorizontalAlignment="Center"/>
-                            <ComboBox Grid.Column="1" Name="comboSearchCriteria">
+                            <ComboBox Grid.Column="1" Name="ComboSearchCriteria">
                                 <ComboBoxItem Content="ФИО" Name="FullName" IsSelected="True"/>
                                 <ComboBoxItem Content="Телефон" Name="Phone"/>
                             </ComboBox>
-                            <TextBox Grid.Row="1" Grid.Column="1" Controls:TextboxHelper.Watermark="Введите данные" Controls:TextboxHelper.ClearTextButton="True"
-                                     Name="inputSearchData"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите данные" controls:TextboxHelper.ClearTextButton="True"
+                                     Name="InputSearchData"/>
                             <Button Grid.Row="2" Grid.Column="1" Content="Поиск" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindEmployeeCommand}"/>
                             <Button Grid.Row="3" Grid.Column="1" Content="Найти всех" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}"/>
                             <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Height="250">
@@ -227,7 +227,7 @@
                                     <Grid>
                                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                             <Grid>
-                                                <ListBox Name="lbEmployees" ListViewItem.MouseDoubleClick="listFoundEmpl_MouseDoubleClick"
+                                                <ListBox Name="LbEmployees" ListViewItem.MouseDoubleClick="listFoundEmpl_MouseDoubleClick"
                                                  DisplayMemberPath="FullName"/>
                                             </Grid>
                                         </ScrollViewer>

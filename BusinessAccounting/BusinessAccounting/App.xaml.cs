@@ -1,13 +1,40 @@
-﻿using System.Windows;
-using Xclass.Database;
+﻿using System;
+using System.Configuration;
+using System.Reflection;
+using System.Windows;
+using XDatabase;
 
 namespace BusinessAccounting
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
-        public static SQLite3Query sqlite = new SQLite3Query();
+        public static readonly XQuerySqlite Sqlite = new XQuerySqlite();
+
+        private void App_OnStartup(object sender, StartupEventArgs e)
+        {
+            var connectionString = $@"Data Source={Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}\ba.sqlite;" +
+                "Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true;";
+
+            try
+            {
+                connectionString = ConfigurationManager.ConnectionStrings["SqliteConnection"].ConnectionString;
+            }
+            catch (NullReferenceException)
+            {
+            }
+
+            if (Sqlite.TestConnection(connectionString))
+            {
+                Sqlite.ConnectionString = connectionString;
+            }
+            else
+            {
+                MessageBox.Show($"Не удалось установить соединение с базой данных.{Environment.NewLine}Детали: {Sqlite.LastErrorMessage}", "Проблемка");
+                Current.Shutdown();
+            }
+        }
     }
 }

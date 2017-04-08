@@ -9,13 +9,14 @@ using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
 using System.Windows.Media;
+using XDatabase;
 
 namespace BusinessAccounting.UserControls
 {
     /// <summary>
     /// Interaction logic for GraphicsPage.xaml
     /// </summary>
-    public partial class GraphicsPage : UserControl
+    public partial class GraphicsPage
     {
         public GraphicsPage()
         {
@@ -30,15 +31,15 @@ namespace BusinessAccounting.UserControls
 
         private void BuildChart()
         {
-            wfHost.Visibility = Visibility.Hidden;
+            WfHost.Visibility = Visibility.Hidden;
 
-            var startDate = pickerPeriodStart.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
-            var endDate = pickerPeriodEnd.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
-            var displayValues = Convert.ToBoolean(comboDisplayValues.IsChecked.Value);
+            var startDate = PickerPeriodStart.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
+            var endDate = PickerPeriodEnd.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
+            var displayValues = Convert.ToBoolean(ComboDisplayValues.IsChecked.Value);
 
             var isBuilt = false;
 
-            var selectedChart = ((ComboBoxItem)comboChart.SelectedItem).Name;
+            var selectedChart = ((ComboBoxItem)ComboChart.SelectedItem).Name;
             switch (selectedChart)
             {
                 case "Period":
@@ -54,14 +55,14 @@ namespace BusinessAccounting.UserControls
 
             if (isBuilt)
             {
-                wfHost.Child = _chart;
-                wfHost.Visibility = Visibility.Visible;
+                WfHost.Child = _chart;
+                WfHost.Visibility = Visibility.Visible;
             }
             else
             {
-                ShowMessage(string.IsNullOrEmpty(App.sqlite.LastOperationErrorMessage)
+                ShowMessage(string.IsNullOrEmpty(App.Sqlite.LastErrorMessage)
                     ? "Нет данных для построения графика!"
-                    : $"Не удалось построить график! Ошибка:{Environment.NewLine}{App.sqlite.LastOperationErrorMessage}");
+                    : $"Не удалось построить график! Ошибка:{Environment.NewLine}{App.Sqlite.LastErrorMessage}");
             }
         }
 
@@ -92,17 +93,17 @@ namespace BusinessAccounting.UserControls
 
         private void PrintChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (comboChart.SelectedIndex == 0 &
-                pickerPeriodStart.SelectedDate != null &
-                pickerPeriodEnd.SelectedDate != null &
-                pickerPeriodStart.SelectedDate <= pickerPeriodEnd.SelectedDate)
+            if (ComboChart.SelectedIndex == 0 &
+                PickerPeriodStart.SelectedDate != null &
+                PickerPeriodEnd.SelectedDate != null &
+                PickerPeriodStart.SelectedDate <= PickerPeriodEnd.SelectedDate)
             {
                 e.CanExecute = true;
                 return;
             }
 
-            if (comboChart.SelectedIndex >= 1 &&
-                pickerPeriodStart.SelectedDate != null)
+            if (ComboChart.SelectedIndex >= 1 &&
+                PickerPeriodStart.SelectedDate != null)
             {
                 e.CanExecute = true;
             }
@@ -116,8 +117,8 @@ namespace BusinessAccounting.UserControls
         private void SaveChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute =
-                wfHost != null &&
-                wfHost.Visibility == Visibility.Visible;
+                WfHost != null &&
+                WfHost.Visibility == Visibility.Visible;
         }
 
         private void SaveChart_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -127,8 +128,8 @@ namespace BusinessAccounting.UserControls
 
         private bool BuildTotalsChartForPeriod(bool displayValues, DateTime startDate, DateTime endDate)
         {
-            const string sql = "select sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 "+
-                "union all select sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0";
+            const string sql = "select Sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 "+
+                "union all select Sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0";
 
             startDate = startDate + new TimeSpan(0, 0, 0);
             endDate = endDate + new TimeSpan(23, 59, 59);
@@ -144,7 +145,7 @@ namespace BusinessAccounting.UserControls
             _chart.Series.Add("");          
             _chart.Series[0].ChartType = SeriesChartType.Doughnut;
 
-            var result = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            var result = App.Sqlite.SelectTable(sql, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
 
             if (result != null && result.Rows.Count == 2)
             {
@@ -179,11 +180,11 @@ namespace BusinessAccounting.UserControls
             var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
 
             const string sqlIncomes =
-                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) as total " +
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, Sum(summa) as total " +
                 "from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 " +
                 "group by year, month;";
             const string sqlCharges =
-                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) as total " +
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, Sum(summa) as total " +
                 "from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0 " +
                 "group by year, month;";
 
@@ -209,7 +210,7 @@ namespace BusinessAccounting.UserControls
 
             var emptyResults = false;
 
-            var resultIncomes = App.sqlite.SelectTable(sqlIncomes, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            var resultIncomes = App.Sqlite.SelectTable(sqlIncomes, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
             if (resultIncomes != null && resultIncomes.Rows.Count >= 1)
             {
                 for (var a = 0; a < resultIncomes.Rows.Count; a++)
@@ -223,7 +224,7 @@ namespace BusinessAccounting.UserControls
                 emptyResults = true;
             }
 
-            var resultCharges = App.sqlite.SelectTable(sqlCharges, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+            var resultCharges = App.Sqlite.SelectTable(sqlCharges, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
             if (resultCharges != null && resultCharges.Rows.Count >= 1)
             {
                 for (var a = 0; a < resultCharges.Rows.Count; a++)
@@ -255,7 +256,7 @@ namespace BusinessAccounting.UserControls
         private bool BuildTotalsChartFor3Years(bool displayValues, DateTime date)
         {
             const string sql = 
-                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, sum(summa) from BA_CASH_OPERATIONS " +
+                "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, Sum(summa) from BA_CASH_OPERATIONS " +
                 "where datestamp between @d1 and @d2 and summa > 0 group by year, month;";
 
             _chart = new Chart();
@@ -291,7 +292,7 @@ namespace BusinessAccounting.UserControls
 
             for (var a = 0; a < 3; a++)
             {
-                var data = App.sqlite.SelectTable(sql, new SQLiteParameter("@d1", startDate), new SQLiteParameter("@d2", endDate));
+                var data = App.Sqlite.SelectTable(sql, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
                 if (data != null && data.Rows.Count > 0)
                 {
                     foreach (DataRow row in data.Rows)

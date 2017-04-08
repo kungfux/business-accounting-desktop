@@ -1,8 +1,8 @@
-﻿<Controls:MetroWindow 
+﻿<controls:MetroWindow 
     x:Class="BusinessAccounting.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     Title="Business Accounting"
     TitleCaps="False"
     Height="450"
@@ -14,13 +14,19 @@
     Icon="pack://application:,,,/Resources/favicon.ico"
     SaveWindowPosition="True">
 
-    <Controls:MetroWindow.Resources>
+    <controls:MetroWindow.Resources>
         <Image x:Key="ImageMenu" Source="pack://application:,,,/Resources/image_menu.png" />
         <Image x:Key="ImageCash" Source="pack://application:,,,/Resources/image_cash.png" />
         <Image x:Key="ImageMan" Source="pack://application:,,,/Resources/image_man.png" />
         <Image x:Key="ImageGraph" Source="pack://application:,,,/Resources/image_graph.png" />
-    </Controls:MetroWindow.Resources>
+    </controls:MetroWindow.Resources>
 
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button Name="OpenDbFolder" Content="Открыть папку с БД" Click="OpenDbFolder_OnClick"/>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+    
     <!-- this grid contain menu button -->
     <Grid>
         <Grid.Triggers>
@@ -121,4 +127,4 @@
     		x:Name="ButtonMenu" 
     		Click="ButtonMenu_Click"/>
     </Grid>
-</Controls:MetroWindow>
+</controls:MetroWindow>

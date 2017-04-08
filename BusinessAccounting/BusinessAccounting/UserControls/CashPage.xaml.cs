@@ -221,7 +221,7 @@ namespace BusinessAccounting.UserControls
 
         private void LoadHistory_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = LvHistory.Items.Count <= PreloadRecordsCount;
+            e.CanExecute = LvHistory != null && LvHistory.Items.Count <= PreloadRecordsCount;
         }
 
         private void LoadHistory_Executed(object sender, ExecutedRoutedEventArgs e)

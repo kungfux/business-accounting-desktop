@@ -38,7 +38,7 @@ namespace BusinessAccounting.UserControls
         // load _history of cash operations from db and fill listview
         private void LoadHistory(bool all = false)
         {
-            string query = $"select Id, datestamp, summa, Comment from ba_cash_operations order by Id desc {(all ? "" : "limit " + PreloadRecordsCount)};";
+            string query = $"select id, datestamp, summa, comment from ba_cash_operations order by id desc {(all ? "" : "limit " + PreloadRecordsCount)};";
 
             _history = new List<CashTransaction>();
 

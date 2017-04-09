@@ -3,7 +3,6 @@ using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
@@ -156,10 +155,7 @@ namespace BusinessAccounting.UserControls
 
         private void LoadSalaryHistory(bool all = false)
         {
-            string query =
-                string.Format("select Id, datestamp, summa, Comment from ba_cash_operations where Id in (select opid from ba_employees_cash where emid = @emid) order by Id desc;",
-                // TODO: add {0}
-                all ? "" : "limit " + PreloadRecordsCount);
+            string query =$"select id, datestamp, summa, comment from ba_cash_operations where id in (select opid from ba_employees_cash where emid = @emid) order by id desc {(all ? "" : "limit " + PreloadRecordsCount)};";
 
             _salaryHistory = new List<CashTransaction>();
 

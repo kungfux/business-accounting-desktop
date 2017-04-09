@@ -337,18 +337,17 @@ namespace BusinessAccounting.UserControls
                     break;
                 }
 
-            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1:dd MMMM yyyy}{0} Сумма: {2:C}{0} Комментарий: {3}",
+            await AskAndDeleteSalaryRecord(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1:dd MMMM yyyy}{0} Сумма: {2:C}{0} Комментарий: {3}",
                 Environment.NewLine, record.Date, record.Sum, record.Comment), record);
         }
 
-        private async Task AskAndDelete(string question, CashTransaction record)
+        private async Task AskAndDeleteSalaryRecord(string question, CashTransaction record)
         {
             MetroWindow w = (MetroWindow)Parent.GetParentObject().GetParentObject();
             MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                if (App.Sqlite.Delete("delete from ba_cash_operations where Id = @Id;",
-                        new XParameter("@Id", record.Id)) <= 0)
+                if (App.Sqlite.Delete("delete from ba_cash_operations where Id = @Id;", new XParameter("@Id", record.Id)) <= 0)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
                 }
@@ -357,6 +356,21 @@ namespace BusinessAccounting.UserControls
                     LoadSalaryHistory();
                 }
             }
+        }
+
+
+        private async Task<bool> AskAndDeleteEmployee(string question)
+        {
+            var w = (MetroWindow) Parent.GetParentObject().GetParentObject();
+            var result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
+            if (result == MessageDialogResult.Affirmative)
+            {
+                if (DeleteEmployee())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void ShowMessage(string text)
@@ -456,9 +470,10 @@ namespace BusinessAccounting.UserControls
                 _openedEmployee != null && _openedEmployee.Id != 0;
         }
 
-        private void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (DeleteEmployee())
+            var result = await AskAndDeleteEmployee($"Удалить сотрудника {_openedEmployee.FullName} ?");
+            if (result)
             {
                 ClearInputFields(false, true);
                 _openedEmployee = null;

@@ -95,12 +95,12 @@ namespace BusinessAccounting.UserControls
             LbEmployees.ItemsSource = _foundEmployees;
         }
 
-        private void OpenEmployee()
+        private void OpenEmployeeFromList()
         {
             if (LbEmployees.SelectedIndex != -1)
             {
-                DataRow r = App.Sqlite.SelectRow("select Id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where Id=@Id;",
-                    new XParameter("@Id", _foundEmployees[LbEmployees.SelectedIndex].Id));
+                DataRow r = App.Sqlite.SelectRow("select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;",
+                    new XParameter("@id", _foundEmployees[LbEmployees.SelectedIndex].Id));
                 if (r == null)
                 {
                     ShowMessage("Сотрудник не найден.");
@@ -119,11 +119,51 @@ namespace BusinessAccounting.UserControls
                 };
 
                 LoadPhoto();
-
                 DataContext = _openedEmployee;
                 LoadSalaryHistory();
                 ClearInputFields(false);
             }
+        }
+
+        private void OpenEmployeeAfterSave(int employeeId)
+        {
+            const string sqlLoadEmployeeById = "select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;";
+            const string sqlLoadEmployeeByMaxId = "select id, fullname, hired, fired, document, telephone, address, notes from ba_employees_cardindex order by id desc limit 1;";
+
+
+            DataRow employee;
+
+            if (employeeId != 0)
+            {
+                employee = App.Sqlite.SelectRow(sqlLoadEmployeeById, new XParameter("@id", employeeId));
+            }
+            else
+            {
+                employee = App.Sqlite.SelectRow(sqlLoadEmployeeByMaxId);
+            }
+
+            if (employee == null)
+            {
+                ShowMessage("Не удалось переоткрыть сотрудника.");
+                return;
+            }
+
+            _openedEmployee = new Employee()
+            {
+                Id = Convert.ToInt32(employee.ItemArray[0]),
+                FullName = employee.ItemArray[1].ToString(),
+                Hired = employee.ItemArray[2] != DBNull.Value ? (DateTime?)employee.ItemArray[2] : null,
+                Fired = employee.ItemArray[3] != DBNull.Value ? (DateTime?)employee.ItemArray[3] : null,
+                Document = employee.ItemArray[4].ToString(),
+                Telephone = employee.ItemArray[5].ToString(),
+                Address = employee.ItemArray[6].ToString(),
+                Notes = employee.ItemArray[7].ToString()
+            };
+
+            LoadPhoto();
+            DataContext = _openedEmployee;
+            LoadSalaryHistory();
+            ClearInputFields(false);
         }
 
         private void LoadPhoto()
@@ -159,8 +199,7 @@ namespace BusinessAccounting.UserControls
 
             _salaryHistory = new List<CashTransaction>();
 
-            DataTable historyRecords = App.Sqlite.SelectTable(query,
-                new XParameter("@emid", _openedEmployee.Id));
+            DataTable historyRecords = App.Sqlite.SelectTable(query, new XParameter("@emid", _openedEmployee.Id));
             if (historyRecords != null)
             {
                 foreach (DataRow row in historyRecords.Rows)
@@ -361,7 +400,7 @@ namespace BusinessAccounting.UserControls
 
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            OpenEmployee();
+            OpenEmployeeFromList();
         }
 
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -404,8 +443,10 @@ namespace BusinessAccounting.UserControls
             if (SaveEmployee())
             {
                 ClearInputFields(false, true);
+                var savedEmployeeId = _openedEmployee.Id;
                 _openedEmployee = null;
                 DataContext = _openedEmployee;
+                OpenEmployeeAfterSave(savedEmployeeId);
             }
         }
 
@@ -464,7 +505,7 @@ namespace BusinessAccounting.UserControls
 
         private void listFoundEmpl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OpenEmployee();
+            OpenEmployeeFromList();
         }
     }
 }

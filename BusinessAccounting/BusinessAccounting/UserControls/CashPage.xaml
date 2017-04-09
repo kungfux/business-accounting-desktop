@@ -107,15 +107,6 @@
 
                     <Button Grid.Row="8" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:CashPage.SaveRecordCommand}"/>
                     
-                    <!--<Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed" Name="GridSalary">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="110"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="27"/>
-                        </Grid.RowDefinitions>
-                    </Grid>-->
                 </Grid>
             </ScrollViewer>
         </GroupBox>

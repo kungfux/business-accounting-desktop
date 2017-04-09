@@ -163,16 +163,16 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="27"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="32"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="130"/>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
                     
                     <Label Grid.Row="0" Grid.Column="0" Content="Критерий поиска" HorizontalAlignment="Right"/>

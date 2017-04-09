@@ -62,18 +62,14 @@
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="3*"/>
                     <RowDefinition Height="5"/>
-                    <RowDefinition />
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
-                <DockPanel>
-                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Добавить фото" Command="{x:Static self:EmployeePage.LookupPhotoCommand}"/>
-                        <Button Content="Удалить фото" Command="{x:Static self:EmployeePage.RemovePhotoCommand}"/>
-                    </StackPanel>
-                    <Image Source="{Binding Path=Photo}" />
-                </DockPanel>
+                <!--<DockPanel>-->
+                    <Image Source="{Binding Path=Photo}" VerticalAlignment="Top" />
+                <!--</DockPanel>-->
 
                 <GridSplitter Grid.Row="0" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="{DynamicResource GrayBrush9}"/>
 
@@ -95,34 +91,47 @@
                             <RowDefinition Height="27"/>
                             <RowDefinition Height="27"/>
                             <RowDefinition Height="27"/>
-                            <RowDefinition Height="27"/>
-                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
+                        
                         <Label Grid.Row="0" Grid.Column="0" Content="Принят" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long" SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="PickerHiredDate"/>
+                        
                         <Label Grid.Row="0" Grid.Column="2" Content="Уволен" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <DatePicker Grid.Row="0" Grid.Column="3" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long" SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="PickerFiredDate"/>
+                        
                         <Label Grid.Row="1" Grid.Column="0" Content="Фамилия, имя, отчество" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <Label Grid.Row="2" Grid.Column="0" Content="Номер телефона" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <Label Grid.Row="3" Grid.Column="0" Content="Паспортные данные" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <Label Grid.Row="5" Grid.Column="0" Content="Адрес проживания" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <Label Grid.Row="7" Grid.Column="0" Content="Заметки" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <DatePicker Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long" SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="PickerHiredDate"/>
-                        <DatePicker Grid.Column="3" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long" SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="PickerFiredDate"/>
                         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True" controls:TextboxHelper.Watermark="Введите фамилию, имя и отчество сотрудника"  controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}"  Name="InputEmplName" Text="{Binding Path=FullName}"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Content="Номер телефона" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True" controls:TextboxHelper.Watermark="Введите контактный номер телефона" controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" Name="InputEmplPhone" Text="{Binding Path=Telephone}"/>
+                        
+                        <Label Grid.Row="3" Grid.Column="0" Content="Паспортные данные" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True" Grid.RowSpan="2" controls:TextboxHelper.Watermark="Введите паспортные данные" controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputEmplPassport" Text="{Binding Path=Document}"/>
+                        
+                        <Label Grid.Row="5" Grid.Column="0" Content="Адрес проживания" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True" Grid.RowSpan="2" controls:TextboxHelper.Watermark="Введите адрес проживания" controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputEmplAddress" Text="{Binding Path=Address}"/>
-                        <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="3" IsReadOnly="True" controls:TextboxHelper.Watermark="Введите прочие данные" controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputEmplNotes" Text="{Binding Path=Notes}"/>
-                        <Grid Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3">
+                        
+                        <Label Grid.Row="7" Grid.Column="0" Content="Заметки" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2" IsReadOnly="True" controls:TextboxHelper.Watermark="Введите прочие данные" controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputEmplNotes" Text="{Binding Path=Notes}"/>
+                        
+                        <Grid Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="Создать" Command="{x:Static self:EmployeePage.NewEmployeeCommand}"/>
-                            <Button Grid.Column="1" Content="Редактировать" Command="{x:Static self:EmployeePage.EditEmployeeCommand}"/>
-                            <Button Grid.Column="2" Content="Сохранить"  Command="{x:Static self:EmployeePage.SaveEmployeeCommand}"/>
-                            <Button Grid.Column="3" Content="Удалить" Command="{x:Static self:EmployeePage.DeleteEmployeeCommand}"/>
+                            <Button Grid.Row="0" Grid.Column="0" Content="Создать" Command="{x:Static self:EmployeePage.NewEmployeeCommand}"/>
+                            <Button Grid.Row="0" Grid.Column="1" Content="Редактировать" Command="{x:Static self:EmployeePage.EditEmployeeCommand}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Content="Сохранить"  Command="{x:Static self:EmployeePage.SaveEmployeeCommand}"/>
+                            <Button Grid.Row="0" Grid.Column="3" Content="Удалить" Command="{x:Static self:EmployeePage.DeleteEmployeeCommand}"/>
+                            <Button Grid.Row="1" Grid.Column="0" Content="Добавить фото" Command="{x:Static self:EmployeePage.LookupPhotoCommand}"/>
+                            <Button Grid.Row="1" Grid.Column="1" Content="Удалить фото" Command="{x:Static self:EmployeePage.RemovePhotoCommand}"/>
                         </Grid>
                     </Grid>
                 </ScrollViewer>

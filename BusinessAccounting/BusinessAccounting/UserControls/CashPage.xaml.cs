@@ -226,7 +226,10 @@ namespace BusinessAccounting.UserControls
 
         private void LoadHistory_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            LoadHistory(true);
+            using (new WaitCursor())
+            {
+                LoadHistory(true);
+            }
         }
         #endregion
 

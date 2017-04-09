@@ -43,6 +43,7 @@ namespace BusinessAccounting.UserControls
         private const int PreloadRecordsCount = 10;
 
         #region Functionality methods
+
         private void SearchEmployees(bool pShowAll = false)
         {
             _foundEmployees = new List<Employee>();
@@ -55,7 +56,7 @@ namespace BusinessAccounting.UserControls
             }
             else
             {
-                switch (((ComboBoxItem)ComboSearchCriteria.SelectedItem).Name)
+                switch (((ComboBoxItem) ComboSearchCriteria.SelectedItem).Name)
                 {
                     case "FullName":
                         query += " where fullname like @data;";
@@ -394,7 +395,10 @@ namespace BusinessAccounting.UserControls
 
         private void Find_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SearchEmployees();
+            using (new WaitCursor())
+            {
+                SearchEmployees();
+            }
         }
 
         private void FindAll_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -404,7 +408,10 @@ namespace BusinessAccounting.UserControls
 
         private void FindAll_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SearchEmployees(true);
+            using (new WaitCursor())
+            {
+                SearchEmployees(true);
+            }
         }
 
         private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -414,7 +421,10 @@ namespace BusinessAccounting.UserControls
 
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            OpenEmployeeFromList();
+            using (new WaitCursor())
+            {
+                OpenEmployeeFromList();
+            }
         }
 
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -454,13 +464,16 @@ namespace BusinessAccounting.UserControls
 
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (SaveEmployee())
+            using (new WaitCursor())
             {
-                ClearInputFields(false, true);
-                var savedEmployeeId = _openedEmployee.Id;
-                _openedEmployee = null;
-                DataContext = _openedEmployee;
-                OpenEmployeeAfterSave(savedEmployeeId);
+                if (SaveEmployee())
+                {
+                    ClearInputFields(false, true);
+                    var savedEmployeeId = _openedEmployee.Id;
+                    _openedEmployee = null;
+                    DataContext = _openedEmployee;
+                    OpenEmployeeAfterSave(savedEmployeeId);
+                }
             }
         }
 
@@ -491,12 +504,18 @@ namespace BusinessAccounting.UserControls
 
         private void LoadAll_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            LoadSalaryHistory(true);
+            using (new WaitCursor())
+            {
+                LoadSalaryHistory(true);
+            }
         }
 
         private void LookupPhoto_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ChoosePhoto();
+            using (new WaitCursor())
+            {
+                ChoosePhoto();
+            }
         }
 
         private void LookupPhoto_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -507,7 +526,10 @@ namespace BusinessAccounting.UserControls
 
         private void RemovePhoto_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ClearPhoto();
+            using (new WaitCursor())
+            {
+                ClearPhoto();
+            }
         }
 
         private void RemovePhoto_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -520,7 +542,10 @@ namespace BusinessAccounting.UserControls
 
         private void listFoundEmpl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OpenEmployeeFromList();
+            using (new WaitCursor())
+            {
+                OpenEmployeeFromList();
+            }
         }
     }
 }

@@ -111,7 +111,10 @@ namespace BusinessAccounting.UserControls
 
         private void PrintChart_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            BuildChart();
+            using (new WaitCursor())
+            {
+                BuildChart();
+            }
         }
 
         private void SaveChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)

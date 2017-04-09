@@ -135,12 +135,9 @@ namespace BusinessAccounting.UserControls
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(String property)
+        private void OnPropertyChanged(string property)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
     }
 }

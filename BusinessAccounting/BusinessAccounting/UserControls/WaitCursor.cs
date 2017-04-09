@@ -5,12 +5,11 @@ namespace BusinessAccounting.UserControls
 {
     public class WaitCursor : IDisposable
     {
-        private Cursor _previousCursor;
+        private readonly Cursor _previousCursor;
 
         public WaitCursor()
         {
             _previousCursor = Mouse.OverrideCursor;
-
             Mouse.OverrideCursor = Cursors.Wait;
         }
 

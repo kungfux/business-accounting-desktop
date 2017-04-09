@@ -48,8 +48,8 @@ namespace BusinessAccounting.UserControls
         {
             _foundEmployees = new List<Employee>();
 
-            DataTable employees = null;
-            string query = "select Id, fullname from ba_employees_cardindex";
+            DataTable employees;
+            var query = "select Id, fullname from ba_employees_cardindex";
             if (pShowAll)
             {
                 query += ";";
@@ -132,16 +132,7 @@ namespace BusinessAccounting.UserControls
             const string sqlLoadEmployeeByMaxId = "select id, fullname, hired, fired, document, telephone, address, notes from ba_employees_cardindex order by id desc limit 1;";
 
 
-            DataRow employee;
-
-            if (employeeId != 0)
-            {
-                employee = App.Sqlite.SelectRow(sqlLoadEmployeeById, new XParameter("@id", employeeId));
-            }
-            else
-            {
-                employee = App.Sqlite.SelectRow(sqlLoadEmployeeByMaxId);
-            }
+            var employee = employeeId != 0 ? App.Sqlite.SelectRow(sqlLoadEmployeeById, new XParameter("@id", employeeId)) : App.Sqlite.SelectRow(sqlLoadEmployeeByMaxId);
 
             if (employee == null)
             {
@@ -170,7 +161,7 @@ namespace BusinessAccounting.UserControls
         private void LoadPhoto()
         {
             // retrieve photo
-            System.Drawing.Image image = App.Sqlite.SelectBinaryAsImage("select photo from ba_employees_cardindex where Id=@Id;",
+            var image = App.Sqlite.SelectBinaryAsImage("select photo from ba_employees_cardindex where Id=@Id;",
                 new XParameter("@Id", _openedEmployee.Id));
 
             if (image != null)
@@ -278,45 +269,37 @@ namespace BusinessAccounting.UserControls
 
         private void ChoosePhoto()
         {
-            System.Windows.Forms.OpenFileDialog ofDialog = new System.Windows.Forms.OpenFileDialog
+            var ofDialog = new System.Windows.Forms.OpenFileDialog
             {
                 AddExtension = true,
                 Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png"
             };
-            if (ofDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (ofDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+            if (ofDialog.FileName == "") return;
+            try
             {
-                if (ofDialog.FileName != "")
-                {
-                    try
-                    {
-                        System.Drawing.Image image = System.Drawing.Image.FromFile(ofDialog.FileName); // check that file is image
-                        if (image == null)
-                        {
-                            ShowMessage("Выбранный файл не является изображением и не может быть использован в качестве фотографии!");
-                        }
-                    }
-                    catch (Exception) 
-                    {
-                        ShowMessage("Выбранный файл не является изображением и не может быть использован в качестве фотографии!");
-                    }
+                // check that file is image
+                System.Drawing.Image.FromFile(ofDialog.FileName); 
+            }
+            catch (Exception) 
+            {
+                ShowMessage("Выбранный файл не является изображением и не может быть использован в качестве фотографии!");
+            }
 
-                    if (!App.Sqlite.InsertFileIntoCell(ofDialog.FileName, "update ba_employees_cardindex set photo = @file where Id = @Id", "@file",
-                        new XParameter("@Id", _openedEmployee.Id)))
-                    {
-                        ShowMessage("Не удалось сохранить фотографию сотрудника!");
-                    }
-                    else
-                    {
-                        LoadPhoto();
-                    }
-                }
+            if (!App.Sqlite.InsertFileIntoCell(ofDialog.FileName, "update ba_employees_cardindex set photo = @file where Id = @Id", "@file",
+                new XParameter("@Id", _openedEmployee.Id)))
+            {
+                ShowMessage("Не удалось сохранить фотографию сотрудника!");
+            }
+            else
+            {
+                LoadPhoto();
             }
         }
 
         private void ClearPhoto()
         {
-            if (App.Sqlite.Update("update ba_employees_cardindex set photo = null where Id=@Id;",
-                    new XParameter("@Id", _openedEmployee.Id)) > 0)
+            if (App.Sqlite.Update("update ba_employees_cardindex set photo = null where Id=@Id;", new XParameter("@Id", _openedEmployee.Id)) > 0)
             {
                 LoadPhoto();
             }
@@ -331,15 +314,16 @@ namespace BusinessAccounting.UserControls
             CashTransaction record = null;
 
             for (var visual = sender as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is GridViewRowPresenter)
-                {
-                    var row = (GridViewRowPresenter)visual;
-                    record = (CashTransaction)row.DataContext;
-                    break;
-                }
+            {
+                var rowPresenter = visual as GridViewRowPresenter;
+                if (rowPresenter == null) continue;
+                var row = rowPresenter;
+                record = (CashTransaction)row.DataContext;
+                break;
+            }
 
             await AskAndDeleteSalaryRecord(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1:dd MMMM yyyy}{0} Сумма: {2:C}{0} Комментарий: {3}",
-                Environment.NewLine, record.Date, record.Sum, record.Comment), record);
+                Environment.NewLine, record?.Date, record?.Sum, record?.Comment), record);
         }
 
         private async Task AskAndDeleteSalaryRecord(string question, CashTransaction record)
@@ -377,11 +361,10 @@ namespace BusinessAccounting.UserControls
         private void ShowMessage(string text)
         {
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is MetroWindow)
-                {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage,
-                        MessageDialogStyle.Affirmative);
-                }
+            {
+                var window = visual as MetroWindow;
+                window?.ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
+            }
         }
         #endregion
 
@@ -458,7 +441,7 @@ namespace BusinessAccounting.UserControls
                 _openedEmployee != null &&
                 PickerHiredDate.IsEnabled &&
                 PickerHiredDate.SelectedDate != null &&
-                (PickerFiredDate.SelectedDate != null ? PickerHiredDate.SelectedDate <= PickerFiredDate.SelectedDate : true) &&
+                (PickerFiredDate.SelectedDate == null || PickerHiredDate.SelectedDate <= PickerFiredDate.SelectedDate) &&
                 InputEmplName.Text != "";
         }
 
@@ -540,7 +523,7 @@ namespace BusinessAccounting.UserControls
         }
         #endregion
 
-        private void listFoundEmpl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void listFoundEmpl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             using (new WaitCursor())
             {

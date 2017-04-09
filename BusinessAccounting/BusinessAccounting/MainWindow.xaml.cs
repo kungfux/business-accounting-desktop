@@ -53,7 +53,7 @@ namespace BusinessAccounting
             {
                 GridMenu.Visibility = Visibility.Visible;
             }
-            DoubleAnimation animation = new DoubleAnimation
+            var animation = new DoubleAnimation
             {
                 From = GridMenu.Opacity > 0 ? 1 : 0,
                 To = GridMenu.Opacity > 0 ? 0 : 1,
@@ -97,10 +97,10 @@ namespace BusinessAccounting
         private void ShowMessage(string text)
         {
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is MetroWindow)
-                {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
-                }
+            {
+                var window = visual as MetroWindow;
+                window?.ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
+            }
         }
 
         private void OpenDbFolder_OnClick(object sender, RoutedEventArgs e)

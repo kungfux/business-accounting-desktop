@@ -69,10 +69,10 @@ namespace BusinessAccounting.UserControls
         private void ShowMessage(string text)
         {
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is MetroWindow)
-                {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text);
-                }
+            {
+                var window = visual as MetroWindow;
+                window?.ShowMessageAsync("Проблемка", text);
+            }
         }
 
         private void SaveChart()
@@ -82,12 +82,10 @@ namespace BusinessAccounting.UserControls
                 AddExtension = true,
                 Filter = "Png (PNG)|*.png"
             };
-            if (sfDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (sfDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+            if (sfDialog.FileName != "")
             {
-                if (sfDialog.FileName != "")
-                {
-                    _chart.SaveImage(sfDialog.FileName, ChartImageFormat.Png);
-                }
+                _chart.SaveImage(sfDialog.FileName, ChartImageFormat.Png);
             }
         }
 

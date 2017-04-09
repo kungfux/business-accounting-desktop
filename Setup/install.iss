@@ -6,7 +6,7 @@
 ; ****************************************
 
 #define AppName 'Business Accounting'
-#define AppVersion '1.2'
+#define AppVersion '1.3'
 
 #define AppExecutable 'Business Accounting.exe'
 #define CompiledBinPath '..\BusinessAccounting\BusinessAccounting\bin\Release'

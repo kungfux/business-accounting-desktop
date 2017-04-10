@@ -38,7 +38,10 @@ namespace BusinessAccounting.UserControls
         // load _history of cash operations from db and fill listview
         private void LoadHistory(bool all = false)
         {
-            string query = $"select id, datestamp, summa, comment from ba_cash_operations order by id desc {(all ? "" : "limit " + PreloadRecordsCount)};";
+            string query = "select c.id, c.datestamp, c.summa, c.comment, e.fullname from ba_cash_operations as c " +
+                "left join ba_employees_cash as ec on ec.opid = c.id left " + 
+                "join ba_employees_cardindex as e on e.id = ec.emid " +
+                $"order by c.id desc { (all ? "" : "limit " + PreloadRecordsCount)};";
 
             _history = new List<CashTransaction>();
 
@@ -52,7 +55,8 @@ namespace BusinessAccounting.UserControls
                         Id = Convert.ToInt32(row.ItemArray[0].ToString()),
                         Date = Convert.ToDateTime(row.ItemArray[1]),
                         Sum = decimal.Parse(row.ItemArray[2].ToString()),
-                        Comment = row.ItemArray[3].ToString()
+                        Comment = row.ItemArray[3].ToString(),
+                        EmployeeFullName = row.ItemArray[4].ToString()
                     });
                 }
                 LvHistory.ItemsSource = _history;
@@ -154,14 +158,14 @@ namespace BusinessAccounting.UserControls
                 break;
             }
 
-            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1:dd MMMM yyyy}{0} Сумма: {2:C}{0} Комментарий: {3}",
-                Environment.NewLine, record?.Date, record?.Sum, record?.Comment), record);
+            await AskAndDelete(string.Format("Дата: {1:dd MMMM yyyy}{0}Сумма: {2:C}{0}Комментарий: {3}{0}Сотрудник: {4}",
+                Environment.NewLine, record?.Date, record?.Sum, record?.Comment, record?.EmployeeFullName), record);
         }
 
         private async Task AskAndDelete(string question, CashTransaction record)
         {
             var w = (MetroWindow)Parent.GetParentObject().GetParentObject();
-            var result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
+            var result = await w.ShowMessageAsync("Удалить запись?", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
                 const string deleteTransactionSql = "delete from ba_cash_operations where Id = @Id;";

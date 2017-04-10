@@ -8,5 +8,6 @@ namespace BusinessAccounting.UserControls
         public DateTime Date { get; set; }
         public decimal Sum { get; set; }
         public string Comment { get; set; }
+        public string EmployeeFullName { get; set; }
     }
 }

@@ -322,14 +322,14 @@ namespace BusinessAccounting.UserControls
                 break;
             }
 
-            await AskAndDeleteSalaryRecord(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1:dd MMMM yyyy}{0} Сумма: {2:C}{0} Комментарий: {3}",
+            await AskAndDeleteSalaryRecord(string.Format("Дата: {1:dd MMMM yyyy}{0}Сумма: {2:C}{0}Комментарий: {3}",
                 Environment.NewLine, record?.Date, record?.Sum, record?.Comment), record);
         }
 
         private async Task AskAndDeleteSalaryRecord(string question, CashTransaction record)
         {
             MetroWindow w = (MetroWindow)Parent.GetParentObject().GetParentObject();
-            MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
+            MessageDialogResult result = await w.ShowMessageAsync("Удалить запись?", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
                 if (App.Sqlite.Delete("delete from ba_cash_operations where Id = @Id;", new XParameter("@Id", record.Id)) <= 0)
@@ -347,7 +347,7 @@ namespace BusinessAccounting.UserControls
         private async Task<bool> AskAndDeleteEmployee(string question)
         {
             var w = (MetroWindow) Parent.GetParentObject().GetParentObject();
-            var result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
+            var result = await w.ShowMessageAsync("Удалить сотрудника?", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
                 if (DeleteEmployee())
@@ -468,7 +468,7 @@ namespace BusinessAccounting.UserControls
 
         private async void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var result = await AskAndDeleteEmployee($"Удалить сотрудника {_openedEmployee.FullName} ?");
+            var result = await AskAndDeleteEmployee($"ФИО: {_openedEmployee.FullName}");
             if (result)
             {
                 ClearInputFields(false, true);

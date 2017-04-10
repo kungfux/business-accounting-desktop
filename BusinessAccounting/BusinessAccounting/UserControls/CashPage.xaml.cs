@@ -25,6 +25,7 @@ namespace BusinessAccounting.UserControls
             InputDate.DisplayDate = DateTime.Now;
 
             LoadHistory();
+            LoadEmployees();
         }
 
         public static RoutedCommand SaveRecordCommand = new RoutedCommand();
@@ -233,13 +234,5 @@ namespace BusinessAccounting.UserControls
             }
         }
         #endregion
-
-        private void SalaryMode_IsCheckedChanged(object sender, EventArgs e)
-        {
-            if (ComboEmployee.Items.Count == 0)
-            {
-                LoadEmployees();
-            }
-        }
     }
 }

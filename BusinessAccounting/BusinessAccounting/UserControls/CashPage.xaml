@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:userControls="clr-namespace:BusinessAccounting.UserControls"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     x:Class="BusinessAccounting.UserControls.CashPage" 
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="850">
@@ -88,13 +89,10 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="108"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -104,21 +102,21 @@
                     </Grid.ColumnDefinitions>
                     
                     <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" />
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" SelectedDate="{Binding DefaultInputDate, Mode=OneWay, TargetNullValue={x:Static System:DateTime.Now}}"/>
                                        
                     <Label Grid.Row="1" Grid.Column="0" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                     <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите сумму" controls:TextboxHelper.ClearTextButton="True" Name="InputSum"/>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <TextBox Grid.Row="2" Grid.Column="1" Grid.RowSpan="4" controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
 
-                    <Label Grid.Row="6" Grid.Column="0" Content="Режим зарплаты" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <controls:ToggleSwitch Grid.Row="6" Grid.Column="1" OnLabel="" OffLabel="" Name="SalaryMode" Margin="0,5,0,0" HorizontalAlignment="Left"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Режим зарплаты" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+                    <controls:ToggleSwitch Grid.Row="3" Grid.Column="1" OnLabel="" OffLabel="" Name="SalaryMode" Margin="0,5"  HorizontalAlignment="Left"/>
 
-                    <Label Grid.Row="7" Grid.Column="0" Content="Сотрудник" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Visibility="{Binding IsChecked, ElementName=SalaryMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <ComboBox Grid.Row="7" Grid.Column="1" Name="ComboEmployee" DisplayMemberPath="FullName" Visibility="{Binding IsChecked, ElementName=SalaryMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Label Grid.Row="4" Grid.Column="0" Content="Сотрудник" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Visibility="{Binding IsChecked, ElementName=SalaryMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <ComboBox Grid.Row="4" Grid.Column="1" Name="ComboEmployee" DisplayMemberPath="FullName" Visibility="{Binding IsChecked, ElementName=SalaryMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                    <Button Grid.Row="8" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:CashPage.SaveRecordCommand}"/>
+                    <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:CashPage.SaveRecordCommand}"/>
                     
                 </Grid>
             </ScrollViewer>

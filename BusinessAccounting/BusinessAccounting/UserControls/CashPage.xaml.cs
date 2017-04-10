@@ -2,6 +2,7 @@
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,11 +23,12 @@ namespace BusinessAccounting.UserControls
         {
             InitializeComponent();
 
-            InputDate.DisplayDate = DateTime.Now;
-
+            LoadDefaultDate();
             LoadHistory();
             LoadEmployees();
         }
+
+        public DateTime DefaultInputDate { get; set; }
 
         public static RoutedCommand SaveRecordCommand = new RoutedCommand();
         public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
@@ -134,7 +136,7 @@ namespace BusinessAccounting.UserControls
 
             if (result)
             {
-                InputDate.SelectedDate = null;
+                InputDate.SelectedDate = DefaultInputDate;
                 InputSum.Text = "";
                 InputComment.Text = "";
                 ComboEmployee.SelectedIndex = -1;
@@ -190,6 +192,20 @@ namespace BusinessAccounting.UserControls
                 var window = visual as MetroWindow;
                 window?.ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
             }
+        }
+
+        private void LoadDefaultDate()
+        {
+            int offset;
+            if (int.TryParse(ConfigurationManager.AppSettings["DefaultInputDateOffset"], out offset))
+            {
+                DefaultInputDate = DateTime.Now.Date.AddDays(offset);
+            }
+            else
+            {
+                DefaultInputDate = DateTime.Now.Date;
+            }
+            InputDate.DataContext = this;
         }
         #endregion
 

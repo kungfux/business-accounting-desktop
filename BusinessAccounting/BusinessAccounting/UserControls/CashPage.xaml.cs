@@ -137,6 +137,7 @@ namespace BusinessAccounting.UserControls
                 InputSum.Text = "";
                 InputComment.Text = "";
                 ComboEmployee.SelectedIndex = -1;
+                SalaryMode.IsChecked = false;
                 LoadHistory();
             }
             else

@@ -49,7 +49,7 @@ namespace BusinessAccounting.UserControls
             _foundEmployees = new List<Employee>();
 
             DataTable employees;
-            var query = "select Id, fullname from ba_employees_cardindex";
+            var query = "select id, fullname from ba_employees_cardindex";
             if (pShowAll)
             {
                 query += ";";
@@ -161,8 +161,8 @@ namespace BusinessAccounting.UserControls
         private void LoadPhoto()
         {
             // retrieve photo
-            var image = App.Sqlite.SelectBinaryAsImage("select photo from ba_employees_cardindex where Id=@Id;",
-                new XParameter("@Id", _openedEmployee.Id));
+            var image = App.Sqlite.SelectBinaryAsImage("select photo from ba_employees_cardindex where id=@id;",
+                new XParameter("@id", _openedEmployee.Id));
 
             if (image != null)
             {
@@ -214,7 +214,7 @@ namespace BusinessAccounting.UserControls
             {
                 // change record
                 return App.Sqlite.Update(
-                    "update ba_employees_cardindex set hired = @h, fired = @f, fullname = @name, document = @d, telephone = @t, address = @a, notes = @n where Id = @Id;",
+                    "update ba_employees_cardindex set hired = @h, fired = @f, fullname = @name, document = @d, telephone = @t, address = @a, notes = @n where id = @id;",
                     new XParameter("@h", _openedEmployee.Hired),
                     new XParameter("@f", _openedEmployee.Fired),
                     new XParameter("@name", _openedEmployee.FullName),
@@ -222,7 +222,7 @@ namespace BusinessAccounting.UserControls
                     new XParameter("@t", _openedEmployee.Telephone),
                     new XParameter("@a", _openedEmployee.Address),
                     new XParameter("@n", _openedEmployee.Notes),
-                    new XParameter("@Id", _openedEmployee.Id)) > 0;
+                    new XParameter("@id", _openedEmployee.Id)) > 0;
             }
             else
             {
@@ -241,8 +241,8 @@ namespace BusinessAccounting.UserControls
 
         private bool DeleteEmployee()
         {
-            return App.Sqlite.Delete("delete from ba_employees_cardindex where Id=@Id",
-                new XParameter("@Id", _openedEmployee.Id)) > 0;
+            return App.Sqlite.Delete("delete from ba_employees_cardindex where id=@id",
+                new XParameter("@id", _openedEmployee.Id)) > 0;
         }
 
         private void ClearInputFields(bool isEnabled, bool clearValues = false)
@@ -286,8 +286,8 @@ namespace BusinessAccounting.UserControls
                 ShowMessage("Выбранный файл не является изображением и не может быть использован в качестве фотографии!");
             }
 
-            if (!App.Sqlite.InsertFileIntoCell(ofDialog.FileName, "update ba_employees_cardindex set photo = @file where Id = @Id", "@file",
-                new XParameter("@Id", _openedEmployee.Id)))
+            if (!App.Sqlite.InsertFileIntoCell(ofDialog.FileName, "update ba_employees_cardindex set photo = @file where id = @id", "@file",
+                new XParameter("@id", _openedEmployee.Id)))
             {
                 ShowMessage("Не удалось сохранить фотографию сотрудника!");
             }
@@ -299,7 +299,7 @@ namespace BusinessAccounting.UserControls
 
         private void ClearPhoto()
         {
-            if (App.Sqlite.Update("update ba_employees_cardindex set photo = null where Id=@Id;", new XParameter("@Id", _openedEmployee.Id)) > 0)
+            if (App.Sqlite.Update("update ba_employees_cardindex set photo = null where id=@id;", new XParameter("@id", _openedEmployee.Id)) > 0)
             {
                 LoadPhoto();
             }
@@ -332,7 +332,7 @@ namespace BusinessAccounting.UserControls
             MessageDialogResult result = await w.ShowMessageAsync("Удалить запись?", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                if (App.Sqlite.Delete("delete from ba_cash_operations where Id = @Id;", new XParameter("@Id", record.Id)) <= 0)
+                if (App.Sqlite.Delete("delete from ba_cash_operations where id = @id;", new XParameter("@id", record.Id)) <= 0)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
                 }

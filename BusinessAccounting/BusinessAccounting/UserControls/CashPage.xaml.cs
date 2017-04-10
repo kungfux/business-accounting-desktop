@@ -31,8 +31,8 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
 
         private const int PreloadRecordsCount = 30;
-        List<CashTransaction> _history = new List<CashTransaction>();
-        List<Employee> _employees = new List<Employee>();
+        private List<CashTransaction> _history = new List<CashTransaction>();
+        private List<Employee> _employees = new List<Employee>();
 
         #region Functionality methods
         // load _history of cash operations from db and fill listview
@@ -72,7 +72,7 @@ namespace BusinessAccounting.UserControls
         {
             _employees = new List<Employee>();
 
-            var employeesData = App.Sqlite.SelectTable("select Id, fullname from ba_employees_cardindex where fired is null;");
+            var employeesData = App.Sqlite.SelectTable("select id, fullname from ba_employees_cardindex where fired is null;");
             if (employeesData != null && employeesData.Rows.Count > 0)
             {
                 foreach (DataRow r in employeesData.Rows)
@@ -95,7 +95,7 @@ namespace BusinessAccounting.UserControls
             if (SalaryMode.IsChecked.HasValue && (bool) SalaryMode.IsChecked)
             {
                 const string insertTransactionSql = "insert into ba_cash_operations (datestamp, summa, Comment) values (@D, @s, @c);";
-                const string insertSalarySql = "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.Id) from ba_cash_operations));";
+                const string insertSalarySql = "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.id) from ba_cash_operations));";
 
                 App.Sqlite.BeginTransaction();
 
@@ -168,9 +168,9 @@ namespace BusinessAccounting.UserControls
             var result = await w.ShowMessageAsync("Удалить запись?", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                const string deleteTransactionSql = "delete from ba_cash_operations where Id = @Id;";
+                const string deleteTransactionSql = "delete from ba_cash_operations where id = @id;";
                 if (App.Sqlite.Delete(deleteTransactionSql,
-                        new XParameter("@Id", record.Id)) <= (int)XQuery.XResult.NothingChanged)
+                        new XParameter("@id", record.Id)) <= (int)XQuery.XResult.NothingChanged)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
                 }

@@ -29,7 +29,8 @@ namespace BusinessAccounting
             }
             else
             {
-                MessageBox.Show($"Не удалось установить соединение с базой данных.{Environment.NewLine}Детали: {Sqlite.LastErrorMessage}", "Проблемка");
+                MessageBox.Show($"Не удалось установить соединение с базой данных.{Environment.NewLine}Детали: {Sqlite.LastErrorMessage}", 
+                    "Business Accounting", MessageBoxButton.OK, MessageBoxImage.Stop);
                 Current.Shutdown();
             }
         }

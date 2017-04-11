@@ -136,7 +136,7 @@ namespace BusinessAccounting.UserControls
 
             if (result)
             {
-                InputDate.SelectedDate = DefaultInputDate;
+                InputDate.SelectedDate = DefaultInputDate != DateTime.MinValue ? DefaultInputDate : (DateTime?)null;
                 InputSum.Text = "";
                 InputComment.Text = "";
                 ComboEmployee.SelectedIndex = -1;
@@ -200,12 +200,8 @@ namespace BusinessAccounting.UserControls
             if (int.TryParse(ConfigurationManager.AppSettings["DefaultInputDateOffset"], out offset))
             {
                 DefaultInputDate = DateTime.Now.Date.AddDays(offset);
+                InputDate.DataContext = this;
             }
-            else
-            {
-                DefaultInputDate = DateTime.Now.Date;
-            }
-            InputDate.DataContext = this;
         }
         #endregion
 

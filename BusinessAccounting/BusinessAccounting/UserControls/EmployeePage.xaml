@@ -59,7 +59,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"/>
@@ -67,9 +67,12 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
-                <!--<DockPanel>-->
-                    <Image Source="{Binding Path=Photo}" VerticalAlignment="Top" />
-                <!--</DockPanel>-->
+                <Image Grid.Row="0" Source="{Binding Path=Photo}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill" Opacity=".5">
+                    <Image.Effect>
+                        <BlurEffect Radius="10" KernelType="Gaussian"/>
+                    </Image.Effect>
+                </Image>
+                <Image Grid.Row="0" Grid.Column="0" Source="{Binding Path=Photo}" VerticalAlignment="Center"/>
 
                 <GridSplitter Grid.Row="0" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="{DynamicResource GrayBrush9}"/>
 

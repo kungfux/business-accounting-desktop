@@ -7,8 +7,10 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using XDatabase;
 using XDatabase.Core;
 
@@ -32,6 +34,7 @@ namespace BusinessAccounting.UserControls
 
         public static RoutedCommand SaveRecordCommand = new RoutedCommand();
         public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
+        public static RoutedCommand DeleteHistoryRecordCommand = new RoutedCommand();
 
         private const int PreloadRecordsCount = 30;
         private List<CashTransaction> _history = new List<CashTransaction>();
@@ -41,7 +44,7 @@ namespace BusinessAccounting.UserControls
         // load _history of cash operations from db and fill listview
         private void LoadHistory(bool all = false)
         {
-            string query = "select c.id, c.datestamp, c.summa, c.comment, e.fullname from ba_cash_operations as c " +
+            var query = "select c.id, c.datestamp, c.summa, c.comment, e.fullname from ba_cash_operations as c " +
                 "left join ba_employees_cash as ec on ec.opid = c.id left " + 
                 "join ba_employees_cardindex as e on e.id = ec.emid " +
                 $"order by c.id desc { (all ? "" : "limit " + PreloadRecordsCount)};";
@@ -149,39 +152,29 @@ namespace BusinessAccounting.UserControls
             }
         }
 
-        private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)
+        private async Task AskAndDelete(CashTransaction record)
         {
-            CashTransaction record = null;
-
-            for (var visual = sender as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+            if (record == null)
             {
-                var rowPresenter = visual as GridViewRowPresenter;
-                if (rowPresenter == null) continue;
-                var row = rowPresenter;
-                record = (CashTransaction)row.DataContext;
-                break;
+                ShowMessage("Сначала выделите запись!");
+                return;
             }
 
-            await AskAndDelete(string.Format("Дата: {1:dd MMMM yyyy}{0}Сумма: {2:C}{0}Комментарий: {3}{0}Сотрудник: {4}",
-                Environment.NewLine, record?.Date, record?.Sum, record?.Comment, record?.EmployeeFullName), record);
-        }
-
-        private async Task AskAndDelete(string question, CashTransaction record)
-        {
             var w = (MetroWindow)Parent.GetParentObject().GetParentObject();
-            var result = await w.ShowMessageAsync("Удалить запись?", question, MessageDialogStyle.AffirmativeAndNegative);
+            var result = await w.ShowMessageAsync("Удалить запись?", 
+                string.Format("Дата: {1:dd MMMM yyyy}{0}Сумма: {2:C}{0}Комментарий: {3}{0}Сотрудник: {4}",
+                Environment.NewLine, record.Date, record.Sum, record.Comment, record.EmployeeFullName), 
+                MessageDialogStyle.AffirmativeAndNegative);
+
             if (result == MessageDialogResult.Affirmative)
             {
                 const string deleteTransactionSql = "delete from ba_cash_operations where id = @id;";
-                if (App.Sqlite.Delete(deleteTransactionSql,
-                        new XParameter("@id", record.Id)) <= (int)XQuery.XResult.NothingChanged)
+                if (App.Sqlite.Delete(deleteTransactionSql, new XParameter("@id", record.Id)) <= (int)XQuery.XResult.NothingChanged)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
+                    return;
                 }
-                else
-                {
-                    LoadHistory();
-                }
+                LoadHistory();
             }
         }
 
@@ -197,11 +190,9 @@ namespace BusinessAccounting.UserControls
         private void LoadDefaultDate()
         {
             int offset;
-            if (int.TryParse(ConfigurationManager.AppSettings["DefaultInputDateOffset"], out offset))
-            {
-                DefaultInputDate = DateTime.Now.Date.AddDays(offset);
-                InputDate.DataContext = this;
-            }
+            if (!int.TryParse(ConfigurationManager.AppSettings["DefaultInputDateOffset"], out offset)) return;
+            DefaultInputDate = DateTime.Now.Date.AddDays(offset);
+            InputDate.DataContext = this;
         }
         #endregion
 
@@ -230,7 +221,10 @@ namespace BusinessAccounting.UserControls
 
         private void SaveRecord_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SaveRecord();
+            using (new WaitCursor())
+            {
+                SaveRecord();
+            }
         }
 
         private void LoadHistory_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -245,6 +239,19 @@ namespace BusinessAccounting.UserControls
                 LoadHistory(true);
             }
         }
+
+        private void DeleteHistoryRecord_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = LvHistory.SelectedIndex >= 0;
+        }
+
+        private async void DeleteHistoryRecord_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (LvHistory.SelectedItem == null) return;
+            var record = (CashTransaction) LvHistory.SelectedItem;
+            await AskAndDelete(record);
+        }
+
         #endregion
     }
 }

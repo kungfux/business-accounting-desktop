@@ -35,6 +35,7 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand LoadAllHistoryCommand = new RoutedCommand();
         public static RoutedCommand LookupPhotoCommand = new RoutedCommand();
         public static RoutedCommand RemovePhotoCommand = new RoutedCommand();
+        public static RoutedCommand DeleteSalaryRecordCommand = new RoutedCommand();
 
         private Employee _openedEmployee;
         private List<CashTransaction> _salaryHistory;
@@ -309,37 +310,29 @@ namespace BusinessAccounting.UserControls
             }
         }
 
-        private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)
+        private async Task AskAndDeleteSalaryRecord(CashTransaction record)
         {
-            CashTransaction record = null;
-
-            for (var visual = sender as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+            if (record == null)
             {
-                var rowPresenter = visual as GridViewRowPresenter;
-                if (rowPresenter == null) continue;
-                var row = rowPresenter;
-                record = (CashTransaction)row.DataContext;
-                break;
+                ShowMessage("Сначала выделите запись!");
+                return;
             }
 
-            await AskAndDeleteSalaryRecord(string.Format("Дата: {1:dd MMMM yyyy}{0}Сумма: {2:C}{0}Комментарий: {3}",
-                Environment.NewLine, record?.Date, record?.Sum, record?.Comment), record);
-        }
+            var w = (MetroWindow)Parent.GetParentObject().GetParentObject();
+            var result = await w.ShowMessageAsync("Удалить запись?", 
+                string.Format("Дата: {1:dd MMMM yyyy}{0}Сумма: {2:C}{0}Комментарий: {3}",
+                Environment.NewLine, record.Date, record.Sum, record.Comment), 
+                MessageDialogStyle.AffirmativeAndNegative);
 
-        private async Task AskAndDeleteSalaryRecord(string question, CashTransaction record)
-        {
-            MetroWindow w = (MetroWindow)Parent.GetParentObject().GetParentObject();
-            MessageDialogResult result = await w.ShowMessageAsync("Удалить запись?", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                if (App.Sqlite.Delete("delete from ba_cash_operations where id = @id;", new XParameter("@id", record.Id)) <= 0)
+                const string deleteSql = "delete from ba_cash_operations where id = @id;";
+                if (App.Sqlite.Delete(deleteSql, new XParameter("@id", record.Id)) <= 0)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
+                    return;
                 }
-                else
-                {
-                    LoadSalaryHistory();
-                }
+                LoadSalaryHistory();
             }
         }
 
@@ -520,6 +513,18 @@ namespace BusinessAccounting.UserControls
             e.CanExecute =
                 _openedEmployee != null && _openedEmployee.Id != 0 &&
                 _openedEmployee.Photo != null;
+        }
+
+        private void DeleteSalaryRecord_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = LvSalaryHistory.SelectedIndex >= 0;
+        }
+
+        private async void DeleteSalaryRecord_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (LvSalaryHistory.SelectedItem == null) return;
+            var record = (CashTransaction)LvSalaryHistory.SelectedItem;
+            await AskAndDeleteSalaryRecord(record);
         }
         #endregion
 

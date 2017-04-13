@@ -27,6 +27,7 @@
         <CommandBinding Command="{x:Static self:EmployeePage.LoadAllHistoryCommand}" Executed="LoadAll_Executed" CanExecute="LoadAll_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.LookupPhotoCommand}" Executed="LookupPhoto_Executed" CanExecute="LookupPhoto_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.RemovePhotoCommand}" Executed="RemovePhoto_Executed" CanExecute="RemovePhoto_CanExecute" />
+        <CommandBinding Command="{x:Static self:EmployeePage.DeleteSalaryRecordCommand}" Executed="DeleteSalaryRecord_Executed" CanExecute="DeleteSalaryRecord_CanExecute" />
     </UserControl.CommandBindings>
 
     <Grid>
@@ -143,28 +144,25 @@
                         <Grid DockPanel.Dock="Bottom" Visibility="Hidden" Margin="10">
                             <!-- Grid Helper for ListViw -->
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="{Binding ElementName=col1, Path=ActualWidth}"/>
-                                <ColumnDefinition Width="{Binding ElementName=col2, Path=ActualWidth}"/>
-                                <ColumnDefinition Width="{Binding ElementName=col3, Path=ActualWidth}"/>
+                                <ColumnDefinition Width="{Binding ElementName=Col1, Path=ActualWidth}"/>
+                                <ColumnDefinition Width="{Binding ElementName=Col2, Path=ActualWidth}"/>
+                                <ColumnDefinition Width="{Binding ElementName=Col3, Path=ActualWidth}"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="{Binding ElementName=col5, Path=ActualWidth}"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="3" x:Name="HelperGrid"/>
                         </Grid>
                         <ListView Name="LvSalaryHistory" SelectionMode="Single" ScrollViewer.CanContentScroll="True">
+                            <ListView.ContextMenu>
+                            <ContextMenu>
+                                    <MenuItem Header="Удалить" Command="{x:Static self:EmployeePage.DeleteSalaryRecordCommand}"/>
+                            </ContextMenu>
+                            </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding Id}" x:Name="col1"/>
-                                    <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" x:Name="col2"/>
-                                    <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding Sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" x:Name="col3"/>
+                                    <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding Id}" x:Name="Col1"/>
+                                    <GridViewColumn Header="Дата" Width="Auto" DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd MMMM yyyy}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" x:Name="Col2"/>
+                                    <GridViewColumn Header="Сумма" Width="Auto" DisplayMemberBinding="{Binding Sum, StringFormat={}{0:C}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" x:Name="Col3"/>
                                     <GridViewColumn Header="Комментарий" Width="{Binding ElementName=HelperGrid, Path=ActualWidth}" DisplayMemberBinding="{Binding Comment}"/>
-                                    <GridViewColumn Width="Auto" x:Name="col5">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Content="Удалить" Click="bRemoveHistoryRecord_Click"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>

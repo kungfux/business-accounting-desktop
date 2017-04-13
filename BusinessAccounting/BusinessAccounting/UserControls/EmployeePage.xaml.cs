@@ -31,7 +31,6 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand SaveEmployeeCommand = new RoutedCommand();
         public static RoutedCommand DeleteEmployeeCommand = new RoutedCommand();
         public static RoutedCommand FindEmployeeCommand = new RoutedCommand();
-        public static RoutedCommand FindAllEmployeesCommand = new RoutedCommand();
         public static RoutedCommand LoadAllHistoryCommand = new RoutedCommand();
         public static RoutedCommand LookupPhotoCommand = new RoutedCommand();
         public static RoutedCommand RemovePhotoCommand = new RoutedCommand();
@@ -45,13 +44,14 @@ namespace BusinessAccounting.UserControls
 
         #region Functionality methods
 
-        private void SearchEmployees(bool pShowAll = false)
+        private void SearchEmployees()
         {
+            var showAll = string.IsNullOrEmpty(InputSearchData.Text);
             _foundEmployees = new List<Employee>();
 
             DataTable employees;
             var query = "select id, fullname from ba_employees_cardindex";
-            if (pShowAll)
+            if (showAll)
             {
                 query += ";";
             }
@@ -68,7 +68,7 @@ namespace BusinessAccounting.UserControls
                 }
             }
 
-            if (pShowAll)
+            if (showAll)
             {
                 employees = App.Sqlite.SelectTable(query);
             }
@@ -101,7 +101,7 @@ namespace BusinessAccounting.UserControls
         {
             if (LbEmployees.SelectedIndex != -1)
             {
-                DataRow r = App.Sqlite.SelectRow("select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;",
+                var r = App.Sqlite.SelectRow("select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;",
                     new XParameter("@id", _foundEmployees[LbEmployees.SelectedIndex].Id));
                 if (r == null)
                 {
@@ -359,14 +359,20 @@ namespace BusinessAccounting.UserControls
                 window?.ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
             }
         }
+
+        private void listFoundEmpl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                OpenEmployeeFromList();
+            }
+        }
         #endregion
 
         #region Commands
         private void Find_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =
-                ComboSearchCriteria.SelectedIndex != -1 && // search criteria is selected
-                InputSearchData.Text != ""; // search key is defined
+            e.CanExecute = ComboSearchCriteria.SelectedIndex != -1;
         }
 
         private void Find_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -374,19 +380,6 @@ namespace BusinessAccounting.UserControls
             using (new WaitCursor())
             {
                 SearchEmployees();
-            }
-        }
-
-        private void FindAll_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void FindAll_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            using (new WaitCursor())
-            {
-                SearchEmployees(true);
             }
         }
 
@@ -527,13 +520,5 @@ namespace BusinessAccounting.UserControls
             await AskAndDeleteSalaryRecord(record);
         }
         #endregion
-
-        private void listFoundEmpl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            using (new WaitCursor())
-            {
-                OpenEmployeeFromList();
-            }
-        }
     }
 }

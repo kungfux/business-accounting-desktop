@@ -23,7 +23,6 @@
         <CommandBinding Command="{x:Static self:EmployeePage.SaveEmployeeCommand}" Executed="Save_Executed" CanExecute="Save_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.DeleteEmployeeCommand}" Executed="Delete_Executed" CanExecute="Delete_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.FindEmployeeCommand}" Executed="Find_Executed" CanExecute="Find_CanExecute" />
-        <CommandBinding Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}" Executed="FindAll_Executed" CanExecute="FindAll_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.LoadAllHistoryCommand}" Executed="LoadAll_Executed" CanExecute="LoadAll_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.LookupPhotoCommand}" Executed="LookupPhoto_Executed" CanExecute="LookupPhoto_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.RemovePhotoCommand}" Executed="RemovePhoto_Executed" CanExecute="RemovePhoto_CanExecute" />
@@ -68,11 +67,6 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
-                <Image Grid.Row="0" Source="{Binding Path=Photo}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill" Opacity=".5">
-                    <Image.Effect>
-                        <BlurEffect Radius="10" KernelType="Gaussian"/>
-                    </Image.Effect>
-                </Image>
                 <Image Grid.Row="0" Grid.Column="0" Source="{Binding Path=Photo}" VerticalAlignment="Center"/>
 
                 <GridSplitter Grid.Row="0" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="{DynamicResource GrayBrush9}"/>
@@ -181,7 +175,6 @@
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="*"/>
@@ -202,12 +195,10 @@
                     <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите данные" controls:TextboxHelper.ClearTextButton="True" Name="InputSearchData"/>
 
                     <Button Grid.Row="2" Grid.Column="1" Content="Поиск" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindEmployeeCommand}"/>
-
-                    <Button Grid.Row="3" Grid.Column="1" Content="Найти всех" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindAllEmployeesCommand}"/>
                     
-                    <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Content="Результаты поиска:" HorizontalAlignment="Center"/>
+                    <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Результаты поиска:" HorizontalAlignment="Center"/>
 
-                    <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
                         <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="1">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                 <ListBox Name="LbEmployees" MouseDoubleClick="listFoundEmpl_MouseDoubleClick" DisplayMemberPath="FullName" ScrollViewer.CanContentScroll="True"/>
@@ -215,7 +206,7 @@
                         </Border>
                     </Grid>
 
-                    <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Content="Открыть досье" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.OpenEmployeeCommand}" />
+                    <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Открыть досье" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.OpenEmployeeCommand}" />
                     
                 </Grid>
             </ScrollViewer>

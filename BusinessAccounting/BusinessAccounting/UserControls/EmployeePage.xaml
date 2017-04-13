@@ -151,7 +151,7 @@
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="3" x:Name="HelperGrid"/>
                         </Grid>
-                        <ListView Name="LvSalaryHistory" SelectionMode="Single">
+                        <ListView Name="LvSalaryHistory" SelectionMode="Single" ScrollViewer.CanContentScroll="True">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding Id}" x:Name="col1"/>
@@ -212,7 +212,7 @@
                     <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
                         <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="1">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                <ListBox Name="LbEmployees" MouseDoubleClick="listFoundEmpl_MouseDoubleClick" DisplayMemberPath="FullName"/>
+                                <ListBox Name="LbEmployees" MouseDoubleClick="listFoundEmpl_MouseDoubleClick" DisplayMemberPath="FullName" ScrollViewer.CanContentScroll="True"/>
                             </ScrollViewer>
                         </Border>
                     </Grid>

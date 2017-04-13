@@ -62,7 +62,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="3" x:Name="HelperGrid"/>
                 </Grid>
-                <ListView Name="LvHistory" SelectionMode="Single">
+                <ListView Name="LvHistory" SelectionMode="Single" ScrollViewer.CanContentScroll="True">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="№" Width="Auto" DisplayMemberBinding="{Binding Id}" x:Name="col1"/>

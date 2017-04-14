@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using MahApps.Metro.Controls;
 using System.Windows.Media.Animation;
@@ -11,17 +10,14 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace BusinessAccounting
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
-            // set opacity and visibility to hidden to display objects in design mode
-            GridMenu.Opacity = 0;
-            GridMenu.Visibility = Visibility.Hidden;
+
+            MainMenuGrid.Opacity = 0;
+            MainMenuGrid.Visibility = Visibility.Hidden;
         }
 
         private void ButtonMenu_Click(object sender, RoutedEventArgs e)
@@ -49,31 +45,29 @@ namespace BusinessAccounting
 
         private void OpenCloseMenu()
         {
-            if (GridMenu.Opacity == 0)
+            if (MainMenuGrid.Opacity == 0)
             {
-                GridMenu.Visibility = Visibility.Visible;
+                MainMenuGrid.Visibility = Visibility.Visible;
             }
             var animation = new DoubleAnimation
             {
-                From = GridMenu.Opacity > 0 ? 1 : 0,
-                To = GridMenu.Opacity > 0 ? 0 : 1,
+                From = MainMenuGrid.Opacity > 0 ? 1 : 0,
+                To = MainMenuGrid.Opacity > 0 ? 0 : 1,
                 Duration = new Duration(TimeSpan.FromSeconds(0.5))
             };
             animation.Completed += animation_Completed;
-            GridMenu.BeginAnimation(OpacityProperty, animation);
+            MainMenuGrid.BeginAnimation(OpacityProperty, animation);
         }
 
         private void animation_Completed(object sender, EventArgs e)
         {
-            // hide objects if they are not visible already
-            // to avoid clicks
-            if (GridMenu.Opacity == 0)
+            if (MainMenuGrid.Opacity == 0)
             {
-                GridMenu.Visibility = Visibility.Hidden;
+                MainMenuGrid.Visibility = Visibility.Hidden;
             }
         }
 
-        private void LoadPage(UserControl pPage)
+        private void LoadPage(UIElement pPage)
         {
             UserControlGrid.Children.Clear();
             UserControlGrid.Children.Add(pPage);
@@ -90,7 +84,6 @@ namespace BusinessAccounting
 
             _windowDisplayed = true;
 
-            // open default page
             LoadPage(new UserControls.CashPage());
         }
 
@@ -103,7 +96,7 @@ namespace BusinessAccounting
             }
         }
 
-        private void OpenDbFolder_OnClick(object sender, RoutedEventArgs e)
+        private void OpenDbFolder_Click(object sender, RoutedEventArgs e)
         {
             string dbPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}";
 

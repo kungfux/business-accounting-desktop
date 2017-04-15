@@ -23,6 +23,8 @@ namespace BusinessAccounting.UserControls
         public EmployeePage()
         {
             InitializeComponent();
+
+            SearchEmployees(true);
         }
 
         public static RoutedCommand NewEmployeeCommand = new RoutedCommand();
@@ -38,51 +40,33 @@ namespace BusinessAccounting.UserControls
 
         private Employee _openedEmployee;
         private List<CashTransaction> _salaryHistory;
-        private List<Employee> _foundEmployees;
+        private List<Employee> _employeesLoadedList;
 
-        private const int PreloadRecordsCount = 10;
+        private const int PreloadHistoryRecordsCount = 10;
 
         #region Functionality methods
 
-        private void SearchEmployees()
+        private void SearchEmployees(bool onlyActive = false)
         {
-            var showAll = string.IsNullOrEmpty(InputSearchData.Text);
-            _foundEmployees = new List<Employee>();
+            var searchForAll = string.IsNullOrEmpty(InputSearchData.Text);
 
-            DataTable employees;
-            var query = "select id, fullname from ba_employees_cardindex";
-            if (showAll)
+            _employeesLoadedList = new List<Employee>();
+
+            DataTable employeesData;
+            if (onlyActive)
             {
-                query += ";";
+                employeesData = GetActiveEmployees();
             }
             else
             {
-                switch (((ComboBoxItem) ComboSearchCriteria.SelectedItem).Name)
-                {
-                    case "FullName":
-                        query += " where fullname like @data;";
-                        break;
-                    case "Phone":
-                        query += " where telephone like @data;";
-                        break;
-                }
+                employeesData = searchForAll ? GetAllEmployees() : GetAllEmployeesByMask(InputSearchData.Text);
             }
 
-            if (showAll)
+            if (employeesData != null && employeesData.Rows.Count > 0)
             {
-                employees = App.Sqlite.SelectTable(query);
-            }
-            else
-            {
-                employees = App.Sqlite.SelectTable(query,
-                    new XParameter("@data", "%" + InputSearchData.Text + "%"));
-            }
-
-            if (employees != null && employees.Rows.Count > 0)
-            {
-                foreach (DataRow r in employees.Rows)
+                foreach (DataRow r in employeesData.Rows)
                 {
-                    _foundEmployees.Add(new Employee()
+                    _employeesLoadedList.Add(new Employee
                     {
                         Id = Convert.ToInt32(r.ItemArray[0]),
                         FullName = r.ItemArray[1].ToString()
@@ -94,7 +78,25 @@ namespace BusinessAccounting.UserControls
                 ShowMessage("Никто не найден!");
             }
 
-            LbEmployees.ItemsSource = _foundEmployees;
+            LbEmployees.ItemsSource = _employeesLoadedList;
+        }
+
+        private static DataTable GetAllEmployees()
+        {
+            const string query = "select id, fullname from ba_employees_cardindex;";
+            return App.Sqlite.SelectTable(query);
+        }
+
+        private static DataTable GetActiveEmployees()
+        {
+            var query = "select id, fullname from ba_employees_cardindex where fired is null;";
+            return App.Sqlite.SelectTable(query);
+        }
+
+        private static DataTable GetAllEmployeesByMask(string mask)
+        {
+            const string query = "select id, fullname from ba_employees_cardindex where lower(fullname) like lower(@mask) or lower(telephone) like lower(@mask);";
+            return App.Sqlite.SelectTable(query, new XParameter("@mask", $"%{mask}%"));
         }
 
         private void OpenEmployeeFromList()
@@ -102,7 +104,7 @@ namespace BusinessAccounting.UserControls
             if (LbEmployees.SelectedIndex != -1)
             {
                 var r = App.Sqlite.SelectRow("select id, fullname, hired, fired, document, telephone, address, notes  from ba_employees_cardindex where id=@id;",
-                    new XParameter("@id", _foundEmployees[LbEmployees.SelectedIndex].Id));
+                    new XParameter("@id", _employeesLoadedList[LbEmployees.SelectedIndex].Id));
                 if (r == null)
                 {
                     ShowMessage("Сотрудник не найден.");
@@ -188,7 +190,7 @@ namespace BusinessAccounting.UserControls
 
         private void LoadSalaryHistory(bool all = false)
         {
-            string query =$"select id, datestamp, summa, comment from ba_cash_operations where id in (select opid from ba_employees_cash where emid = @emid) order by id desc {(all ? "" : "limit " + PreloadRecordsCount)};";
+            string query =$"select id, datestamp, summa, comment from ba_cash_operations where id in (select opid from ba_employees_cash where emid = @emid) order by id desc {(all ? "" : "limit " + PreloadHistoryRecordsCount)};";
 
             _salaryHistory = new List<CashTransaction>();
 
@@ -370,11 +372,6 @@ namespace BusinessAccounting.UserControls
         #endregion
 
         #region Commands
-        private void Find_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = ComboSearchCriteria.SelectedIndex != -1;
-        }
-
         private void Find_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             using (new WaitCursor())
@@ -468,7 +465,7 @@ namespace BusinessAccounting.UserControls
             e.CanExecute = 
                 _openedEmployee != null &&
                 _openedEmployee.Id != 0 &&
-                LvSalaryHistory.Items.Count <= PreloadRecordsCount;
+                LvSalaryHistory.Items.Count <= PreloadHistoryRecordsCount;
         }
 
         private void LoadAll_Executed(object sender, ExecutedRoutedEventArgs e)

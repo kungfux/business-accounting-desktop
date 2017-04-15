@@ -6,7 +6,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:userControls="clr-namespace:BusinessAccounting.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="700">
+             d:DesignHeight="400"
+             d:DesignWidth="800">
 
     <UserControl.Resources>
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_graph.png" />
@@ -53,16 +54,16 @@
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Данные за" HorizontalAlignment="Right"/>
@@ -77,7 +78,8 @@
 
                     <DatePicker Grid.Row="2" Grid.Column="1" controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" Name="PickerPeriodEnd" SelectedDateFormat="Short" SelectedDate="{Binding DefaultEndDate, Mode=OneWay}" IsEnabled="{Binding ElementName=ComboChart, Path=SelectedIndex, Converter={StaticResource IndexToBooleanConverter}}"/>
 
-                    <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="ComboDisplayValues" ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Показывать значения" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                    <controls:ToggleSwitch Grid.Row="3" Grid.Column="1" OnLabel="" OffLabel="" Name="ComboDisplayValues" Margin="0,5"  HorizontalAlignment="Left" ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>
 
                     <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.PrintChartCommand}"/>
                     <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.SaveChartCommand}"/>

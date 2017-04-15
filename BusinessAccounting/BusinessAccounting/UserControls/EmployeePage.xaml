@@ -186,7 +186,7 @@
                     <Label Grid.Row="0" Grid.Column="0" Content="Данные для поиска" HorizontalAlignment="Right"/>
                     <TextBox Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Введите данные" controls:TextboxHelper.ClearTextButton="True" Name="InputSearchData" TextChanged="InputSearchData_OnTextChanged"/>
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Только активные" HorizontalAlignment="Right"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Только активные" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                     <controls:ToggleSwitch Grid.Row="1" Grid.Column="1" Name="CheckBoxOnlyActive" Margin="0,5" HorizontalAlignment="Left" OnLabel="" OffLabel="" IsChecked="true" IsCheckedChanged="CheckBoxOnlyActive_OnIsCheckedChanged"/>
                     
                     <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Результаты поиска:" HorizontalAlignment="Center"/>

@@ -22,9 +22,9 @@ namespace BusinessAccounting.UserControls
     {
         public EmployeePage()
         {
-            InitializeComponent();
+            InitializeComponent();           
 
-            SearchEmployees(true);
+            SearchEmployees();
         }
 
         public static RoutedCommand NewEmployeeCommand = new RoutedCommand();
@@ -32,7 +32,6 @@ namespace BusinessAccounting.UserControls
         public static RoutedCommand EditEmployeeCommand = new RoutedCommand();
         public static RoutedCommand SaveEmployeeCommand = new RoutedCommand();
         public static RoutedCommand DeleteEmployeeCommand = new RoutedCommand();
-        public static RoutedCommand FindEmployeeCommand = new RoutedCommand();
         public static RoutedCommand LoadAllHistoryCommand = new RoutedCommand();
         public static RoutedCommand LookupPhotoCommand = new RoutedCommand();
         public static RoutedCommand RemovePhotoCommand = new RoutedCommand();
@@ -46,20 +45,20 @@ namespace BusinessAccounting.UserControls
 
         #region Functionality methods
 
-        private void SearchEmployees(bool onlyActive = false)
+        private void SearchEmployees()
         {
             var searchForAll = string.IsNullOrEmpty(InputSearchData.Text);
 
             _employeesLoadedList = new List<Employee>();
 
             DataTable employeesData;
-            if (onlyActive)
+            if (searchForAll)
             {
-                employeesData = GetActiveEmployees();
+                employeesData = GetAllEmployees(CheckBoxOnlyActive.IsChecked);
             }
             else
             {
-                employeesData = searchForAll ? GetAllEmployees() : GetAllEmployeesByMask(InputSearchData.Text);
+                employeesData = GetAllEmployeesByMask(InputSearchData.Text, CheckBoxOnlyActive.IsChecked);
             }
 
             if (employeesData != null && employeesData.Rows.Count > 0)
@@ -73,29 +72,21 @@ namespace BusinessAccounting.UserControls
                     });
                 }
             }
-            else
-            {
-                ShowMessage("Никто не найден!");
-            }
 
             LbEmployees.ItemsSource = _employeesLoadedList;
         }
 
-        private static DataTable GetAllEmployees()
+        private static DataTable GetAllEmployees(bool? onlyActive)
         {
-            const string query = "select id, fullname from ba_employees_cardindex;";
+            var activeSqlFilter = onlyActive == true ? "where fired is null" : "";
+            var query = $"select id, fullname from ba_employees_cardindex {activeSqlFilter};";
             return App.Sqlite.SelectTable(query);
         }
 
-        private static DataTable GetActiveEmployees()
+        private static DataTable GetAllEmployeesByMask(string mask, bool? onlyActive)
         {
-            var query = "select id, fullname from ba_employees_cardindex where fired is null;";
-            return App.Sqlite.SelectTable(query);
-        }
-
-        private static DataTable GetAllEmployeesByMask(string mask)
-        {
-            const string query = "select id, fullname from ba_employees_cardindex where lower(fullname) like lower(@mask) or lower(telephone) like lower(@mask);";
+            var activeSqlFilter = onlyActive == true ? "and fired is null" : "";
+            var query = $"select id, fullname from ba_employees_cardindex where (fullname like @mask or document like @mask or telephone like @mask or address like @mask or notes like @mask) {activeSqlFilter};";
             return App.Sqlite.SelectTable(query, new XParameter("@mask", $"%{mask}%"));
         }
 
@@ -164,12 +155,11 @@ namespace BusinessAccounting.UserControls
         private void LoadPhoto()
         {
             // retrieve photo
-            var image = App.Sqlite.SelectBinaryAsImage("select photo from ba_employees_cardindex where id=@id;",
-                new XParameter("@id", _openedEmployee.Id));
+            var image = App.Sqlite.SelectBinaryAsImage("select photo from ba_employees_cardindex where id=@id;", new XParameter("@id", _openedEmployee.Id));
 
             if (image != null)
             {
-                using (MemoryStream memory = new MemoryStream())
+                using (var memory = new MemoryStream())
                 {
                     image.Save(memory, ImageFormat.Png);
                     memory.Position = 0;
@@ -369,10 +359,8 @@ namespace BusinessAccounting.UserControls
                 OpenEmployeeFromList();
             }
         }
-        #endregion
 
-        #region Commands
-        private void Find_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void CheckBoxOnlyActive_OnIsCheckedChanged(object sender, EventArgs e)
         {
             using (new WaitCursor())
             {
@@ -380,6 +368,16 @@ namespace BusinessAccounting.UserControls
             }
         }
 
+        private void InputSearchData_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                SearchEmployees();
+            }
+        }
+        #endregion
+
+        #region Commands
         private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = LbEmployees.SelectedIndex != -1; // employee is selected

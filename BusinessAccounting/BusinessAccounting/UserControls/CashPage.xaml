@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:userControls="clr-namespace:BusinessAccounting.UserControls"
-    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     x:Class="BusinessAccounting.UserControls.CashPage" 
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="850">
@@ -100,7 +100,7 @@
                     </Grid.ColumnDefinitions>
                     
                     <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" SelectedDate="{Binding DefaultInputDate, Mode=OneWay, TargetNullValue={x:Static System:DateTime.Now}}"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" SelectedDate="{Binding DefaultInputDate, Mode=OneWay, TargetNullValue={x:Static system:DateTime.Now}}"/>
                                        
                     <Label Grid.Row="1" Grid.Column="0" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                     <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите сумму" controls:TextboxHelper.ClearTextButton="True" Name="InputSum"/>

@@ -22,7 +22,6 @@
         <CommandBinding Command="{x:Static self:EmployeePage.EditEmployeeCommand}" Executed="Edit_Executed" CanExecute="Edit_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.SaveEmployeeCommand}" Executed="Save_Executed" CanExecute="Save_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.DeleteEmployeeCommand}" Executed="Delete_Executed" CanExecute="Delete_CanExecute" />
-        <CommandBinding Command="{x:Static self:EmployeePage.FindEmployeeCommand}" Executed="Find_Executed" />
         <CommandBinding Command="{x:Static self:EmployeePage.LoadAllHistoryCommand}" Executed="LoadAll_Executed" CanExecute="LoadAll_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.LookupPhotoCommand}" Executed="LookupPhoto_Executed" CanExecute="LookupPhoto_CanExecute" />
         <CommandBinding Command="{x:Static self:EmployeePage.RemovePhotoCommand}" Executed="RemovePhoto_Executed" CanExecute="RemovePhoto_CanExecute" />
@@ -172,22 +171,23 @@
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="27"/>
-                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="ФИО или телефон" HorizontalAlignment="Right"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Введите данные" controls:TextboxHelper.ClearTextButton="True" Name="InputSearchData"/>
+                    <Label Grid.Row="0" Grid.Column="0" Content="Данные для поиска" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Введите данные" controls:TextboxHelper.ClearTextButton="True" Name="InputSearchData" TextChanged="InputSearchData_OnTextChanged"/>
 
-                    <Button Grid.Row="1" Grid.Column="1" Content="Поиск" Margin="0,5,0,0" Command="{x:Static self:EmployeePage.FindEmployeeCommand}"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Только активные" HorizontalAlignment="Right"/>
+                    <controls:ToggleSwitch Grid.Row="1" Grid.Column="1" Name="CheckBoxOnlyActive" Margin="0,5" HorizontalAlignment="Left" OnLabel="" OffLabel="" IsChecked="true" IsCheckedChanged="CheckBoxOnlyActive_OnIsCheckedChanged"/>
                     
                     <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Результаты поиска:" HorizontalAlignment="Center"/>
 

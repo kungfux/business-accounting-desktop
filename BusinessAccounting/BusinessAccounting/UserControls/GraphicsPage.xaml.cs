@@ -1,8 +1,8 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
+using System.Configuration;
 using System.Data;
-using System.Data.SQLite;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +21,12 @@ namespace BusinessAccounting.UserControls
         public GraphicsPage()
         {
             InitializeComponent();
+
+            LoadDefaultDates();
         }
+
+        public DateTime DefaultStartDate { get; set; }
+        public DateTime DefaultEndDate { get; set; }
 
         public static readonly RoutedCommand PrintChartCommand = new RoutedCommand();
         public static readonly RoutedCommand SaveChartCommand = new RoutedCommand();
@@ -342,6 +347,18 @@ namespace BusinessAccounting.UserControls
             chartArea.AxisY.ScrollBar.IsPositionedInside = true;
             chartArea.AxisY.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
             chartArea.AxisY.ScaleView.SmallScrollMinSize = 0;
+        }
+
+        private void LoadDefaultDates()
+        {
+            int startOffset;
+            int endOffset;
+            if (!int.TryParse(ConfigurationManager.AppSettings["DefaultStartDateOffset"], out startOffset)) return;
+            if (!int.TryParse(ConfigurationManager.AppSettings["DefaultEndDateOffset"], out endOffset)) return;
+            DefaultStartDate = DateTime.Now.Date.AddDays(startOffset);
+            DefaultEndDate = DateTime.Now.Date.AddDays(endOffset);
+            PickerPeriodStart.DataContext = this;
+            PickerPeriodEnd.DataContext = this;
         }
     }
 }

@@ -25,8 +25,8 @@ namespace BusinessAccounting.UserControls
             LoadDefaultDates();
         }
 
-        public DateTime DefaultStartDate { get; set; }
-        public DateTime DefaultEndDate { get; set; }
+        public DateTime? DefaultStartDate { get; set; }
+        public DateTime? DefaultEndDate { get; set; }
 
         public static readonly RoutedCommand PrintChartCommand = new RoutedCommand();
         public static readonly RoutedCommand SaveChartCommand = new RoutedCommand();
@@ -38,10 +38,14 @@ namespace BusinessAccounting.UserControls
         {
             int startOffset;
             int endOffset;
-            if (!int.TryParse(ConfigurationManager.AppSettings["DefaultStartDateOffset"], out startOffset)) return;
-            if (!int.TryParse(ConfigurationManager.AppSettings["DefaultEndDateOffset"], out endOffset)) return;
-            DefaultStartDate = DateTime.Now.Date.AddDays(startOffset);
-            DefaultEndDate = DateTime.Now.Date.AddDays(endOffset);
+            if (int.TryParse(ConfigurationManager.AppSettings["DefaultStartDateOffset"], out startOffset))
+            {
+                DefaultStartDate = DateTime.Now.Date.AddDays(startOffset);
+            }
+            if (int.TryParse(ConfigurationManager.AppSettings["DefaultEndDateOffset"], out endOffset))
+            {
+                DefaultEndDate = DateTime.Now.Date.AddDays(endOffset);
+            }
         }
 
         #region Charts

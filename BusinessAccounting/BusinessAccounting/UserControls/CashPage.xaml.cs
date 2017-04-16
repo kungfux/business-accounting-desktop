@@ -5,12 +5,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using XDatabase;
 using XDatabase.Core;
 
@@ -25,12 +21,14 @@ namespace BusinessAccounting.UserControls
         {
             InitializeComponent();
 
+            InputDate.DataContext = this;
+
             LoadDefaultDate();
             LoadHistory();
             LoadEmployees();
         }
 
-        public DateTime DefaultInputDate { get; set; }
+        public DateTime? DefaultInputDate { get; set; }
 
         public static RoutedCommand SaveRecordCommand = new RoutedCommand();
         public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
@@ -83,7 +81,7 @@ namespace BusinessAccounting.UserControls
             {
                 foreach (DataRow r in employeesData.Rows)
                 {
-                    _employees.Add(new Employee()
+                    _employees.Add(new Employee
                     {
                         Id = Convert.ToInt32(r.ItemArray[0]),
                         FullName = r.ItemArray[1].ToString()
@@ -139,7 +137,7 @@ namespace BusinessAccounting.UserControls
 
             if (result)
             {
-                InputDate.SelectedDate = DefaultInputDate != DateTime.MinValue ? DefaultInputDate : (DateTime?)null;
+                InputDate.SelectedDate = DefaultInputDate;
                 InputSum.Text = "";
                 InputComment.Text = "";
                 ComboEmployee.SelectedIndex = -1;
@@ -192,7 +190,6 @@ namespace BusinessAccounting.UserControls
             int offset;
             if (!int.TryParse(ConfigurationManager.AppSettings["DefaultInputDateOffset"], out offset)) return;
             DefaultInputDate = DateTime.Now.Date.AddDays(offset);
-            InputDate.DataContext = this;
         }
         #endregion
 

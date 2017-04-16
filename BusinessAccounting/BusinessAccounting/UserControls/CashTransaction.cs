@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessAccounting.UserControls
 {
@@ -12,5 +8,6 @@ namespace BusinessAccounting.UserControls
         public DateTime Date { get; set; }
         public decimal Sum { get; set; }
         public string Comment { get; set; }
+        public string EmployeeFullName { get; set; }
     }
 }

@@ -6,7 +6,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:userControls="clr-namespace:BusinessAccounting.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="700">
+             d:DesignHeight="400"
+             d:DesignWidth="800">
 
     <UserControl.Resources>
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_graph.png" />
@@ -20,80 +21,70 @@
 
     <Grid>
         <Grid.Triggers>
-            <!-- Animates the rectangle's opacity. -->
             <EventTrigger RoutedEvent="Grid.Loaded">
                 <BeginStoryboard>
                     <Storyboard>
-                        <DoubleAnimation
-                                    Storyboard.TargetProperty="Opacity"
-                                    From="0.0" To="1.0" Duration="0:0:0.5" />
+                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:0.5" />
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
         </Grid.Triggers>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition />
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0"
-    		Content="           Графики"
-            Grid.ColumnSpan="2"
-    		VerticalContentAlignment="Center"
-    		FontSize="14"
-    		Foreground="White"
-    		Background="{DynamicResource AccentColorBrush}"/>
-        <Label Grid.Row="0"
-            Content="{StaticResource ImageHeader}" />
-        <Grid Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3" />
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <GroupBox
-                Grid.Column="0"
-                Header="График">
-                <WindowsFormsHost Margin="5,5,5,5" Name="WfHost" Visibility="Hidden"/>
-            </GroupBox>
-            <GridSplitter Grid.Column="1" ResizeDirection="Columns" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Width="1" />
-            <GroupBox
-                Grid.Column="2"
-                Header="Параметры графика">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal" Height="50" Background="{DynamicResource AccentColorBrush}">
+            <Label Content="{StaticResource ImageHeader}" />
+            <Label Content="Графики" VerticalContentAlignment="Center" FontSize="14" Foreground="White" />
+        </StackPanel>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="График">
+            <WindowsFormsHost Margin="5,5,5,5" Name="WfHost" Visibility="Hidden"/>
+        </GroupBox>
+
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}" />
+
+        <GroupBox Grid.Row="1" Grid.Column="2" Header="Параметры графика">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid>
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Данные за" HorizontalAlignment="Right"/>
-                            <Label Grid.Row="1" Grid.Column="0" Content="Период / год" HorizontalAlignment="Right"/>
-                            <ComboBox Grid.Row="0" Grid.Column="1" Name="ComboChart">
-                                <ComboBoxItem Content="Выбранный период" Name="Period" IsSelected="True"/>
-                                <ComboBoxItem Content="Статистика за год" Name="Year"/>
-                                <ComboBoxItem Content="Сравнение за 3 года" Name="Year3"/>
-                            </ComboBox>
-                            <DatePicker Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Начальная дата" FirstDayOfWeek="Monday" 
-                                Name="PickerPeriodStart" SelectedDateFormat="Short"/>
-                            <DatePicker Grid.Row="2" Grid.Column="1" controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" 
-                                Name="PickerPeriodEnd" SelectedDateFormat="Short"
-                                        IsEnabled="{Binding ElementName=ComboChart, Path=SelectedIndex, Converter={StaticResource IndexToBooleanConverter}}"/>
-                            <CheckBox Grid.Row="3" Grid.Column="1" Content="Показывать значения" Name="ComboDisplayValues" 
-                                      ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>
-                            <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.PrintChartCommand}"/>
-                            <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.SaveChartCommand}"/>
-                        </Grid>
-                    </ScrollViewer>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="Данные за" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1" Name="ComboChart">
+                        <ComboBoxItem Content="Выбранный период" Name="Period" IsSelected="True"/>
+                        <ComboBoxItem Content="Статистика за год" Name="Year"/>
+                        <ComboBoxItem Content="Сравнение за 3 года" Name="Year3"/>
+                    </ComboBox>
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="Период / год" HorizontalAlignment="Right"/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Начальная дата" FirstDayOfWeek="Monday" Name="PickerPeriodStart" SelectedDateFormat="Short" SelectedDate="{Binding DefaultStartDate, Mode=OneWay}"/>
+
+                    <DatePicker Grid.Row="2" Grid.Column="1" controls:TextboxHelper.Watermark="Конечная дата" FirstDayOfWeek="Monday" Name="PickerPeriodEnd" SelectedDateFormat="Short" SelectedDate="{Binding DefaultEndDate, Mode=OneWay}" IsEnabled="{Binding ElementName=ComboChart, Path=SelectedIndex, Converter={StaticResource IndexToBooleanConverter}}"/>
+
+                    <Label Grid.Row="3" Grid.Column="0" Content="Показывать значения" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                    <controls:ToggleSwitch Grid.Row="3" Grid.Column="1" OnLabel="" OffLabel="" Name="ComboDisplayValues" Margin="0,5"  HorizontalAlignment="Left" ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>
+
+                    <Button Grid.Row="4" Grid.Column="1" Content="Построить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.PrintChartCommand}"/>
+                    <Button Grid.Row="5" Grid.Column="1" Content="Сохранить" Margin="0,5,0,0" Command="{x:Static userControls:GraphicsPage.SaveChartCommand}"/>
                 </Grid>
-            </GroupBox>
-        </Grid>
+            </ScrollViewer>
+        </GroupBox>
     </Grid>
 </UserControl>

@@ -2,10 +2,9 @@
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using XDatabase;
@@ -22,27 +21,35 @@ namespace BusinessAccounting.UserControls
         {
             InitializeComponent();
 
-            InputDate.DisplayDate = DateTime.Now;
+            InputDate.DataContext = this;
 
+            LoadDefaultDate();
             LoadHistory();
+            LoadEmployees();
         }
+
+        public DateTime? DefaultInputDate { get; set; }
 
         public static RoutedCommand SaveRecordCommand = new RoutedCommand();
         public static RoutedCommand LoadHistoryCommand = new RoutedCommand();
+        public static RoutedCommand DeleteHistoryRecordCommand = new RoutedCommand();
 
         private const int PreloadRecordsCount = 30;
-        List<CashTransaction> _history = new List<CashTransaction>();
-        List<Employee> _employees = new List<Employee>();
+        private List<CashTransaction> _history = new List<CashTransaction>();
+        private List<Employee> _employees = new List<Employee>();
 
         #region Functionality methods
         // load _history of cash operations from db and fill listview
         private void LoadHistory(bool all = false)
         {
-            string query = $"select Id, datestamp, summa, Comment from ba_cash_operations order by Id desc {(all ? "" : "limit " + PreloadRecordsCount)};";
+            var query = "select c.id, c.datestamp, c.summa, c.comment, e.fullname from ba_cash_operations as c " +
+                "left join ba_employees_cash as ec on ec.opid = c.id left " + 
+                "join ba_employees_cardindex as e on e.id = ec.emid " +
+                $"order by c.id desc { (all ? "" : "limit " + PreloadRecordsCount)};";
 
             _history = new List<CashTransaction>();
 
-            DataTable historyRecords = App.Sqlite.SelectTable(query);
+            var historyRecords = App.Sqlite.SelectTable(query);
             if (historyRecords != null)
             {
                 foreach (DataRow row in historyRecords.Rows)
@@ -52,7 +59,8 @@ namespace BusinessAccounting.UserControls
                         Id = Convert.ToInt32(row.ItemArray[0].ToString()),
                         Date = Convert.ToDateTime(row.ItemArray[1]),
                         Sum = decimal.Parse(row.ItemArray[2].ToString()),
-                        Comment = row.ItemArray[3].ToString()
+                        Comment = row.ItemArray[3].ToString(),
+                        EmployeeFullName = row.ItemArray[4].ToString()
                     });
                 }
                 LvHistory.ItemsSource = _history;
@@ -68,12 +76,12 @@ namespace BusinessAccounting.UserControls
         {
             _employees = new List<Employee>();
 
-            DataTable employeesData = App.Sqlite.SelectTable("select Id, fullname from ba_employees_cardindex where fired is null;");
+            var employeesData = App.Sqlite.SelectTable("select id, fullname from ba_employees_cardindex where fired is null;");
             if (employeesData != null && employeesData.Rows.Count > 0)
             {
                 foreach (DataRow r in employeesData.Rows)
                 {
-                    _employees.Add(new Employee()
+                    _employees.Add(new Employee
                     {
                         Id = Convert.ToInt32(r.ItemArray[0]),
                         FullName = r.ItemArray[1].ToString()
@@ -90,10 +98,8 @@ namespace BusinessAccounting.UserControls
 
             if (SalaryMode.IsChecked.HasValue && (bool) SalaryMode.IsChecked)
             {
-                const string insertTransactionSql =
-                    "insert into ba_cash_operations (datestamp, summa, Comment) values (@D, @s, @c);";
-                const string insertSalarySql =
-                    "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.Id) from ba_cash_operations));";
+                const string insertTransactionSql = "insert into ba_cash_operations (datestamp, summa, Comment) values (@D, @s, @c);";
+                const string insertSalarySql = "insert into ba_employees_cash (emid, opid) values (@e, (select max(ba_cash_operations.id) from ba_cash_operations));";
 
                 App.Sqlite.BeginTransaction();
 
@@ -108,9 +114,7 @@ namespace BusinessAccounting.UserControls
                     App.Sqlite.RollbackTransaction();
                 }
 
-                result = App.Sqlite.Insert(insertSalarySql,
-                    new XParameter("@e", _employees[ComboEmployee.SelectedIndex].Id)) >=
-                         (int) XQuery.XResult.ChangesApplied;
+                result = App.Sqlite.Insert(insertSalarySql, new XParameter("@e", _employees[ComboEmployee.SelectedIndex].Id)) >= (int) XQuery.XResult.ChangesApplied;
 
                 if (!result)
                 {
@@ -123,8 +127,7 @@ namespace BusinessAccounting.UserControls
             }
             else
             {
-                const string insertSql =
-                    "insert into ba_cash_operations (datestamp, summa, Comment) values (@d, @s, @c);";
+                const string insertSql = "insert into ba_cash_operations (datestamp, summa, Comment) values (@d, @s, @c);";
                 result = App.Sqlite.Insert(insertSql,
                     new XParameter("@d", InputDate.SelectedDate),
                     new XParameter("@s", Convert.ToDecimal(InputSum.Text)),
@@ -134,10 +137,11 @@ namespace BusinessAccounting.UserControls
 
             if (result)
             {
-                InputDate.SelectedDate = null;
+                InputDate.SelectedDate = DefaultInputDate;
                 InputSum.Text = "";
                 InputComment.Text = "";
                 ComboEmployee.SelectedIndex = -1;
+                SalaryMode.IsChecked = false;
                 LoadHistory();
             }
             else
@@ -146,48 +150,46 @@ namespace BusinessAccounting.UserControls
             }
         }
 
-        private async void bRemoveHistoryRecord_Click(object sender, RoutedEventArgs e)
+        private async Task AskAndDelete(CashTransaction record)
         {
-            CashTransaction record = null;
+            if (record == null)
+            {
+                ShowMessage("Сначала выделите запись!");
+                return;
+            }
 
-            for (var visual = sender as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is GridViewRowPresenter)
-                {
-                    var row = (GridViewRowPresenter)visual;
-                    record = (CashTransaction)row.DataContext;
-                    break;
-                }
+            var w = (MetroWindow)Parent.GetParentObject().GetParentObject();
+            var result = await w.ShowMessageAsync("Удалить запись?", 
+                string.Format("Дата: {1:dd MMMM yyyy}{0}Сумма: {2:C}{0}Комментарий: {3}{0}Сотрудник: {4}",
+                Environment.NewLine, record.Date, record.Sum, record.Comment, record.EmployeeFullName), 
+                MessageDialogStyle.AffirmativeAndNegative);
 
-            await AskAndDelete(string.Format("Удалить запись?{0}{0}Информация об удаляемой записи:{0} Дата: {1:dd MMMM yyyy}{0} Сумма: {2:C}{0} Комментарий: {3}",
-                Environment.NewLine, record.Date, record.Sum, record.Comment), record);
-        }
-
-        private async Task AskAndDelete(string question, CashTransaction record)
-        {
-            MetroWindow w = (MetroWindow)Parent.GetParentObject().GetParentObject();
-            MessageDialogResult result = await w.ShowMessageAsync("Вопросик", question, MessageDialogStyle.AffirmativeAndNegative);
             if (result == MessageDialogResult.Affirmative)
             {
-                const string deleteTransactionSql = "delete from ba_cash_operations where Id = @Id;";
-                if (App.Sqlite.Delete(deleteTransactionSql,
-                        new XParameter("@Id", record.Id)) <= (int)XQuery.XResult.NothingChanged)
+                const string deleteTransactionSql = "delete from ba_cash_operations where id = @id;";
+                if (App.Sqlite.Delete(deleteTransactionSql, new XParameter("@id", record.Id)) <= (int)XQuery.XResult.NothingChanged)
                 {
                     ShowMessage("Не удалось удалить запись из базы данных!");
+                    return;
                 }
-                else
-                {
-                    LoadHistory();
-                }
+                LoadHistory();
             }
         }
 
         private void ShowMessage(string text)
         {
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is MetroWindow)
-                {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
-                }
+            {
+                var window = visual as MetroWindow;
+                window?.ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
+            }
+        }
+
+        private void LoadDefaultDate()
+        {
+            int offset;
+            if (!int.TryParse(ConfigurationManager.AppSettings["DefaultInputDateOffset"], out offset)) return;
+            DefaultInputDate = DateTime.Now.Date.AddDays(offset);
         }
         #endregion
 
@@ -216,27 +218,37 @@ namespace BusinessAccounting.UserControls
 
         private void SaveRecord_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SaveRecord();
+            using (new WaitCursor())
+            {
+                SaveRecord();
+            }
         }
 
         private void LoadHistory_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = LvHistory.Items.Count <= PreloadRecordsCount;
+            e.CanExecute = LvHistory != null && LvHistory.Items.Count <= PreloadRecordsCount;
         }
 
         private void LoadHistory_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            LoadHistory(true);
-        }
-        #endregion
-
-        private void SalaryMode_IsCheckedChanged(object sender, EventArgs e)
-        {
-            GridSalary.Visibility = SalaryMode.IsChecked.HasValue && (bool)SalaryMode.IsChecked ? Visibility.Visible : Visibility.Collapsed;
-            if (SalaryMode.IsChecked.HasValue && (bool)SalaryMode.IsChecked)
+            using (new WaitCursor())
             {
-                LoadEmployees();
+                LoadHistory(true);
             }
         }
+
+        private void DeleteHistoryRecord_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = LvHistory.SelectedIndex >= 0;
+        }
+
+        private async void DeleteHistoryRecord_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (LvHistory.SelectedItem == null) return;
+            var record = (CashTransaction) LvHistory.SelectedItem;
+            await AskAndDelete(record);
+        }
+
+        #endregion
     }
 }

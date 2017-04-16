@@ -1,8 +1,8 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
+using System.Configuration;
 using System.Data;
-using System.Data.SQLite;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,15 +13,20 @@ using XDatabase;
 
 namespace BusinessAccounting.UserControls
 {
-    /// <summary>
-    /// Interaction logic for GraphicsPage.xaml
-    /// </summary>
     public partial class GraphicsPage
     {
         public GraphicsPage()
         {
             InitializeComponent();
+
+            PickerPeriodStart.DataContext = this;
+            PickerPeriodEnd.DataContext = this;
+
+            LoadDefaultDates();
         }
+
+        public DateTime? DefaultStartDate { get; set; }
+        public DateTime? DefaultEndDate { get; set; }
 
         public static readonly RoutedCommand PrintChartCommand = new RoutedCommand();
         public static readonly RoutedCommand SaveChartCommand = new RoutedCommand();
@@ -29,13 +34,28 @@ namespace BusinessAccounting.UserControls
         private Chart _chart;
         private readonly Font _titleFont = new Font("Arial", 16, System.Drawing.FontStyle.Bold);
 
+        private void LoadDefaultDates()
+        {
+            int startOffset;
+            int endOffset;
+            if (int.TryParse(ConfigurationManager.AppSettings["DefaultStartDateOffset"], out startOffset))
+            {
+                DefaultStartDate = DateTime.Now.Date.AddDays(startOffset);
+            }
+            if (int.TryParse(ConfigurationManager.AppSettings["DefaultEndDateOffset"], out endOffset))
+            {
+                DefaultEndDate = DateTime.Now.Date.AddDays(endOffset);
+            }
+        }
+
+        #region Charts
         private void BuildChart()
         {
             WfHost.Visibility = Visibility.Hidden;
 
             var startDate = PickerPeriodStart.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
             var endDate = PickerPeriodEnd.SelectedDate.GetValueOrDefault(DateTime.MaxValue);
-            var displayValues = Convert.ToBoolean(ComboDisplayValues.IsChecked.Value);
+            var displayValues = ComboDisplayValues.IsChecked;
 
             var isBuilt = false;
 
@@ -66,69 +86,9 @@ namespace BusinessAccounting.UserControls
             }
         }
 
-        private void ShowMessage(string text)
+        private bool BuildTotalsChartForPeriod(bool? displayValues, DateTime startDate, DateTime endDate)
         {
-            for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
-                if (visual is MetroWindow)
-                {
-                    ((MetroWindow)visual).ShowMessageAsync("Проблемка", text);
-                }
-        }
-
-        private void SaveChart()
-        {
-            var sfDialog = new System.Windows.Forms.SaveFileDialog
-            {
-                AddExtension = true,
-                Filter = "Png (PNG)|*.png"
-            };
-            if (sfDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (sfDialog.FileName != "")
-                {
-                    _chart.SaveImage(sfDialog.FileName, ChartImageFormat.Png);
-                }
-            }
-        }
-
-        private void PrintChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (ComboChart.SelectedIndex == 0 &
-                PickerPeriodStart.SelectedDate != null &
-                PickerPeriodEnd.SelectedDate != null &
-                PickerPeriodStart.SelectedDate <= PickerPeriodEnd.SelectedDate)
-            {
-                e.CanExecute = true;
-                return;
-            }
-
-            if (ComboChart.SelectedIndex >= 1 &&
-                PickerPeriodStart.SelectedDate != null)
-            {
-                e.CanExecute = true;
-            }
-        }
-
-        private void PrintChart_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            BuildChart();
-        }
-
-        private void SaveChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute =
-                WfHost != null &&
-                WfHost.Visibility == Visibility.Visible;
-        }
-
-        private void SaveChart_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            SaveChart();
-        }
-
-        private bool BuildTotalsChartForPeriod(bool displayValues, DateTime startDate, DateTime endDate)
-        {
-            const string sql = "select Sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 "+
+            const string sql = "select Sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa > 0 " +
                 "union all select Sum(summa) from ba_cash_operations where datestamp between @d1 and @d2 and summa < 0";
 
             startDate = startDate + new TimeSpan(0, 0, 0);
@@ -142,7 +102,7 @@ namespace BusinessAccounting.UserControls
             _chart.Legends.Add("Легенда").Title = "Легенда";
             _chart.ChartAreas.Add("");
 
-            _chart.Series.Add("");          
+            _chart.Series.Add("");
             _chart.Series[0].ChartType = SeriesChartType.Doughnut;
 
             var result = App.Sqlite.SelectTable(sql, new XParameter("@d1", startDate), new XParameter("@d2", endDate));
@@ -154,14 +114,14 @@ namespace BusinessAccounting.UserControls
 
                 _chart.Series[0].Points.Add(incomeSum);
                 _chart.Series[0].Points[0].LegendText = "Доходы";
-                if (displayValues)
+                if (displayValues == true)
                 {
                     _chart.Series[0].Points[0].Label = $"{incomeSum:C}";
                 }
 
                 _chart.Series[0].Points.Add(chargesSum);
                 _chart.Series[0].Points[1].LegendText = "Расходы";
-                if (displayValues)
+                if (displayValues == true)
                 {
                     _chart.Series[0].Points[1].Label = $"{chargesSum:C}";
                 }
@@ -174,7 +134,7 @@ namespace BusinessAccounting.UserControls
             return true;
         }
 
-        private bool BuildTotalsChartForTheYear(bool displayValues, DateTime date)
+        private bool BuildTotalsChartForTheYear(bool? displayValues, DateTime date)
         {
             var startDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
             var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
@@ -243,7 +203,7 @@ namespace BusinessAccounting.UserControls
                 _chart.Series[0].Points.Add(totalsIncomes[a]);
                 _chart.Series[1].Points.Add(totalsCharges[a]);
 
-                if (displayValues)
+                if (displayValues == true)
                 {
                     _chart.Series[0].Points[a].Label = $"{totalsIncomes[a]:C}";
                     _chart.Series[1].Points[a].Label = $"{totalsCharges[a]:C}";
@@ -253,14 +213,14 @@ namespace BusinessAccounting.UserControls
             return true;
         }
 
-        private bool BuildTotalsChartFor3Years(bool displayValues, DateTime date)
+        private bool BuildTotalsChartFor3Years(bool? displayValues, DateTime date)
         {
-            const string sql = 
+            const string sql =
                 "select strftime('%Y', datestamp) as year, strftime('%m', datestamp) as month, Sum(summa) from BA_CASH_OPERATIONS " +
                 "where datestamp between @d1 and @d2 and summa > 0 group by year, month;";
 
             _chart = new Chart();
-            
+
             var title = _chart.Titles.Add($"Доходы за {date.Year - 2}-{date.Year} годы");
             title.Font = _titleFont;
             _chart.Legends.Add("Легенда").Title = "Легенда";
@@ -287,7 +247,7 @@ namespace BusinessAccounting.UserControls
             var startDate = new DateTime(date.Year, 1, 1, 0, 0, 0);
             var endDate = new DateTime(date.Year, 12, 31, 23, 59, 59);
 
-            var values = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            var values = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             var emptyDataCount = 0;
 
             for (var a = 0; a < 3; a++)
@@ -305,7 +265,7 @@ namespace BusinessAccounting.UserControls
                     for (var i = 0; i < 12; i++)
                     {
                         _chart.Series[a].Points.Add(new DataPoint(i + 1, values[i]));
-                        if (displayValues)
+                        if (displayValues == true)
                         {
                             _chart.Series[a].Points[i].Label = $"{values[i]:C}";
                         }
@@ -318,15 +278,28 @@ namespace BusinessAccounting.UserControls
 
                 startDate = startDate.AddYears(-1);
                 endDate = endDate.AddYears(-1);
-                values = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                values = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             }
 
             return emptyDataCount < 3;
         }
 
+        private void SaveChartAsImage()
+        {
+            var sfDialog = new System.Windows.Forms.SaveFileDialog
+            {
+                AddExtension = true,
+                Filter = "Png (PNG)|*.png"
+            };
+            if (sfDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+            if (sfDialog.FileName != "")
+            {
+                _chart.SaveImage(sfDialog.FileName, ChartImageFormat.Png);
+            }
+        }
+
         private static void MakeAreaZoomable(ChartArea chartArea)
         {
-            chartArea.CursorX.IsUserEnabled = true;
             chartArea.CursorX.IsUserSelectionEnabled = true;
             chartArea.CursorX.Interval = 0;
             chartArea.AxisX.ScaleView.Zoomable = true;
@@ -334,7 +307,6 @@ namespace BusinessAccounting.UserControls
             chartArea.AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
             chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
 
-            chartArea.CursorY.IsUserEnabled = true;
             chartArea.CursorY.IsUserSelectionEnabled = true;
             chartArea.CursorY.Interval = 0;
             chartArea.AxisY.ScaleView.Zoomable = true;
@@ -342,5 +314,50 @@ namespace BusinessAccounting.UserControls
             chartArea.AxisY.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
             chartArea.AxisY.ScaleView.SmallScrollMinSize = 0;
         }
+        #endregion
+
+        private void ShowMessage(string text)
+        {
+            for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
+            {
+                var window = visual as MetroWindow;
+                window?.ShowMessageAsync("Проблемка", text);
+            }
+        }
+
+        #region Commands
+        private void PrintChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (ComboChart.SelectedIndex == 0 & PickerPeriodStart.SelectedDate != null &
+                PickerPeriodEnd.SelectedDate != null & PickerPeriodStart.SelectedDate <= PickerPeriodEnd.SelectedDate)
+            {
+                e.CanExecute = true;
+                return;
+            }
+
+            if (ComboChart.SelectedIndex >= 1 && PickerPeriodStart.SelectedDate != null)
+            {
+                e.CanExecute = true;
+            }
+        }
+
+        private void PrintChart_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                BuildChart();
+            }
+        }
+
+        private void SaveChart_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = WfHost != null && WfHost.Visibility == Visibility.Visible;
+        }
+
+        private void SaveChart_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveChartAsImage();
+        }
+        #endregion
     }
 }

@@ -1,5 +1,5 @@
-// requires Windows 7 Service Pack 1, Windows 8, Windows 8.1, Windows Server 2003, Windows Server 2008 R2 SP1, Windows Server 2008 Service Pack 2, Windows Server 2012, Windows Vista Service Pack 2, Windows XP
-// http://www.microsoft.com/en-us/download/details.aspx?id=30679
+; requires Windows 7 Service Pack 1, Windows 8, Windows 8.1, Windows Server 2003, Windows Server 2008 R2 SP1, Windows Server 2008 Service Pack 2, Windows Server 2012, Windows Vista Service Pack 2, Windows XP
+; http://www.microsoft.com/en-us/download/details.aspx?id=30679
 
 [CustomMessages]
 vcredist2012_title=Visual C++ 2012 Redistributable
@@ -10,7 +10,6 @@ ru.vcredist2012_size=6,3 MB
 
 en.vcredist2012_size_x64=6.4 MB
 ru.vcredist2012_size_x64=6,4 MB
-
 
 [Code]
 const
@@ -29,6 +28,8 @@ begin
 				CustomMessage('vcredist2012_title' + GetArchitectureString()),
 				CustomMessage('vcredist2012_size' + GetArchitectureString()),
 				GetString(vcredist2012_url, vcredist2012_url_x64, ''),
-				false, false);
+				false, false, false);
 	end;
 end;
+
+[Setup]

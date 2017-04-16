@@ -19,7 +19,7 @@ AppVersion={#AppVersion}
 AppVerName={#AppName} {#AppVersion}
 VersionInfoVersion={#AppVersion}
 VersionInfoCompany=Alexander Fuks
-AppCopyright=Copyright © 2014-2017 Alexander Fuks
+AppCopyright=Copyright Â© 2014-2017 Alexander Fuks
 AppPublisher=Alexander Fuks
 AppPublisherURL=https://github.com/kungfux/business-accounting
 AppSupportURL=https://github.com/kungfux/business-accounting
@@ -67,23 +67,23 @@ Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExecutable}"; WorkingD
 [Run]
 Filename: "{app}\{#AppExecutable}"; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
 
-[Code]
 #include "scripts\products.iss"
+
 #include "scripts\products\stringversion.iss"
 #include "scripts\products\winversion.iss"
 #include "scripts\products\fileversion.iss"
 #include "scripts\products\dotnetfxversion.iss"
-#include "scripts\products\msiproduct.iss"
 
+#include "scripts\products\msiproduct.iss"
 #include "scripts\products\dotnetfx46.iss"
 #include "scripts\products\vcredist2012.iss"
 
+[Code]
 function InitializeSetup(): boolean;
 begin
 	initwinversion();
 
   dotnetfx46(61);
   vcredist2012();
-
   Result := true;
 end;

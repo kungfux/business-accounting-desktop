@@ -89,10 +89,10 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Принят" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long" SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="PickerHiredDate"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" SelectedDateFormat="Short" SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="PickerHiredDate"/>
 
                     <Label Grid.Row="0" Grid.Column="2" Content="Уволен" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <DatePicker Grid.Row="0" Grid.Column="3" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" SelectedDateFormat="Long" SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="PickerFiredDate"/>
+                    <DatePicker Grid.Row="0" Grid.Column="3" controls:TextboxHelper.Watermark="Выберите дату" SelectedDateFormat="Short" SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="PickerFiredDate"/>
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Фамилия, имя, отчество" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True" controls:TextboxHelper.Watermark="Введите фамилию, имя и отчество сотрудника"  controls:TextboxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}"  Name="InputEmplName" Text="{Binding Path=FullName}"/>

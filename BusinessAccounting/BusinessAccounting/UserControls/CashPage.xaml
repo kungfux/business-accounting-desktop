@@ -100,7 +100,7 @@
                     </Grid.ColumnDefinitions>
                     
                     <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" SelectedDate="{Binding DefaultInputDate, Mode=OneWay}"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" Name="InputDate" SelectedDateFormat="Short" SelectedDate="{Binding DefaultInputDate, Mode=OneWay}"/>
                                        
                     <Label Grid.Row="1" Grid.Column="0" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                     <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите сумму" controls:TextboxHelper.ClearTextButton="True" Name="InputSum"/>

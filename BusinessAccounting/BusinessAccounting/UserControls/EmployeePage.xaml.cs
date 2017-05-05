@@ -6,7 +6,6 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -430,14 +429,15 @@ namespace BusinessAccounting.UserControls
         {
             using (new WaitCursor())
             {
-                if (SaveEmployee())
-                {
-                    ClearInputFields(false, true);
-                    var savedEmployeeId = _openedEmployee.Id;
-                    _openedEmployee = null;
-                    DataContext = _openedEmployee;
-                    OpenEmployeeAfterSave(savedEmployeeId);
-                }
+                if (!SaveEmployee())
+                    return;
+
+                ClearInputFields(false, true);
+                var savedEmployeeId = _openedEmployee.Id;
+                _openedEmployee = null;
+                DataContext = _openedEmployee;
+                OpenEmployeeAfterSave(savedEmployeeId);
+                InputSearchData_OnTextChanged(this, null);
             }
         }
 
@@ -455,6 +455,7 @@ namespace BusinessAccounting.UserControls
                 ClearInputFields(false, true);
                 _openedEmployee = null;
                 DataContext = _openedEmployee;
+                InputSearchData_OnTextChanged(this, null);
             }
         }
 

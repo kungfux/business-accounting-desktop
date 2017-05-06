@@ -19,11 +19,14 @@
         <Image x:Key="ImageCash" Source="pack://application:,,,/Resources/image_cash.png"/>
         <Image x:Key="ImageMan" Source="pack://application:,,,/Resources/image_man.png"/>
         <Image x:Key="ImageGraph" Source="pack://application:,,,/Resources/image_graph.png"/>
+        <Image x:Key="ImageFolder" Source="pack://application:,,,/Resources/image_folder.png"/>
+        <Image x:Key="ImageBackup" Source="pack://application:,,,/Resources/image_backup.png"/>
     </controls:MetroWindow.Resources>
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <Button Content="Открыть папку с БД" Click="OpenDbFolder_Click"/>
+            <Button Margin="0,5" Content="{StaticResource ImageFolder}" ToolTip="Открыть папку с базой данных" Click="OpenDbFolder_Click"/>
+            <!--<Button Margin="0,5" Content="{StaticResource ImageBackup}" ToolTip="Сделать резервную копию базы данных"/>-->
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
     

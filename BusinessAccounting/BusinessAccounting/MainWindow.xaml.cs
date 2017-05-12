@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using MahApps.Metro.Controls;
@@ -22,7 +21,7 @@ namespace BusinessAccounting
 
         private void ButtonMenu_Click(object sender, RoutedEventArgs e)
         {
-            OpenCloseMenu();   
+            OpenCloseMenu();
         }
 
         private void MenuButtonCash_Click(object sender, RoutedEventArgs e)
@@ -98,17 +97,15 @@ namespace BusinessAccounting
 
         private void OpenDbFolder_Click(object sender, RoutedEventArgs e)
         {
-            string dbPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}";
-
             try
             {
-                if (!Directory.Exists(dbPath))
+                if (!Directory.Exists(App.DatabasePath))
                 {
-                    ShowMessage($"Папка по адресу {dbPath} не найдена.");
+                    ShowMessage($"Папка по адресу {App.DatabasePath} не найдена.");
                     return;
                 }
 
-                Process.Start("explorer", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}");
+                Process.Start("explorer", App.DatabasePath);
             }
             catch (Exception)
             {

@@ -10,16 +10,29 @@ namespace BusinessAccounting
     {
         public static readonly XQuerySqlite Sqlite = new XQuerySqlite();
         public static string DatabasePath { get; private set; }
+        public static string DatabaseFilePath { get; private set; }
+        public static string BackupRemoteFolderId { get; private set; }
 
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
             var defaultPath = DatabasePath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}";
-            var connectionString = $@"Data Source={defaultPath}\ba.sqlite;Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true;";
+            DatabaseFilePath = $@"{defaultPath}\ba.sqlite";
+            var connectionString = $@"Data Source={DatabaseFilePath};Version=3;UTF8Encoding=True;foreign keys=true;FailIfMissing=true;";
 
             try
             {
                 connectionString = ConfigurationManager.ConnectionStrings["SqliteConnection"].ConnectionString;
-                DatabasePath = ExtractPathFromConnectionString(connectionString) ?? AppDomain.CurrentDomain.BaseDirectory;
+                DatabaseFilePath = ExtractFilePathFromConnectionString(connectionString);
+                DatabasePath = ExtractPathFromFilePath(DatabaseFilePath);
+            }
+            catch (NullReferenceException)
+            {
+                // ignored
+            }
+
+            try
+            {
+                BackupRemoteFolderId = ConfigurationManager.AppSettings["BackupRemoteFolderId"];
             }
             catch (NullReferenceException)
             {
@@ -38,13 +51,22 @@ namespace BusinessAccounting
             }
         }
 
-        private static string ExtractPathFromConnectionString(string connectionString)
+        private static string ExtractFilePathFromConnectionString(string connectionString)
         {
             var conn = new System.Data.SQLite.SQLiteConnectionStringBuilder(connectionString);
             var dataSource = conn.DataSource;
-            if (dataSource.Contains(@"\"))
+            if (!dataSource.Contains(@"\"))
             {
-                return dataSource.Substring(0, dataSource.LastIndexOf(@"\", StringComparison.InvariantCulture));
+                dataSource = $@"{AppDomain.CurrentDomain.BaseDirectory}\{dataSource}";
+            }
+            return dataSource;
+        }
+
+        private static string ExtractPathFromFilePath(string filePath)
+        {
+            if (filePath.Contains(@"\"))
+            {
+                return filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.InvariantCulture));
             }
             return null;
         }

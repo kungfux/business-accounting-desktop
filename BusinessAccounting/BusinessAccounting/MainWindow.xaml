@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:c="clr-namespace:BusinessAccounting.UserControls"
+    xmlns:converters="clr-namespace:BusinessAccounting.Converters"
     Title="Business Accounting"
     TitleCaps="False"
     Height="450"
@@ -21,15 +23,16 @@
         <Image x:Key="ImageGraph" Source="pack://application:,,,/Resources/image_graph.png"/>
         <Image x:Key="ImageFolder" Source="pack://application:,,,/Resources/image_folder.png"/>
         <Image x:Key="ImageBackup" Source="pack://application:,,,/Resources/image_backup.png"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     </controls:MetroWindow.Resources>
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <Button Margin="0,5" Content="{StaticResource ImageFolder}" ToolTip="Открыть папку с базой данных" Click="OpenDbFolder_Click"/>
-            <!--<Button Margin="0,5" Content="{StaticResource ImageBackup}" ToolTip="Сделать резервную копию базы данных"/>-->
+            <Button Margin="0,5" Content="{StaticResource ImageBackup}" ToolTip="Сделать резервную копию базы данных" Click="MakeBackup_Click"/>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
-    
+
     <Grid>
         <Grid.Triggers>
             <EventTrigger RoutedEvent="Grid.Loaded">
@@ -41,7 +44,12 @@
             </EventTrigger>
         </Grid.Triggers>
 
-        <Grid Name="UserControlGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Name="UserControlGrid">
         </Grid>
 
         <Grid Width="150" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,74,10,0" Opacity="1.0" Name="MainMenuGrid">
@@ -66,5 +74,11 @@
             </Border>
         </Grid>
         <Button Height="64" Width="64" Focusable="False" Content="{StaticResource ImageMenu}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0"  ToolTip="Главное меню" Click="ButtonMenu_Click"/>
+        <DockPanel Grid.Row="1" Name="dockPanel" Dock="Bottom" Visibility="{Binding Path=Status, Converter={StaticResource NullToVisibilityConverter}}">
+            <StatusBar>
+                <Label Content="Google Backup Status:"/>
+                <Label Name="lblStatus" Content="{Binding Path=Status}" />
+            </StatusBar>
+        </DockPanel>
     </Grid>
 </controls:MetroWindow>

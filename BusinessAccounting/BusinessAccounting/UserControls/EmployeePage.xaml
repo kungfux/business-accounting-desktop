@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:c="clr-namespace:BusinessAccounting.UserControls"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:self="clr-namespace:BusinessAccounting.UserControls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -90,10 +89,10 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Принят" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextBoxHelper.Watermark="Выберите дату" SelectedDateFormat="Short" SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="PickerHiredDate"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextBoxHelper.Watermark="Выберите дату" SelectedDateFormat="Short" SelectedDate="{Binding Path=Hired}" IsEnabled="False" Name="PickerHiredDate" IsTodayHighlighted="True"/>
 
                     <Label Grid.Row="0" Grid.Column="2" Content="Уволен" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                    <DatePicker Grid.Row="0" Grid.Column="3" controls:TextBoxHelper.Watermark="Выберите дату" SelectedDateFormat="Short" SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="PickerFiredDate"/>
+                    <DatePicker Grid.Row="0" Grid.Column="3" controls:TextBoxHelper.Watermark="Выберите дату" SelectedDateFormat="Short" SelectedDate="{Binding Path=Fired}" IsEnabled="False" Name="PickerFiredDate" IsTodayHighlighted="True"/>
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Фамилия, имя, отчество" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="True" controls:TextBoxHelper.Watermark="Введите фамилию, имя и отчество сотрудника"  controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly, Converter={StaticResource InverseBooleanConverter}}"  Name="InputEmplName" Text="{Binding Path=FullName}"/>

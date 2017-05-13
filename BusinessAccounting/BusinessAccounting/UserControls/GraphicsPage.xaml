@@ -75,9 +75,9 @@
                     </ComboBox>
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Период / год" HorizontalAlignment="Right"/>
-                    <DatePicker Grid.Row="1" Grid.Column="1" controls:TextBoxHelper.Watermark="Начальная дата" Name="PickerPeriodStart" SelectedDateFormat="Short" SelectedDate="{Binding DefaultStartDate, Mode=OneWay}"/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" controls:TextBoxHelper.Watermark="Начальная дата" Name="PickerPeriodStart" SelectedDateFormat="Short" SelectedDate="{Binding DefaultStartDate, Mode=OneWay}" IsTodayHighlighted="True"/>
 
-                    <DatePicker Grid.Row="2" Grid.Column="1" controls:TextBoxHelper.Watermark="Конечная дата" Name="PickerPeriodEnd" SelectedDateFormat="Short" SelectedDate="{Binding DefaultEndDate, Mode=OneWay}" IsEnabled="{Binding ElementName=ComboChart, Path=SelectedIndex, Converter={StaticResource IndexToBooleanConverter}}"/>
+                    <DatePicker Grid.Row="2" Grid.Column="1" controls:TextBoxHelper.Watermark="Конечная дата" Name="PickerPeriodEnd" SelectedDateFormat="Short" SelectedDate="{Binding DefaultEndDate, Mode=OneWay}" IsEnabled="{Binding ElementName=ComboChart, Path=SelectedIndex, Converter={StaticResource IndexToBooleanConverter}}" IsTodayHighlighted="True"/>
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Показывать значения" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
                     <controls:ToggleSwitch Grid.Row="3" Grid.Column="1" OnLabel="" OffLabel="" Name="ComboDisplayValues" Margin="0,5"  HorizontalAlignment="Left" ToolTip="Отображать значение каждой точки графика" IsChecked="True"/>

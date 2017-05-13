@@ -22,7 +22,7 @@ namespace BusinessAccounting.Integrations
 
             var uploadStream = new FileStream(fileToBackup, FileMode.Open, FileAccess.Read);
             var insertRequest = service.Files.Create(
-                new Google.Apis.Drive.v3.Data.File { Name = "ba.sqlite", Parents = !string.IsNullOrEmpty(remoteFolder) ? new List<string> { remoteFolder } : null }, 
+                new Google.Apis.Drive.v3.Data.File { Name = "ba.sqlite", Parents = !string.IsNullOrEmpty(remoteFolder) ? new List<string> { remoteFolder } : null },
                 uploadStream, "application/x-sqlite3");
 
             insertRequest.ProgressChanged += Upload_ProgressChanged;
@@ -56,7 +56,7 @@ namespace BusinessAccounting.Integrations
                 var credentialPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                 credentialPath = Path.Combine(credentialPath, ".credentials/business-accounting.json");
 
-                _credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, 
+                _credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets,
                     new[] { DriveService.Scope.DriveFile }, "user", CancellationToken.None, new FileDataStore(credentialPath, true)).Result;
             }
         }
@@ -72,7 +72,27 @@ namespace BusinessAccounting.Integrations
 
         private void Upload_ProgressChanged(IUploadProgress progress)
         {
-            UpdateStatus(progress.Status.ToString());
+            var status = progress.Status.ToString();
+
+            switch (progress.Status)
+            {
+                case UploadStatus.Starting:
+                    status = "Начинаю загрузку...";
+                    break;
+                case UploadStatus.NotStarted:
+                    status = "Загрузка не начата.";
+                    break;
+                case UploadStatus.Uploading:
+                    status = "Загрузка...";
+                    break;
+                case UploadStatus.Completed:
+                    status = "Завершено.";
+                    break;
+                case UploadStatus.Failed:
+                    status = "Ошибка.";
+                    break;
+            }
+            UpdateStatus(status);
 
             if (progress.Status == UploadStatus.Failed)
             {
@@ -82,7 +102,7 @@ namespace BusinessAccounting.Integrations
 
         private void Upload_ResponseReceived(Google.Apis.Drive.v3.Data.File file)
         {
-            UpdateStatus(file.Name + " was uploaded successfully");
+            UpdateStatus(file.Name + " был успешно загружен.");
         }
     }
 }

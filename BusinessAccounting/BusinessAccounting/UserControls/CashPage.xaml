@@ -101,13 +101,13 @@
                     </Grid.ColumnDefinitions>
                     
                     <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" Name="InputDate" SelectedDateFormat="Short" SelectedDate="{Binding DefaultInputDate, Mode=OneWay}"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextBoxHelper.Watermark="Выберите дату" Name="InputDate" SelectedDateFormat="Short" SelectedDate="{Binding DefaultInputDate, Mode=OneWay}"/>
                                        
                     <Label Grid.Row="1" Grid.Column="0" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите сумму" controls:TextboxHelper.ClearTextButton="True" Name="InputSum"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" controls:TextBoxHelper.Watermark="Введите сумму" controls:TextBoxHelper.ClearTextButton="True" Name="InputSum"/>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <TextBox Grid.Row="2" Grid.Column="1" controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" controls:TextBoxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextBoxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Режим зарплаты" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                     <controls:ToggleSwitch Grid.Row="3" Grid.Column="1" OnLabel="" OffLabel="" Name="SalaryMode" Margin="0,5"  HorizontalAlignment="Left"/>

@@ -6,7 +6,7 @@
 ; ****************************************
 
 #define AppName 'Business Accounting'
-#define AppVersion '1.3'
+#define AppVersion '1.4'
 
 #define AppExecutable 'Business Accounting.exe'
 #define CompiledBinPath '..\BusinessAccounting\BusinessAccounting\bin\Release'
@@ -57,6 +57,15 @@ Source: "{#CompiledBinPath}\XDatabase.dll"; DestDir: "{app}"
 Source: "{#CompiledBinPath}\System.Data.SQLite.dll"; DestDir: "{app}"
 Source: "{#CompiledBinPath}\MySql.Data.dll"; DestDir: "{app}"
 Source: "{#CompiledBinPath}\System.Windows.Interactivity.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Google.Apis.Auth.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Google.Apis.Auth.PlatformServices.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Google.Apis.Core.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Google.Apis.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Google.Apis.Drive.v3.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Google.Apis.PlatformServices.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Newtonsoft.Json.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\Zlib.Portable.dll"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\google_drive_api.json"; DestDir: "{app}"
 Source: "{#InitDatabaseFilePath}\ba.sqlite"; DestDir: "{userappdata}\{#AppName}"; Flags: onlyifdoesntexist uninsneveruninstall
 
 [Icons]
@@ -77,6 +86,9 @@ Filename: "{app}\{#AppExecutable}"; WorkingDir: "{app}"; Description: "{cm:Launc
 #include "scripts\products\msiproduct.iss"
 #include "scripts\products\dotnetfx46.iss"
 #include "scripts\products\vcredist2012.iss"
+
+[CustomMessages]
+win_sp_title=Windows %1 Service Pack %2
 
 [Code]
 function InitializeSetup(): boolean;

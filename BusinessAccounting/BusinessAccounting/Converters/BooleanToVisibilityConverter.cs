@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace BusinessAccounting.UserControls
+namespace BusinessAccounting.Converters
 {
     [ValueConversion(typeof(bool), typeof(Visibility))]
     public class BooleanToVisibilityConverter : IValueConverter

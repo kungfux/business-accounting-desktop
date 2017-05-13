@@ -8,12 +8,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:userControls="clr-namespace:BusinessAccounting.UserControls"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:BusinessAccounting.Converters"
     x:Class="BusinessAccounting.UserControls.CashPage" 
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="850">
     
     <UserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_cash.png" />
     </UserControl.Resources>
 
@@ -100,13 +101,13 @@
                     </Grid.ColumnDefinitions>
                     
                     <Label Grid.Row="0" Content="Дата" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextboxHelper.Watermark="Выберите дату" FirstDayOfWeek="Monday" Name="InputDate" SelectedDateFormat="Long" SelectedDate="{Binding DefaultInputDate, Mode=OneWay}"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" controls:TextBoxHelper.Watermark="Выберите дату" Name="InputDate" SelectedDateFormat="Short" SelectedDate="{Binding DefaultInputDate, Mode=OneWay}" IsTodayHighlighted="True"/>
                                        
                     <Label Grid.Row="1" Grid.Column="0" Content="Сумма" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <TextBox Grid.Row="1" Grid.Column="1" controls:TextboxHelper.Watermark="Введите сумму" controls:TextboxHelper.ClearTextButton="True" Name="InputSum"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" controls:TextBoxHelper.Watermark="Введите сумму" controls:TextBoxHelper.ClearTextButton="True" Name="InputSum"/>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Комментарий" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                    <TextBox Grid.Row="2" Grid.Column="1" controls:TextboxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextboxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" controls:TextBoxHelper.Watermark="Введите комментарий&#x0a;для записи (опционально)" controls:TextBoxHelper.ClearTextButton="True" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True" AutoWordSelection="True" TextWrapping="Wrap" Name="InputComment"/>
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Режим зарплаты" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                     <controls:ToggleSwitch Grid.Row="3" Grid.Column="1" OnLabel="" OffLabel="" Name="SalaryMode" Margin="0,5"  HorizontalAlignment="Left"/>

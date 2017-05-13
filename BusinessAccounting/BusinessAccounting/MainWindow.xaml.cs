@@ -1,28 +1,40 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using MahApps.Metro.Controls;
 using System.Windows.Media.Animation;
+using BusinessAccounting.Integrations;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace BusinessAccounting
 {
-    public partial class MainWindow
+    public partial class MainWindow : INotifyPropertyChanged
     {
         public MainWindow()
         {
             InitializeComponent();
 
+            dockPanel.DataContext = this;
+            lblStatus.DataContext = this;
+
             MainMenuGrid.Opacity = 0;
             MainMenuGrid.Visibility = Visibility.Hidden;
         }
 
+        private string _status;
+        public string Status
+        {
+            get { return _status; }
+            set { _status = value; OnPropertyChanged(); }
+        }
+
         private void ButtonMenu_Click(object sender, RoutedEventArgs e)
         {
-            OpenCloseMenu();   
+            OpenCloseMenu();
         }
 
         private void MenuButtonCash_Click(object sender, RoutedEventArgs e)
@@ -92,28 +104,51 @@ namespace BusinessAccounting
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
             {
                 var window = visual as MetroWindow;
-                window?.ShowMessageAsync("Проблемка", text + Environment.NewLine + App.Sqlite.LastErrorMessage);
+                window?.ShowMessageAsync("Проблемка", text);
             }
         }
 
         private void OpenDbFolder_Click(object sender, RoutedEventArgs e)
         {
-            string dbPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}";
-
             try
             {
-                if (!Directory.Exists(dbPath))
+                if (!Directory.Exists(App.DatabasePath))
                 {
-                    ShowMessage($"Папка по адресу {dbPath} не найдена.");
+                    ShowMessage($"Папка по адресу {App.DatabasePath} не найдена.");
                     return;
                 }
 
-                Process.Start("explorer", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{Assembly.GetExecutingAssembly().GetName().Name}");
+                Process.Start("explorer", App.DatabasePath);
             }
             catch (Exception)
             {
                 // ignored
             }
+        }
+
+        private void MakeBackup_Click(object sender, RoutedEventArgs e)
+        {
+            var backup = new GoogleDriveBackupStorage();
+            backup.OnUpdateStatus += Backup_OnUpdateStatus;
+            backup.OnFailed += Backup_OnFailed;
+            backup.MakeBackup(App.DatabaseFilePath, App.BackupRemoteFolderId);
+        }
+
+        private void Backup_OnFailed(string message)
+        {
+            Application.Current.Dispatcher.Invoke(() => ShowMessage(message));
+        }
+
+        private void Backup_OnUpdateStatus(string status)
+        {
+            Status = status;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -96,7 +96,7 @@ namespace BusinessAccounting.UserControls
 
             _chart = new Chart();
 
-            var title = _chart.Titles.Add($"Сумма доходов и расходов за период {Environment.NewLine} с {startDate.ToString("dd MMMM yyyy")} по {endDate.ToString("dd MMMM yyyy")}");
+            var title = _chart.Titles.Add($"Сумма доходов и расходов за период {Environment.NewLine} с {startDate.ToShortDateString()} по {endDate.ToShortDateString()}");
             title.Font = _titleFont;
 
             _chart.Legends.Add("Легенда").Title = "Легенда";

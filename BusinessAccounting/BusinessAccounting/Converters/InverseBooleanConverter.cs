@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace BusinessAccounting.UserControls
+namespace BusinessAccounting.Converters
 {
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter

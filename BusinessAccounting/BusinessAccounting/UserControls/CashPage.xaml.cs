@@ -7,6 +7,7 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using BusinessAccounting.Entity;
 using XDatabase;
 using XDatabase.Core;
 

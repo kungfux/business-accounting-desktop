@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BusinessAccounting.UserControls
+namespace BusinessAccounting.Entity
 {
     public class CashTransaction
     {

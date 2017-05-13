@@ -84,20 +84,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="UserControls\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="UserControls\CashPage.xaml.cs">
       <DependentUpon>CashPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Employee.cs" />
+    <Compile Include="Entity\Employee.cs" />
     <Compile Include="UserControls\EmployeePage.xaml.cs">
       <DependentUpon>EmployeePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\GraphicsPage.xaml.cs">
       <DependentUpon>GraphicsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CashTransaction.cs" />
-    <Compile Include="UserControls\IndexToBooleanConverter.cs" />
-    <Compile Include="UserControls\InverseBooleanConverter.cs" />
+    <Compile Include="Entity\CashTransaction.cs" />
+    <Compile Include="Converters\IndexToBooleanConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="UserControls\WaitCursor.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

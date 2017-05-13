@@ -8,12 +8,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:userControls="clr-namespace:BusinessAccounting.UserControls"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:BusinessAccounting.Converters"
     x:Class="BusinessAccounting.UserControls.CashPage" 
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="850">
     
     <UserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_cash.png" />
     </UserControl.Resources>
 

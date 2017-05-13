@@ -6,13 +6,14 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:self="clr-namespace:BusinessAccounting.UserControls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:BusinessAccounting.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="650" 
              d:DesignWidth="1050">
 
     <UserControl.Resources>
-        <c:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <Image x:Key="ImageHeader" Source="pack://application:,,,/Resources/image_man.png" />
     </UserControl.Resources>
 

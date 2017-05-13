@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
-namespace BusinessAccounting.UserControls
+namespace BusinessAccounting.Entity
 {
     public class Employee : INotifyPropertyChanged 
     {

@@ -48,24 +48,24 @@ Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm
 Name: quicklaunchicon; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#CompiledBinPath}\x86\SQLite.Interop.dll"; DestDir: "{app}\x86"
-Source: "{#CompiledBinPath}\x64\SQLite.Interop.dll"; DestDir: "{app}\x64"
-Source: "{#CompiledBinPath}\Business Accounting.exe"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\x86\SQLite.Interop.dll"; DestDir: "{app}\x86"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\x64\SQLite.Interop.dll"; DestDir: "{app}\x64"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Business Accounting.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CompiledBinPath}\Business Accounting.exe.config"; DestDir: "{app}"; Flags: confirmoverwrite uninsneveruninstall
-Source: "{#CompiledBinPath}\MahApps.Metro.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\XDatabase.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\System.Data.SQLite.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\MySql.Data.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\System.Windows.Interactivity.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Google.Apis.Auth.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Google.Apis.Auth.PlatformServices.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Google.Apis.Core.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Google.Apis.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Google.Apis.Drive.v3.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Google.Apis.PlatformServices.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Newtonsoft.Json.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\Zlib.Portable.dll"; DestDir: "{app}"
-Source: "{#CompiledBinPath}\google_drive_api.json"; DestDir: "{app}"
+Source: "{#CompiledBinPath}\MahApps.Metro.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\XDatabase.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\System.Data.SQLite.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\System.Windows.Interactivity.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Google.Apis.Auth.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Google.Apis.Auth.PlatformServices.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Google.Apis.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Google.Apis.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Google.Apis.Drive.v3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Google.Apis.PlatformServices.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\Zlib.Portable.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompiledBinPath}\google_drive_api.json"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#InitDatabaseFilePath}\ba.sqlite"; DestDir: "{userappdata}\{#AppName}"; Flags: onlyifdoesntexist uninsneveruninstall
 
 [Icons]

@@ -14,6 +14,12 @@ namespace BusinessAccounting
 {
     public partial class MainWindow : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string _status;
+        private bool _windowDisplayed;
+        private GoogleDriveBackupStorage _backupStorage;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -23,13 +29,26 @@ namespace BusinessAccounting
 
             MainMenuGrid.Opacity = 0;
             MainMenuGrid.Visibility = Visibility.Hidden;
+
+            _backupStorage = new GoogleDriveBackupStorage(
+                App.DatabaseFilePath, 
+                App.BackupRemoteFolderId, 
+                App.BackupRemoteFileId, 
+                App.AutoBackupInterval);
+            _backupStorage.OnUpdateStatus += backupStorage_OnUpdateStatus;
+            _backupStorage.OnFailed += backupStorage_OnFailed;
+            _backupStorage.OnAutoBackup += _backupStorage_OnAutoBackup;
         }
 
-        private string _status;
         public string Status
         {
             get { return _status; }
             set { _status = value; OnPropertyChanged(); }
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void ButtonMenu_Click(object sender, RoutedEventArgs e)
@@ -85,8 +104,6 @@ namespace BusinessAccounting
             UserControlGrid.Children.Add(pPage);
         }
 
-        private bool _windowDisplayed;
-
         protected override void OnContentRendered(EventArgs e)
         {
             base.OnContentRendered(e);
@@ -97,14 +114,15 @@ namespace BusinessAccounting
             _windowDisplayed = true;
 
             LoadPage(new UserControls.CashPage());
+            _backupStorage.MakeAutoBackup();
         }
 
-        private void ShowMessage(string text)
+        private void ShowMessage(string text, string caption = "Проблемка")
         {
             for (var visual = this as Visual; visual != null; visual = VisualTreeHelper.GetParent(visual) as Visual)
             {
                 var window = visual as MetroWindow;
-                window?.ShowMessageAsync("Проблемка", text);
+                window?.ShowMessageAsync(caption, text);
             }
         }
 
@@ -128,27 +146,22 @@ namespace BusinessAccounting
 
         private void MakeBackup_Click(object sender, RoutedEventArgs e)
         {
-            var backup = new GoogleDriveBackupStorage();
-            backup.OnUpdateStatus += Backup_OnUpdateStatus;
-            backup.OnFailed += Backup_OnFailed;
-            backup.MakeBackup(App.DatabaseFilePath, App.BackupRemoteFolderId);
+            _backupStorage.MakeBackup();
         }
 
-        private void Backup_OnFailed(string message)
-        {
-            Application.Current.Dispatcher.Invoke(() => ShowMessage(message));
-        }
-
-        private void Backup_OnUpdateStatus(string status)
+        private void backupStorage_OnUpdateStatus(string status)
         {
             Status = status;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void backupStorage_OnFailed(string message)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Application.Current.Dispatcher.Invoke(() => ShowMessage(message));
+        }
+
+        private void _backupStorage_OnAutoBackup(object sender, EventArgs e)
+        {
+            ShowMessage("Автоматическое резервное копирование завершено.", "Резервное копирование");
         }
     }
 }

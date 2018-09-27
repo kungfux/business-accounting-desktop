@@ -120,4 +120,31 @@
   <data name="AppName" xml:space="preserve">
     <value>Business Accounting</value>
   </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Резервное копирование</value>
+  </data>
+  <data name="BackupCompleted" xml:space="preserve">
+    <value>Резервное копирование завершено</value>
+  </data>
+  <data name="BackupFailed" xml:space="preserve">
+    <value>Резервное копирование не было выполнено. Детали ошибки:</value>
+  </data>
+  <data name="NoBackupLocationDefined" xml:space="preserve">
+    <value>Для создания резервной копии в Google Drive, необходимо указать идентификатор папки, либо файла в конфигурационном файле .config</value>
+  </data>
+  <data name="UploadingStatusCompleted" xml:space="preserve">
+    <value>Завершено.</value>
+  </data>
+  <data name="UploadingStatusFailed" xml:space="preserve">
+    <value>Ошибка.</value>
+  </data>
+  <data name="UploadingStatusNotStarted" xml:space="preserve">
+    <value>Загрузка не начата.</value>
+  </data>
+  <data name="UploadingStatusStarting" xml:space="preserve">
+    <value>Начинаю загрузку...</value>
+  </data>
+  <data name="UploadingStatusUploading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
 </root>

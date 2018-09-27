@@ -123,10 +123,10 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Integrations\GoogleDriveBackupStorage.cs" />
-    <Compile Include="Properties\Resource.Designer.cs">
+    <Compile Include="Properties\ResourcesRU.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
+      <DependentUpon>ResourcesRU.resx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CashPage.xaml.cs">
       <DependentUpon>CashPage.xaml</DependentUpon>
@@ -204,9 +204,9 @@
     <Resource Include="Resources\image_folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resource.resx">
+    <EmbeddedResource Include="Properties\ResourcesRU.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <LastGenOutput>ResourcesRU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

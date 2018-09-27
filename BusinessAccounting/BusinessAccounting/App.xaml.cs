@@ -53,7 +53,7 @@ namespace BusinessAccounting
             catch (ConfigurationErrorsException ex)
             {
                 MessageBox.Show($"Конфигурация приложения содержит ошибки, что может привести к неправильной работе. Детали: {Environment.NewLine}{ex.Message}",
-                    Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    ResourcesRU.AppName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
 
@@ -68,7 +68,7 @@ namespace BusinessAccounting
             else
             {
                 MessageBox.Show($"Не удалось установить соединение с базой данных.{Environment.NewLine}Детали: {Sqlite.LastErrorMessage}",
-                    Resource.AppName, MessageBoxButton.OK, MessageBoxImage.Stop);
+                    ResourcesRU.AppName, MessageBoxButton.OK, MessageBoxImage.Stop);
                 Current.Shutdown();
             }
         }

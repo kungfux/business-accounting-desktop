@@ -9,6 +9,7 @@ using MahApps.Metro.Controls;
 using System.Windows.Media.Animation;
 using BusinessAccounting.Integrations;
 using MahApps.Metro.Controls.Dialogs;
+using BusinessAccounting.Properties;
 
 namespace BusinessAccounting
 {
@@ -31,13 +32,13 @@ namespace BusinessAccounting
             MainMenuGrid.Visibility = Visibility.Hidden;
 
             _backupStorage = new GoogleDriveBackupStorage(
-                App.DatabaseFilePath, 
-                App.BackupRemoteFolderId, 
-                App.BackupRemoteFileId, 
-                App.AutoBackupInterval);
-            _backupStorage.OnUpdateStatus += backupStorage_OnUpdateStatus;
-            _backupStorage.OnFailed += backupStorage_OnFailed;
-            _backupStorage.OnAutoBackup += _backupStorage_OnAutoBackup;
+                DatabaseFileFullPath: App.DatabaseFilePath, 
+                RemoteFolderId: App.BackupRemoteFolderId, 
+                RemoteFileId: App.BackupRemoteFileId, 
+                BackupInterval: App.AutoBackupInterval);
+            _backupStorage.OnStatusUpdated += BackupStorage_OnUpdateStatus;
+            _backupStorage.OnFailed += BackupStorage_OnFailed;
+            _backupStorage.OnCompleted += BackupStorage_OnCompleted;
         }
 
         public string Status
@@ -114,7 +115,7 @@ namespace BusinessAccounting
             _windowDisplayed = true;
 
             LoadPage(new UserControls.CashPage());
-            _backupStorage.MakeAutoBackup();
+            _backupStorage.MakeBackupIfOutOfDate();
         }
 
         private void ShowMessage(string text, string caption = "Проблемка")
@@ -149,19 +150,19 @@ namespace BusinessAccounting
             _backupStorage.MakeBackup();
         }
 
-        private void backupStorage_OnUpdateStatus(string status)
+        private void BackupStorage_OnUpdateStatus(string status)
         {
             Status = status;
         }
 
-        private void backupStorage_OnFailed(string message)
+        private void BackupStorage_OnFailed(string message)
         {
-            Application.Current.Dispatcher.Invoke(() => ShowMessage(message));
+            Application.Current.Dispatcher.Invoke(() => ShowMessage(message, ResourcesRU.Backup));
         }
 
-        private void _backupStorage_OnAutoBackup(object sender, EventArgs e)
+        private void BackupStorage_OnCompleted()
         {
-            ShowMessage("Автоматическое резервное копирование завершено.", "Резервное копирование");
+            Application.Current.Dispatcher.Invoke(() => ShowMessage(ResourcesRU.BackupCompleted, ResourcesRU.Backup));
         }
     }
 }

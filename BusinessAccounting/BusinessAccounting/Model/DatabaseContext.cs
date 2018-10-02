@@ -11,15 +11,15 @@ namespace BusinessAccounting.Model
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            AddCompany(modelBuilder);
+            modelBuilder.Entity<Picture>();
+
+            modelBuilder.Entity<Company>();
+            //    .HasOptional(t => t.Logo);
+
+            modelBuilder.Entity<Title>();
 
             var init = new DatabaseInit(modelBuilder);
             Database.SetInitializer(init);
-        }
-
-        private void AddCompany(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Company>();
         }
     }
 }

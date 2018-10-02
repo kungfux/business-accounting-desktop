@@ -17,14 +17,14 @@ namespace BusinessAccounting.Model
         //    base.Seed(context);
         //}
 
-        private void SetCompanyDefaults(DatabaseContext context)
-        {
-            var company = new Company()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Company Name"
-            };
-            context.Set<Company>().Add(company);
-        }
+        //private void SetCompanyDefaults(DatabaseContext context)
+        //{
+        //    var company = new Company()
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        Name = "Company Name"
+        //    };
+        //    context.Set<Company>().Add(company);
+        //}
     }
 }

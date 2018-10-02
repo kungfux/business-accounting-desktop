@@ -89,6 +89,8 @@
   <ItemGroup>
     <Compile Include="Model\DatabaseContext.cs" />
     <Compile Include="Model\DatabaseInit.cs" />
+    <Compile Include="Model\Entity\Title.cs" />
+    <Compile Include="Model\Entity\Picture.cs" />
     <Compile Include="Model\Entity\Company.cs" />
     <Compile Include="Model\Entity\IEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -126,4 +128,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>del ba.sqlite</PreBuildEvent>
+  </PropertyGroup>
 </Project>

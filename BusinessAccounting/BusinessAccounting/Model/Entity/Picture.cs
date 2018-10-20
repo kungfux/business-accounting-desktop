@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessAccounting.Model.Entity
 {
-    [Table("PICTURES")]
+    [Table("PICTURE")]
     public class Picture : IEntity
     {
         [Key]
         public Guid Id { get; set; }
 
         [Required]
-        public byte[] Source { get; set; }
+        public byte[] BinaryData { get; set; }
     }
 }

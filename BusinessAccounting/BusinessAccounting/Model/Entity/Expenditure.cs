@@ -4,16 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessAccounting.Model.Entity
 {
-    [Table("TITLE")]
-    public class Title : IEntity
+    [Table("EXPENDITURE")]
+    public class Expenditure : IEntity
     {
         [Key]
         public Guid Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
-        public decimal Rate { get; set; }
-        public bool Billable { get; set; }
+        public string Title { get; set; }
 
         [Required]
         public virtual Company Company { get; set; }

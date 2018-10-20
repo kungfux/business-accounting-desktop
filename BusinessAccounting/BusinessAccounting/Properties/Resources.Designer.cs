@@ -63,6 +63,16 @@ namespace BusinessAccounting.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap contactPhoto {
+            get {
+                object obj = ResourceManager.GetObject("contactPhoto", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap defaultLogo {
             get {
                 object obj = ResourceManager.GetObject("defaultLogo", resourceCulture);

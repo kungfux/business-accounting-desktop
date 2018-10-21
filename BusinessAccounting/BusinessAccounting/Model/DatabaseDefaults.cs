@@ -3,6 +3,7 @@ using BusinessAccounting.Properties;
 using System;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 
 namespace BusinessAccounting.Model
 {
@@ -12,6 +13,11 @@ namespace BusinessAccounting.Model
         {
             using (DatabaseContext context = new DatabaseContext())
             {
+                if (context.Companies.ToList().Count > 0)
+                {
+                    return;
+                }
+
                 AddDefaultCompany(context);
             }
         }

@@ -91,6 +91,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\DatabaseTestDefaults.cs" />
     <Compile Include="Model\Entity\Contact.cs" />
     <Compile Include="Model\DatabaseContext.cs" />
     <Compile Include="Model\DatabaseDefaults.cs" />

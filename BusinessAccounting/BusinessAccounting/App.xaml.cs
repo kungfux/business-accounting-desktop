@@ -7,10 +7,28 @@ namespace BusinessAccounting
 {
     public partial class App : Application
     {
+        private static Mutex _mutex = null;
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             SetLanguageDictionary();
+            CheckIfSingleInstanceIsRunning();
             new DatabaseDefaults().InitDatabaseDefaults();
+        }
+
+        private void CheckIfSingleInstanceIsRunning()
+        {
+            const string mutexName = "Business Accounting v2";
+            _mutex = new Mutex(true, mutexName, out bool createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show(
+                    Current.FindResource("MessageAppAlreadyRunning").ToString(),
+                    Current.FindResource("MessageDefaultCaption").ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Exclamation);
+                Current.Shutdown();
+            }
         }
 
         private void SetLanguageDictionary()

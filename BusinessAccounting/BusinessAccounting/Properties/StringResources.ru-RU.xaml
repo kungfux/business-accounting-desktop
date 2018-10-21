@@ -18,5 +18,8 @@
     <system:String x:Key="ContactNote">Договор №34-567</system:String>
     <!-- Database defaults -->
     <system:String x:Key="CompanyDefaultCompany">Инновационные технологии</system:String>
+    <!-- System -->
+    <system:String x:Key="MessageDefaultCaption">Business Accounting v2</system:String>
+    <system:String x:Key="MessageAppAlreadyRunning">Программа уже запущена.</system:String>
 </ResourceDictionary>
     

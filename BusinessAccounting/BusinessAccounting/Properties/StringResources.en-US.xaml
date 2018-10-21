@@ -18,5 +18,8 @@
     <system:String x:Key="ContactNote">Contract #12-A2</system:String>
     <!-- Database defaults -->
     <system:String x:Key="CompanyDefaultCompany">Innovative Technologies</system:String>
+    <!-- System -->
+    <system:String x:Key="MessageDefaultCaption">Business Accounting v2</system:String>
+    <system:String x:Key="MessageAppAlreadyRunning">Application is already running.</system:String>
 </ResourceDictionary>
     

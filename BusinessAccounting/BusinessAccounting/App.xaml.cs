@@ -19,8 +19,9 @@ namespace BusinessAccounting
         private void CheckIfSingleInstanceIsRunning()
         {
             const string mutexName = "Business Accounting v2";
-            _mutex = new Mutex(true, mutexName, out bool createdNew);
-            if (!createdNew)
+            bool isCreatedNew;
+            _mutex = new Mutex(true, mutexName, out isCreatedNew);
+            if (!isCreatedNew)
             {
                 MessageBox.Show(
                     Current.FindResource("MessageAppAlreadyRunning").ToString(),

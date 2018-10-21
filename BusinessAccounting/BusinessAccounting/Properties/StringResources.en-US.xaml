@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BusinessAccounting.Properties"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!-- Test data -->
+    <system:String x:Key="CompanySunlightCorp">Sunlight Corp</system:String>
+    <system:String x:Key="TitleDirector">Director</system:String>
+    <system:String x:Key="TitleAccountant">Accountant</system:String>
+    <system:String x:Key="TitleAdministrator">Administrator</system:String>
+    <system:String x:Key="TitleWorker">Worker</system:String>
+    <system:String x:Key="TitleCleaner">Cleaner</system:String>
+    <system:String x:Key="TitleContact">External contact</system:String>
+    <system:String x:Key="ContactName">Elliott Sagers</system:String>
+    <system:String x:Key="ContactPhone">202-555-0121</system:String>
+    <system:String x:Key="ContactCellPhone">+1-202-555-0121</system:String>
+    <system:String x:Key="ContactEmail">Elliot.Sagers@email.com</system:String>
+    <system:String x:Key="ContactAddress">727 Linda Drive Marlton, NJ 08053</system:String>
+    <system:String x:Key="ContactNote">Contract #12-A2</system:String>
+    <!-- Database defaults -->
+    <system:String x:Key="CompanyDefaultCompany">Innovative Technologies</system:String>
+</ResourceDictionary>
+    

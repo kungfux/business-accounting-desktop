@@ -4,6 +4,7 @@ using System;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace BusinessAccounting.Model
 {
@@ -27,7 +28,7 @@ namespace BusinessAccounting.Model
             var company = new Company()
             {
                 Id = Guid.NewGuid(),
-                Name = "My company",
+                Name = Application.Current.FindResource("CompanyDefaultCompany").ToString(),
                 Logo = AddCompanyDefaultLogo(context)
             };
             context.Set<Company>().Add(company);

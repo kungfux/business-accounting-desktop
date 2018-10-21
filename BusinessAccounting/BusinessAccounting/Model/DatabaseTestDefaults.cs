@@ -5,12 +5,13 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace BusinessAccounting.Model
 {
     public class DatabaseTestDefaults
     {
-        private const string COMPANYNAME = "Sunlight Corp";
+        private readonly string _companyName = Application.Current.FindResource("CompanySunlightCorp").ToString();
         private DatabaseContext _context;
 
         public DatabaseTestDefaults(DatabaseContext context)
@@ -56,7 +57,7 @@ namespace BusinessAccounting.Model
             var company = new Company()
             {
                 Id = Guid.NewGuid(),
-                Name = COMPANYNAME,
+                Name = _companyName,
                 Logo = _context.Pictures.Find(logoId)
             };
             _context.Set<Company>().Add(company);
@@ -65,20 +66,20 @@ namespace BusinessAccounting.Model
 
         private void AddTitles()
         {
-            var company = _context.Companies.Where(c => c.Name == COMPANYNAME).First();
+            var company = _context.Companies.Where(c => c.Name == _companyName).First();
             var titles = new Title[]
             {
                 new Title()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Director",
+                    Name = Application.Current.FindResource("TitleDirector").ToString(),
                     Billable = false,
                     Company = company
                 },
                 new Title()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Accountant",
+                    Name = Application.Current.FindResource("TitleAccountant").ToString(),
                     Billable = true,
                     Rate = 150,
                     Company = company
@@ -86,7 +87,7 @@ namespace BusinessAccounting.Model
                 new Title()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Administrator",
+                    Name = Application.Current.FindResource("TitleAdministrator").ToString(),
                     Billable = true,
                     Rate = 100,
                     Company = company
@@ -94,7 +95,7 @@ namespace BusinessAccounting.Model
                 new Title()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Worker",
+                    Name = Application.Current.FindResource("TitleWorker").ToString(),
                     Billable = true,
                     Rate = 50,
                     Company = company
@@ -102,7 +103,7 @@ namespace BusinessAccounting.Model
                 new Title()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Cleaner",
+                    Name = Application.Current.FindResource("TitleCleaner").ToString(),
                     Billable = true,
                     Rate = 25,
                     Company = company
@@ -110,7 +111,7 @@ namespace BusinessAccounting.Model
                 new Title()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "External contact",
+                    Name = Application.Current.FindResource("TitleContact").ToString(),
                     Billable = false,
                     Company = company
                 }
@@ -122,7 +123,9 @@ namespace BusinessAccounting.Model
 
         private void AddContacts()
         {
-            var company = _context.Companies.Where(c => c.Name == COMPANYNAME).First();
+            var titleWorker = Application.Current.FindResource("TitleWorker").ToString();
+            var company = _context.Companies.Where(c => c.Name == _companyName).First();
+            var title = _context.Titles.Where(t => t.Name == titleWorker).First();
             var photoId = AddPicture(Resources.contactPhoto);
 
             var contacts = new Contact[]
@@ -130,15 +133,16 @@ namespace BusinessAccounting.Model
                 new Contact()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Elliott Sagers",
-                    Phone = "+1-202-555-0121",
-                    CellPhone = "202-555-0121",
-                    Email = "Elliot.Sagers@email.com",
-                    Address = "727 Linda Drive Marlton, NJ 08053",
-                    Note = "Contract #12-A2",
+                    Name = Application.Current.FindResource("ContactName").ToString(),
+                    Phone = Application.Current.FindResource("ContactPhone").ToString(),
+                    CellPhone = Application.Current.FindResource("ContactCellPhone").ToString(),
+                    Email = Application.Current.FindResource("ContactEmail").ToString(),
+                    Address = Application.Current.FindResource("ContactAddress").ToString(),
+                    Note = Application.Current.FindResource("ContactNote").ToString(),
                     Birthday = DateTime.Now.AddYears(-30),
                     Hired = DateTime.Now.AddDays(-1),
                     Photo = _context.Pictures.Find(photoId),
+                    Title = title,
                     Company = company
                 }
             };

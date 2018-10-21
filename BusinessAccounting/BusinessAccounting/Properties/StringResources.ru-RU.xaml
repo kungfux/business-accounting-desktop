@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BusinessAccounting.Properties"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!-- Test data -->
+    <system:String x:Key="CompanySunlightCorp">Солнечная компания</system:String>
+    <system:String x:Key="TitleDirector">Директор</system:String>
+    <system:String x:Key="TitleAccountant">Бухгалтер</system:String>
+    <system:String x:Key="TitleAdministrator">Администратор</system:String>
+    <system:String x:Key="TitleWorker">Рабочий</system:String>
+    <system:String x:Key="TitleCleaner">Уборщик</system:String>
+    <system:String x:Key="TitleContact">Внешний контакт</system:String>
+    <system:String x:Key="ContactName">Петров Александр Васильевич</system:String>
+    <system:String x:Key="ContactPhone">06154-25-36-09</system:String>
+    <system:String x:Key="ContactCellPhone">+7(988)555-01-21</system:String>
+    <system:String x:Key="ContactEmail">Alexander.Petrov@email.ru</system:String>
+    <system:String x:Key="ContactAddress">г. Москва, ул. Тигровой Акулы, 12, 100101</system:String>
+    <system:String x:Key="ContactNote">Договор №34-567</system:String>
+    <!-- Database defaults -->
+    <system:String x:Key="CompanyDefaultCompany">Инновационные технологии</system:String>
+</ResourceDictionary>
+    

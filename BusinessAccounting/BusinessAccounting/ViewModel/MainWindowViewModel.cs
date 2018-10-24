@@ -12,7 +12,13 @@ namespace BusinessAccounting.ViewModel
 
             NavigationDrawerItems = new[]
             {
-                new NavigationDrawerItem("Home", null)
+                new NavigationDrawerItem("Home", null),
+                new NavigationDrawerItem("Logbook", null),
+                new NavigationDrawerItem("Property", null),
+                new NavigationDrawerItem("Contacts", null),
+                new NavigationDrawerItem("Documents", null),
+                new NavigationDrawerItem("Charts", null),
+                new NavigationDrawerItem("Reports", null)
             };
         }
 

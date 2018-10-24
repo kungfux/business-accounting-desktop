@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BusinessAccounting.View"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewModel="clr-namespace:BusinessAccounting.ViewModel"
         mc:Ignorable="d"
         Title="{DynamicResource ApplicationName}"
         Height="450"
@@ -23,8 +24,12 @@
                 <DockPanel MinWidth="212">
                     <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" DockPanel.Dock="Top" HorizontalAlignment="Right"
                                   Margin="16" IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
-                    <ListBox x:Name="DemoItemsListBox" Margin="0 16 0 16" SelectedIndex="0">
-                        <TextBlock Text="aaa" Margin="32 0 32 0" />
+                    <ListBox x:Name="NavigationDrawerListBox" Margin="0 16 0 16" SelectedIndex="0" ItemsSource="{Binding NavigationDrawerItems}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="viewModel:NavigationDrawerItem">
+                                <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
@@ -34,11 +39,11 @@
                         <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False" x:Name="MenuToggleButton"/>
                         <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                             <StackPanel>
-                                <Button Content="Theme" IsEnabled="False" />
-                                <Button Content="Settings" IsEnabled="False" />
-                                <Button Content="Integration" IsEnabled="False" />
+                                <Button Content="Theme" IsEnabled="True" />
+                                <Button Content="Settings" IsEnabled="True" />
+                                <Button Content="Integration" IsEnabled="True" />
                                 <Separator/>
-                                <Button Content="Exit" IsEnabled="False" />
+                                <Button Content="Exit" IsEnabled="True" />
                             </StackPanel>
                         </materialDesign:PopupBox>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Sunlight Corp.</TextBlock>

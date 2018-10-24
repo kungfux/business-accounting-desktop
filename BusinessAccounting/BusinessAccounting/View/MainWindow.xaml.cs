@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace BusinessAccounting
+namespace BusinessAccounting.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

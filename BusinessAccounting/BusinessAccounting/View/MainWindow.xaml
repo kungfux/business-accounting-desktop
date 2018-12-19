@@ -46,7 +46,10 @@
                                 <Button Content="Exit" IsEnabled="True" />
                             </StackPanel>
                         </materialDesign:PopupBox>
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Sunlight Corp.</TextBlock>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                            <Image Source="{Binding CompanyLogo}" Height="64" Width="64" Margin="0,0,10,0"/>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Sunlight Corp.</TextBlock>
+                        </StackPanel>
                     </DockPanel>
                 </materialDesign:ColorZone>
                 <Grid>

@@ -1,5 +1,7 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using BusinessAccounting.Properties;
+using MaterialDesignThemes.Wpf;
 using System;
+using System.Drawing;
 
 namespace BusinessAccounting.ViewModel
 {
@@ -20,8 +22,11 @@ namespace BusinessAccounting.ViewModel
                 new NavigationDrawerItem("Charts", null),
                 new NavigationDrawerItem("Reports", null)
             };
+
+            CompanyLogo = Resources.defaultLogo;
         }
 
         public NavigationDrawerItem[] NavigationDrawerItems { get; }
+        public Image CompanyLogo { get; }
     }
 }

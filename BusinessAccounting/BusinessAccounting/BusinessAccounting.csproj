@@ -39,7 +39,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>BusinessAccounting.App</StartupObject>
@@ -153,13 +153,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="favicon.ico" />
+    <Resource Include="Resources\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="defaultLogo.png" />
+    <None Include="Resources\defaultLogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="contactPhoto.jpg" />
+    <None Include="Resources\contactPhoto.jpg" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

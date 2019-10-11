@@ -36,13 +36,23 @@ namespace BusinessAccounting.UserControls
 
         private void LoadDefaultDates()
         {
-            int startOffset;
-            int endOffset;
-            if (int.TryParse(ConfigurationManager.AppSettings["DefaultStartDateOffset"], out startOffset))
+            if (int.TryParse(ConfigurationManager.AppSettings["DefaultExactStartDay"], out int exactStartDay))
             {
-                DefaultStartDate = DateTime.Now.Date.AddDays(startOffset);
+                if (exactStartDay > 0 && exactStartDay <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month))
+                {
+                    DefaultStartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, exactStartDay);
+                }
             }
-            if (int.TryParse(ConfigurationManager.AppSettings["DefaultEndDateOffset"], out endOffset))
+
+            if (!DefaultStartDate.HasValue)
+            {
+                if (int.TryParse(ConfigurationManager.AppSettings["DefaultStartDateOffset"], out int startOffset))
+                {
+                    DefaultStartDate = DateTime.Now.Date.AddDays(startOffset);
+                }
+            }
+
+            if (int.TryParse(ConfigurationManager.AppSettings["DefaultEndDateOffset"], out int endOffset))
             {
                 DefaultEndDate = DateTime.Now.Date.AddDays(endOffset);
             }

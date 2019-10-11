@@ -6,7 +6,7 @@
 ; ****************************************
 
 #define AppName 'Business Accounting'
-#define AppVersion '1.4'
+#define AppVersion '1.4.1'
 
 #define AppExecutable 'Business Accounting.exe'
 #define CompiledBinPath '..\BusinessAccounting\BusinessAccounting\bin\Release'
@@ -19,7 +19,7 @@ AppVersion={#AppVersion}
 AppVerName={#AppName} {#AppVersion}
 VersionInfoVersion={#AppVersion}
 VersionInfoCompany=Alexander Fuks
-AppCopyright=Copyright © 2014-2017 Alexander Fuks
+AppCopyright=Copyright © Alexander Fuks 2014-2019
 AppPublisher=Alexander Fuks
 AppPublisherURL=https://github.com/kungfux/business-accounting
 AppSupportURL=https://github.com/kungfux/business-accounting
